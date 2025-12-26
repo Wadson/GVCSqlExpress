@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>D:\Instalador SisControl\|publish\</PublishUrlHistory>
+    <InstallUrlHistory />
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>pt-BR</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Controls\ComboClientes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="FrmModelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MUI\FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MUI\FrmRecuperarSenhaOffline.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="TexBoxPersonalizado.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="TexBoxTelefoneFormatado.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="UTIL\FrmOpcoesExtrato.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmBackup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmBaixarParcela.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmCadCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmCadProdutos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmCadUsuario .cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmConsultaMovimentacaoEstoque.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmContasAReceber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmEntradaEstoque.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmEntradaFiscal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmEstornarPagamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmFerramentas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmGerenciarVendas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarCidade.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarEstado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmLocalizarProduto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutCidade.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutEstado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutProduto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmManutUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmModeloUI .cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmMovimentacaoEstoque.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmRelatorioEstoque.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmRelatorios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmTelaPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FrmVendas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\Sobre.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

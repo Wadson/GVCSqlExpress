@@ -1,0 +1,101 @@
+﻿using GVC.DALL;
+using GVC.MODEL;
+using System;
+using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using GVC.Helpers;
+
+namespace GVC.BLL
+{
+    internal class CidadeBLL
+    {
+        CidadeDal CidadeDal = null;
+
+        public DataTable Listar()
+        {
+            DataTable dtable = new DataTable();
+            try
+            {
+                CidadeDal = new CidadeDal();
+                dtable = CidadeDal.Listar_Cidades();
+            }
+            catch (Exception erro)
+            {
+                throw erro;
+            }
+            return dtable;
+        }
+
+        public void Salvar(CidadeMODEL cidades)
+        {
+            try
+            {
+                CidadeDal = new CidadeDal();
+                CidadeDal.Salvar(cidades);
+            }
+            catch (Exception erro)
+            {
+                throw erro;
+            }
+        }
+
+        public void Excluir(CidadeMODEL cidades)
+        {
+            try
+            {
+                CidadeDal = new CidadeDal();
+                CidadeDal.Excluir(cidades);
+            }
+            catch (Exception erro)
+            {
+                throw erro;
+            }
+        }
+
+        public void Atualizar(CidadeMODEL cidades)
+        {
+            try
+            {
+                CidadeDal = new CidadeDal();
+                CidadeDal.Atualizar(cidades);
+            }
+            catch (Exception erro)
+            {
+                throw erro;
+            }
+        }
+
+        public CidadeMODEL Pesquisar(string pesquisa)
+        {
+            var conn = Conexao.Conex();
+            try
+            {
+                var sql = new SqlCommand("SELECT TOP 1 * FROM Cidade WHERE Nome LIKE @Nome", conn);
+                sql.Parameters.AddWithValue("@Nome", pesquisa + "%");  // ✅ parâmetro seguro
+
+                conn.Open();
+                var datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
+
+                CidadeMODEL obj_cidade = null;
+                if (datareader.Read())
+                {
+                    obj_cidade = new CidadeMODEL
+                    {
+                        CidadeID = Convert.ToInt32(datareader["CidadeID"]),
+                        Nome = datareader["Nome"].ToString()
+                    };
+                }
+                return obj_cidade;
+            }
+            catch (Exception erro)
+            {
+                throw erro;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+    }
+}

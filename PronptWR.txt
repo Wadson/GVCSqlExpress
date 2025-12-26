@@ -1,0 +1,839 @@
+Perfeito 👍
+Agora que você mostrou exatamente como está sua tabela Produtos, dá pra montar a solução de estoque 100% compatível com o que você já tem, sem quebrar nada e sem alterar essa tabela (isso é importante).
+
+Vou dividir em partes bem claras.
+
+✅ O QUE SUA TABELA ATUAL JÁ ATENDE
+
+Sua tabela Produtos já está ótima para estoque atual:
+
+Campo	Uso
+Estoque	Quantidade atual em estoque
+PrecoCusto	Base para entrada
+PrecoDeVenda	Venda
+DataDeEntrada	Última entrada (ou cadastro)
+Status / Situacao	Ativo, Inativo, etc.
+FornecedorID	Ligação com fornecedor
+
+📌 Conclusão:
+👉 NÃO mexa nessa tabela
+👉 Ela continuará guardando apenas o estoque atual
+
+🚨 PROBLEMA SE ATUALIZAR ESTOQUE DIRETO AQUI
+
+Se você apenas fizer:
+
+UPDATE Produtos SET Estoque = Estoque + 10
+
+
+Você perde histórico, não sabe:
+
+De onde veio
+
+Quem alterou
+
+Se foi nota, cupom, ajuste ou erro
+
+Por isso entra a solução correta 👇
+
+🟩 SOLUÇÃO CORRETA: TABELA DE MOVIMENTAÇÃO DE ESTOQUE
+
+Você mantém Produtos como está
+E cria UMA NOVA TABELA só para registrar entradas/saídas.
+
+🗂️ TABELA: MovimentacaoEstoque (NOVA)
+CREATE TABLE MovimentacaoEstoque
+(
+    MovimentacaoID INT IDENTITY(1,1) PRIMARY KEY,
+    ProdutoID INT NOT NULL,
+
+    TipoMovimentacao NVARCHAR(20) NOT NULL,
+    -- ENTRADA | SAIDA | AJUSTE
+
+    Quantidade INT NOT NULL,
+
+    EstoqueAnterior INT NOT NULL,
+    EstoqueAtual INT NOT NULL,
+
+    Origem NVARCHAR(30) NOT NULL,
+    -- NF-e | NFC-e | Cupom Fiscal | Cupom Não Fiscal | Ajuste Manual | Venda
+
+    Documento NVARCHAR(50) NULL,
+    Observacao NVARCHAR(255) NULL,
+
+    DataMovimentacao DATETIME NOT NULL DEFAULT GETDATE(),
+    Usuario NVARCHAR(50) NULL,
+
+    CONSTRAINT FK_MovEstoque_Produto
+        FOREIGN KEY (ProdutoID) REFERENCES Produtos(ProdutoID)
+);
+
+
+✅ Isso NÃO altera nada do que você já tem
+✅ Só acrescenta controle
+
+🟦 FORM 1 – FrmMovimentacaoEstoque (AJUSTE MANUAL)
+
+👉 Esse form NÃO é fiscal
+
+Componentes (nomes certinhos)
+Produto
+
+txtCodigoProduto
+
+btnBuscarProduto
+
+txtNomeProduto (ReadOnly)
+
+lblEstoqueAtual
+
+Movimentação
+
+cmbTipoMovimentacao
+
+Entrada
+Saída
+Ajuste
+
+
+numQuantidade
+
+Motivo
+
+cmbOrigem
+
+Ajuste Manual
+Inventário
+Perda
+Devolução
+
+
+txtObservacao
+
+Ação
+
+btnConfirmar
+
+btnCancelar
+
+🔄 Lógica desse Form
+Entrada  → Estoque = Estoque + Quantidade
+Saída    → Estoque = Estoque - Quantidade
+Ajuste   → Estoque = Quantidade
+
+
+E SEMPRE:
+
+Busca estoque atual em Produtos
+
+Salva na MovimentacaoEstoque
+
+Atualiza Produtos.Estoque
+
+🟩 FORM 2 – FrmEntradaFiscal (NF / Cupom)
+
+👉 Esse form é fiscal / documental
+
+Componentes
+Documento
+
+cmbTipoDocumento
+
+NF-e
+NFC-e
+Cupom Fiscal
+Cupom Não Fiscal
+
+
+txtNumeroDocumento
+
+txtSerie
+
+dtEmissao
+
+cmbFornecedor
+
+Itens
+
+dgvItensDocumento
+
+Colunas:
+
+ProdutoID
+NomeProduto
+Quantidade
+PrecoCusto
+Subtotal
+
+Ação
+
+btnAdicionarItem
+
+btnConfirmarEntrada
+
+btnCancelar
+
+(opcional) btnImportarXML
+
+🔄 Lógica da Entrada Fiscal
+
+Para cada item do grid:
+
+Lê estoque atual em Produtos
+
+Calcula novo estoque
+
+Insere em MovimentacaoEstoque:
+
+TipoMovimentacao = ENTRADA
+
+Origem = NF-e / Cupom / etc
+
+Documento = Número da nota
+
+Atualiza Produtos.Estoque
+
+📌 Cupom Não Fiscal
+✔️ Mesma lógica
+❌ Não gera imposto
+✔️ Só movimenta estoque
+
+🔗 INTEGRAÇÃO COM VENDAS (IMPORTANTE)
+
+Quando uma venda for salva:
+
+👉 Para cada item vendido:
+
+TipoMovimentacao = SAIDA
+Origem = Venda
+Documento = VendaID
+
+
+Isso fecha o ciclo:
+
+Entrada → Nota
+
+Saída → Venda
+
+Ajuste → Manual
+
+🔥 VANTAGENS COM SUA TABELA ATUAL
+
+✔️ Não perde nenhum produto já cadastrado
+✔️ Não precisa migrar dados
+✔️ Estoque sempre consistente
+✔️ Histórico completo
+✔️ Auditoria fácil
+✔️ Pronto para relatórios
+
+👉 Próximo passo (você escolhe):
+
+1️⃣ Quer que eu desenhe o layout visual dos forms
+2️⃣ Quer BLL + DAL prontos (insert/update)
+3️⃣ Quer integração automática com Venda
+4️⃣ Quer relatório de movimentação de estoque
+
+Só me diga o próximo passo.
+
+1 Quer que eu desenhe o layout visual dos forms
+
+Perfeito 👍
+Então vamos desenhar o layout visual dos 2 forms, com organização profissional, nomes corretos dos componentes e sem código ainda, exatamente como você pediu.
+
+Vou descrever como se você estivesse montando no WinForms Designer.
+
+🟦 FORM 1 — FrmMovimentacaoEstoque
+
+👉 Ajuste manual / controle interno
+
+📌 Tamanho sugerido
+
+Width: 650
+
+Height: 420
+
+StartPosition: CenterScreen
+
+FormBorderStyle: FixedDialog
+
+🔹 GROUPBOX 1 — Produto
+
+Name: grpProduto
+Text: Produto
+Dock: Top
+Height: 110
+
+Componentes (da esquerda para direita):
+Tipo	Name	Observação
+Label	lblCodigo	"Código"
+TextBox	txtCodigoProduto	Width 80
+Button	btnBuscarProduto	Texto: 🔍
+Label	lblNome	"Produto"
+TextBox	txtNomeProduto	ReadOnly, Width 300
+Label	lblEstoque	"Estoque Atual"
+Label	lblEstoqueAtual	Fonte em negrito
+🔹 GROUPBOX 2 — Movimentação
+
+Name: grpMovimentacao
+Text: Movimentação
+Top: 120
+Height: 110
+
+Componentes:
+Tipo	Name	Observação
+Label	lblTipo	"Tipo"
+ComboBox	cmbTipoMovimentacao	DropDownList
+Label	lblQtd	"Quantidade"
+NumericUpDown	numQuantidade	Minimum = 1
+Label	lblOrigem	"Origem"
+ComboBox	cmbOrigem	DropDownList
+
+📌 cmbTipoMovimentacao – Items
+
+Entrada
+Saída
+Ajuste
+
+
+📌 cmbOrigem – Items
+
+Ajuste Manual
+Inventário
+Perda
+Devolução
+
+🔹 GROUPBOX 3 — Observações
+
+Name: grpObs
+Text: Observação
+Top: 235
+Height: 80
+
+Tipo	Name
+TextBox	txtObservacao
+🔹 BOTÕES
+
+📍 Alinhados à direita (Bottom)
+
+Tipo	Name	Texto
+Button	btnConfirmar	Confirmar
+Button	btnCancelar	Cancelar
+🟩 FORM 2 — FrmEntradaFiscal
+
+👉 Entrada por NF / Cupom
+
+📌 Tamanho sugerido
+
+Width: 900
+
+Height: 600
+
+StartPosition: CenterScreen
+
+FormBorderStyle: FixedSingle
+
+🔹 GROUPBOX 1 — Documento Fiscal
+
+Name: grpDocumento
+Text: Documento
+Dock: Top
+Height: 120
+
+Linha 1
+Tipo	Name
+ComboBox	cmbTipoDocumento
+TextBox	txtNumeroDocumento
+TextBox	txtSerie
+DateTimePicker	dtEmissao
+
+📌 cmbTipoDocumento – Items
+
+NF-e
+NFC-e
+Cupom Fiscal
+Cupom Não Fiscal
+
+Linha 2
+Tipo	Name
+ComboBox	cmbFornecedor
+Button	btnBuscarFornecedor
+🔹 GROUPBOX 2 — Itens do Documento
+
+Name: grpItens
+Top: 130
+Height: 330
+
+DataGridView — dgvItensDocumento
+Colunas:
+ProdutoID (oculta)
+NomeProduto
+Quantidade
+PrecoCusto
+Subtotal (readonly)
+
+🔹 GROUPBOX 3 — Totais
+
+Name: grpTotais
+Top: 470
+Height: 70
+
+Tipo	Name	Observação
+TextBox	txtTotalItens	ReadOnly
+Button	btnAdicionarItem	+ Item
+Button	btnRemoverItem	- Item
+🔹 BOTÕES (Bottom Right)
+Tipo	Name	Texto
+Button	btnConfirmarEntrada	Confirmar Entrada
+Button	btnCancelar	Cancelar
+🔥 BOA PRÁTICA (IMPORTANTE)
+
+✔️ Não misture ajuste manual com documento fiscal
+✔️ Cada form tem uma responsabilidade
+✔️ Layout limpo, fácil de manter
+✔️ Pronto para crescer (XML, impostos, etc.)
+
+👉 Próximo passo?
+
+2️⃣ Quer que eu faça a lógica de estoque (BLL + DAL)
+3️⃣ Quer que eu integre com Venda automaticamente
+4️⃣ Quer que eu faça validações de segurança
+5️⃣ Quer o desenho visual em ASCII (mockup)
+
+Escolha e seguimos sem bagunçar 👍
+
+2️⃣ Quero que faça a lógica de estoque (BLL + DAL)
+
+Perfeito. Agora vamos com calma, organizado e sem quebrar nada 👍
+Vou montar a lógica completa de ESTOQUE (DAL + BLL) pensada para:
+
+✅ Ajuste manual
+✅ Entrada por NF / Cupom
+✅ Saída (vendas, perdas, etc.)
+✅ Histórico de movimentações (essencial)
+✅ Integração futura com Venda sem retrabalho
+
+🧱 1️⃣ NOVA TABELA (OBRIGATÓRIA) — MovimentacaoEstoque
+
+⚠️ Nunca atualize estoque direto sem histórico
+Essa tabela é o coração do controle de estoque.
+
+CREATE TABLE MovimentacaoEstoque (
+    MovimentacaoID INT IDENTITY PRIMARY KEY,
+    ProdutoID INT NOT NULL,
+    TipoMovimentacao NVARCHAR(20) NOT NULL, -- Entrada | Saida | Ajuste
+    Quantidade INT NOT NULL,
+    EstoqueAnterior INT NOT NULL,
+    EstoqueAtual INT NOT NULL,
+    Origem NVARCHAR(50) NOT NULL, -- Venda | NF | Ajuste Manual
+    Documento NVARCHAR(50) NULL,
+    Observacao NVARCHAR(255) NULL,
+    DataMovimentacao DATETIME NOT NULL DEFAULT GETDATE(),
+    Usuario NVARCHAR(50) NULL,
+
+    CONSTRAINT FK_MovEst_Produto
+        FOREIGN KEY (ProdutoID) REFERENCES Produtos(ProdutoID)
+);
+
+🧩 2️⃣ MODEL — MovimentacaoEstoqueModel
+public class MovimentacaoEstoqueModel
+{
+    public int ProdutoID { get; set; }
+    public string TipoMovimentacao { get; set; } // Entrada | Saida | Ajuste
+    public int Quantidade { get; set; }
+    public int EstoqueAnterior { get; set; }
+    public int EstoqueAtual { get; set; }
+    public string Origem { get; set; }
+    public string Documento { get; set; }
+    public string Observacao { get; set; }
+    public string Usuario { get; set; }
+}
+
+🗄️ 3️⃣ DAL — EstoqueDAL
+
+Responsabilidade EXCLUSIVA:
+👉 Banco de dados (sem regra de negócio)
+
+public class EstoqueDAL
+{
+    public int ObterEstoqueAtual(int produtoId, SqlConnection conn, SqlTransaction tran)
+    {
+        string sql = "SELECT Estoque FROM Produtos WHERE ProdutoID = @ProdutoID";
+        using var cmd = new SqlCommand(sql, conn, tran);
+        cmd.Parameters.AddWithValue("@ProdutoID", produtoId);
+        return Convert.ToInt32(cmd.ExecuteScalar());
+    }
+
+    public void AtualizarEstoque(int produtoId, int novoEstoque, SqlConnection conn, SqlTransaction tran)
+    {
+        string sql = "UPDATE Produtos SET Estoque = @Estoque WHERE ProdutoID = @ProdutoID";
+        using var cmd = new SqlCommand(sql, conn, tran);
+        cmd.Parameters.AddWithValue("@Estoque", novoEstoque);
+        cmd.Parameters.AddWithValue("@ProdutoID", produtoId);
+        cmd.ExecuteNonQuery();
+    }
+
+    public void RegistrarMovimentacao(MovimentacaoEstoqueModel mov, SqlConnection conn, SqlTransaction tran)
+    {
+        string sql = @"
+            INSERT INTO MovimentacaoEstoque
+            (ProdutoID, TipoMovimentacao, Quantidade, EstoqueAnterior, EstoqueAtual,
+             Origem, Documento, Observacao, Usuario)
+            VALUES
+            (@ProdutoID, @Tipo, @Qtd, @Anterior, @Atual,
+             @Origem, @Doc, @Obs, @Usuario)";
+
+        using var cmd = new SqlCommand(sql, conn, tran);
+        cmd.Parameters.AddWithValue("@ProdutoID", mov.ProdutoID);
+        cmd.Parameters.AddWithValue("@Tipo", mov.TipoMovimentacao);
+        cmd.Parameters.AddWithValue("@Qtd", mov.Quantidade);
+        cmd.Parameters.AddWithValue("@Anterior", mov.EstoqueAnterior);
+        cmd.Parameters.AddWithValue("@Atual", mov.EstoqueAtual);
+        cmd.Parameters.AddWithValue("@Origem", mov.Origem);
+        cmd.Parameters.AddWithValue("@Doc", (object)mov.Documento ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@Obs", (object)mov.Observacao ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@Usuario", (object)mov.Usuario ?? DBNull.Value);
+
+        cmd.ExecuteNonQuery();
+    }
+}
+
+🧠 4️⃣ BLL — EstoqueBLL
+
+Aqui entra toda a inteligência
+👉 validação
+👉 regra
+👉 transação
+👉 segurança
+
+public class EstoqueBLL
+{
+    private readonly EstoqueDAL _dal = new EstoqueDAL();
+
+    public void MovimentarEstoque(MovimentacaoEstoqueModel mov)
+    {
+        using var conn = Conexao.Conex();
+        conn.Open();
+        using var tran = conn.BeginTransaction();
+
+        try
+        {
+            int estoqueAtual = _dal.ObterEstoqueAtual(mov.ProdutoID, conn, tran);
+            int novoEstoque = estoqueAtual;
+
+            switch (mov.TipoMovimentacao)
+            {
+                case "Entrada":
+                    novoEstoque += mov.Quantidade;
+                    break;
+
+                case "Saida":
+                    if (estoqueAtual < mov.Quantidade)
+                        throw new Exception("Estoque insuficiente.");
+                    novoEstoque -= mov.Quantidade;
+                    break;
+
+                case "Ajuste":
+                    novoEstoque = mov.Quantidade; // ajuste direto
+                    break;
+
+                default:
+                    throw new Exception("Tipo de movimentação inválido.");
+            }
+
+            _dal.AtualizarEstoque(mov.ProdutoID, novoEstoque, conn, tran);
+
+            mov.EstoqueAnterior = estoqueAtual;
+            mov.EstoqueAtual = novoEstoque;
+
+            _dal.RegistrarMovimentacao(mov, conn, tran);
+
+            tran.Commit();
+        }
+        catch
+        {
+            tran.Rollback();
+            throw;
+        }
+    }
+}
+
+🔌 5️⃣ COMO USAR (EXEMPLOS)
+✔️ Entrada por NF
+estoqueBLL.MovimentarEstoque(new MovimentacaoEstoqueModel
+{
+    ProdutoID = 10,
+    TipoMovimentacao = "Entrada",
+    Quantidade = 50,
+    Origem = "NF-e",
+    Documento = "NF 12345",
+    Observacao = "Entrada fornecedor XPTO"
+});
+
+✔️ Saída por Venda
+estoqueBLL.MovimentarEstoque(new MovimentacaoEstoqueModel
+{
+    ProdutoID = item.ProdutoID,
+    TipoMovimentacao = "Saida",
+    Quantidade = item.Quantidade,
+    Origem = "Venda",
+    Documento = $"Venda {vendaId}"
+});
+
+✔️ Ajuste Manual
+estoqueBLL.MovimentarEstoque(new MovimentacaoEstoqueModel
+{
+    ProdutoID = 5,
+    TipoMovimentacao = "Ajuste",
+    Quantidade = 120,
+    Origem = "Ajuste Manual",
+    Observacao = "Inventário físico"
+});
+
+🛡️ VANTAGENS DESSE MODELO
+
+✔️ Histórico completo
+✔️ Auditoria
+✔️ Não quebra o cadastro de produtos
+✔️ Integra fácil com Venda
+✔️ Profissional (ERP-like)
+
+👉 Próximo passo (escolha)
+
+3️⃣ Integrar automaticamente com Venda
+4️⃣ Criar consulta de histórico de estoque
+5️⃣ Validar estoque antes de salvar venda
+6️⃣ Criar relatório de movimentações
+
+Só escolher que seguimos sem bagunçar nada 😄
+
+Eu já tenho a tabela de MovimentacaoEstoque
+
+olha aqui o script que gerei do banco
+
+
+USE [bdsiscontrol]
+GO
+
+/****** Object:  Table [dbo].[MovimentacaoEstoque]    Script Date: 23/12/2025 12:29:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[MovimentacaoEstoque](
+	[MovimentacaoID] [int] IDENTITY(1,1) NOT NULL,
+	[ProdutoID] [int] NOT NULL,
+	[TipoMovimentacao] [nvarchar](20) NOT NULL,
+	[Quantidade] [int] NOT NULL,
+	[EstoqueAnterior] [int] NOT NULL,
+	[EstoqueAtual] [int] NOT NULL,
+	[Origem] [nvarchar](30) NOT NULL,
+	[Documento] [nvarchar](50) NULL,
+	[Observacao] [nvarchar](255) NULL,
+	[DataMovimentacao] [datetime] NOT NULL,
+	[Usuario] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MovimentacaoID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[MovimentacaoEstoque] ADD  DEFAULT (getdate()) FOR [DataMovimentacao]
+GO
+
+ALTER TABLE [dbo].[MovimentacaoEstoque]  WITH CHECK ADD  CONSTRAINT [FK_MovEstoque_Produto] FOREIGN KEY([ProdutoID])
+REFERENCES [dbo].[Produtos] ([ProdutoID])
+GO
+
+ALTER TABLE [dbo].[MovimentacaoEstoque] CHECK CONSTRAINT [FK_MovEstoque_Produto]
+GO
+
+
+
+Perfeito 👍
+Ótimo: sua tabela já está correta e profissional, então não vamos mexer nela.
+Vou ajustar a BLL + DAL exatamente para o seu script, sem criar nada novo e sem conflito.
+
+Vou ser cirúrgico, organizado e compatível com tudo que você já tem.
+
+🧱 1️⃣ MODEL — MovimentacaoEstoqueModel (compatível 100%)
+public class MovimentacaoEstoqueModel
+{
+    public int MovimentacaoID { get; set; }
+    public int ProdutoID { get; set; }
+    public string TipoMovimentacao { get; set; } // Entrada | Saida | Ajuste
+    public int Quantidade { get; set; }
+    public int EstoqueAnterior { get; set; }
+    public int EstoqueAtual { get; set; }
+    public string Origem { get; set; }
+    public string Documento { get; set; }
+    public string Observacao { get; set; }
+    public DateTime DataMovimentacao { get; set; }
+    public string Usuario { get; set; }
+}
+
+🗄️ 2️⃣ DAL — EstoqueDAL (AJUSTADO À SUA TABELA)
+
+Responsabilidade: apenas banco, sem regra.
+
+public class EstoqueDAL
+{
+    public int ObterEstoqueAtual(int produtoId, SqlConnection conn, SqlTransaction tran)
+    {
+        const string sql = "SELECT Estoque FROM Produtos WHERE ProdutoID = @ProdutoID";
+
+        using var cmd = new SqlCommand(sql, conn, tran);
+        cmd.Parameters.AddWithValue("@ProdutoID", produtoId);
+
+        return Convert.ToInt32(cmd.ExecuteScalar());
+    }
+
+    public void AtualizarEstoque(int produtoId, int novoEstoque, SqlConnection conn, SqlTransaction tran)
+    {
+        const string sql = "UPDATE Produtos SET Estoque = @Estoque WHERE ProdutoID = @ProdutoID";
+
+        using var cmd = new SqlCommand(sql, conn, tran);
+        cmd.Parameters.AddWithValue("@Estoque", novoEstoque);
+        cmd.Parameters.AddWithValue("@ProdutoID", produtoId);
+
+        cmd.ExecuteNonQuery();
+    }
+
+    public void RegistrarMovimentacao(MovimentacaoEstoqueModel mov, SqlConnection conn, SqlTransaction tran)
+    {
+        const string sql = @"
+            INSERT INTO MovimentacaoEstoque
+            (ProdutoID, TipoMovimentacao, Quantidade, EstoqueAnterior, EstoqueAtual,
+             Origem, Documento, Observacao, Usuario)
+            VALUES
+            (@ProdutoID, @Tipo, @Quantidade, @Anterior, @Atual,
+             @Origem, @Documento, @Observacao, @Usuario)";
+
+        using var cmd = new SqlCommand(sql, conn, tran);
+
+        cmd.Parameters.AddWithValue("@ProdutoID", mov.ProdutoID);
+        cmd.Parameters.AddWithValue("@Tipo", mov.TipoMovimentacao);
+        cmd.Parameters.AddWithValue("@Quantidade", mov.Quantidade);
+        cmd.Parameters.AddWithValue("@Anterior", mov.EstoqueAnterior);
+        cmd.Parameters.AddWithValue("@Atual", mov.EstoqueAtual);
+        cmd.Parameters.AddWithValue("@Origem", mov.Origem);
+        cmd.Parameters.AddWithValue("@Documento", (object)mov.Documento ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@Observacao", (object)mov.Observacao ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@Usuario", (object)mov.Usuario ?? DBNull.Value);
+
+        cmd.ExecuteNonQuery();
+    }
+}
+
+🧠 3️⃣ BLL — EstoqueBLL (REGRA DE NEGÓCIO SEGURA)
+
+Aqui está tudo que protege seu estoque.
+
+public class EstoqueBLL
+{
+    private readonly EstoqueDAL _dal = new EstoqueDAL();
+
+    public void MovimentarEstoque(MovimentacaoEstoqueModel mov)
+    {
+        using var conn = Conexao.Conex();
+        conn.Open();
+        using var tran = conn.BeginTransaction();
+
+        try
+        {
+            int estoqueAtual = _dal.ObterEstoqueAtual(mov.ProdutoID, conn, tran);
+            int novoEstoque;
+
+            switch (mov.TipoMovimentacao)
+            {
+                case "Entrada":
+                    novoEstoque = estoqueAtual + mov.Quantidade;
+                    break;
+
+                case "Saida":
+                    if (estoqueAtual < mov.Quantidade)
+                        throw new Exception("Estoque insuficiente para saída.");
+
+                    novoEstoque = estoqueAtual - mov.Quantidade;
+                    break;
+
+                case "Ajuste":
+                    // Ajuste define o estoque final diretamente
+                    novoEstoque = mov.Quantidade;
+                    break;
+
+                default:
+                    throw new Exception("Tipo de movimentação inválido.");
+            }
+
+            _dal.AtualizarEstoque(mov.ProdutoID, novoEstoque, conn, tran);
+
+            mov.EstoqueAnterior = estoqueAtual;
+            mov.EstoqueAtual = novoEstoque;
+
+            _dal.RegistrarMovimentacao(mov, conn, tran);
+
+            tran.Commit();
+        }
+        catch
+        {
+            tran.Rollback();
+            throw;
+        }
+    }
+}
+
+🔌 4️⃣ COMO USAR NA PRÁTICA (SEM FORM AINDA)
+🔹 Entrada por Nota Fiscal / Cupom
+new EstoqueBLL().MovimentarEstoque(new MovimentacaoEstoqueModel
+{
+    ProdutoID = 1,
+    TipoMovimentacao = "Entrada",
+    Quantidade = 30,
+    Origem = "NF-e",
+    Documento = "NF 123456",
+    Observacao = "Entrada fornecedor ABC",
+    Usuario = "Admin"
+});
+
+🔹 Saída por Venda (integra com seu FrmVendas depois)
+new EstoqueBLL().MovimentarEstoque(new MovimentacaoEstoqueModel
+{
+    ProdutoID = item.ProdutoID,
+    TipoMovimentacao = "Saida",
+    Quantidade = item.Quantidade,
+    Origem = "Venda",
+    Documento = $"Venda {vendaId}",
+    Usuario = "Caixa"
+});
+
+🔹 Ajuste Manual de Estoque
+new EstoqueBLL().MovimentarEstoque(new MovimentacaoEstoqueModel
+{
+    ProdutoID = 5,
+    TipoMovimentacao = "Ajuste",
+    Quantidade = 100, // estoque final
+    Origem = "Ajuste Manual",
+    Observacao = "Inventário físico",
+    Usuario = "Administrador"
+});
+
+✅ O QUE VOCÊ GANHOU COM ISSO
+
+✔️ Compatível com seu banco atual
+✔️ Histórico completo
+✔️ Controle de erros
+✔️ Transação segura
+✔️ Preparado para integrar com Venda
+✔️ Sem bagunçar nada que já funciona
+
+👉 Próximo passo (você escolhe)
+
+1️⃣ Integrar estoque automático na venda
+2️⃣ Criar Form de Entrada de NF / Cupom
+3️⃣ Criar Form de Ajuste Manual de Estoque
+4️⃣ Criar Consulta / Relatório de Movimentações
+
+Diga o número e seguimos com precisão cirúrgica 😄
