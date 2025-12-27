@@ -17,7 +17,7 @@ namespace GVC.View
 {
     public partial class FrmGerenciarVendas : KryptonForm
     {
-        public int ClienteID {  get; set; }
+        public int ClienteID { get; set; }
         public FrmGerenciarVendas()
         {
             InitializeComponent();
@@ -114,7 +114,7 @@ namespace GVC.View
         }
 
         private void btnSair_Click(object sender, EventArgs e)
-        {            
+        {
             this.Close();
         }
         private long ObterVendaSelecionada()
@@ -252,5 +252,6 @@ namespace GVC.View
                 MessageBox.Show(ex.Message);
             }
         }
+       
     }
 }

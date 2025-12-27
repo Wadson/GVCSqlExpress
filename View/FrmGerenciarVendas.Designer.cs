@@ -59,8 +59,20 @@
             dgvVendas = new Krypton.Toolkit.KryptonDataGridView();
             btnCancelar = new Krypton.Toolkit.KryptonButton();
             btnLocalizarCliente = new Krypton.Toolkit.KryptonButton();
+            tableLayoutPanelGerenciamentoVendas = new TableLayoutPanel();
+            kryptonPanel1 = new Krypton.Toolkit.KryptonPanel();
+            lblTituloPDV = new Krypton.Toolkit.KryptonLabel();
+            kryptonPanel2 = new Krypton.Toolkit.KryptonPanel();
+            kryptonPanel4 = new Krypton.Toolkit.KryptonPanel();
             kryptonStatusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVendas).BeginInit();
+            tableLayoutPanelGerenciamentoVendas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel1).BeginInit();
+            kryptonPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel2).BeginInit();
+            kryptonPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel4).BeginInit();
+            kryptonPanel4.SuspendLayout();
             SuspendLayout();
             // 
             // kryptonStatusStrip1
@@ -184,9 +196,9 @@
             // 
             txtCliente.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             txtCliente.CharacterCasing = CharacterCasing.Upper;
-            txtCliente.Location = new Point(124, 31);
+            txtCliente.Location = new Point(114, 31);
             txtCliente.Name = "txtCliente";
-            txtCliente.Size = new Size(472, 27);
+            txtCliente.Size = new Size(496, 27);
             txtCliente.StateCommon.Back.Color1 = Color.White;
             txtCliente.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             txtCliente.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
@@ -202,9 +214,10 @@
             // lblRotuloNome
             // 
             lblRotuloNome.AutoSize = true;
+            lblRotuloNome.BackColor = Color.Transparent;
             lblRotuloNome.Font = new Font("Microsoft Sans Serif", 9.25F);
-            lblRotuloNome.ForeColor = Color.FromArgb(0, 76, 172);
-            lblRotuloNome.Location = new Point(130, 10);
+            lblRotuloNome.ForeColor = Color.Navy;
+            lblRotuloNome.Location = new Point(120, 10);
             lblRotuloNome.Name = "lblRotuloNome";
             lblRotuloNome.Size = new Size(112, 16);
             lblRotuloNome.TabIndex = 1030;
@@ -214,8 +227,8 @@
             // 
             lblRotuloVendaID.AutoSize = true;
             lblRotuloVendaID.BackColor = Color.Transparent;
-            lblRotuloVendaID.ForeColor = Color.FromArgb(0, 76, 172);
-            lblRotuloVendaID.Location = new Point(12, 11);
+            lblRotuloVendaID.ForeColor = Color.Navy;
+            lblRotuloVendaID.Location = new Point(2, 11);
             lblRotuloVendaID.Name = "lblRotuloVendaID";
             lblRotuloVendaID.Size = new Size(102, 15);
             lblRotuloVendaID.TabIndex = 1031;
@@ -223,7 +236,7 @@
             // 
             // txtVendaID
             // 
-            txtVendaID.Location = new Point(12, 31);
+            txtVendaID.Location = new Point(2, 31);
             txtVendaID.Name = "txtVendaID";
             txtVendaID.Size = new Size(102, 27);
             txtVendaID.StateCommon.Back.Color1 = Color.White;
@@ -244,7 +257,7 @@
             // 
             btnSair.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnSair.CornerRoundingRadius = 10F;
-            btnSair.Location = new Point(802, 384);
+            btnSair.Location = new Point(811, 0);
             btnSair.Margin = new Padding(5, 3, 5, 3);
             btnSair.Name = "btnSair";
             btnSair.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
@@ -258,7 +271,7 @@
             btnSair.OverrideDefault.Border.Rounding = 20F;
             btnSair.OverrideDefault.Border.Width = 1;
             btnSair.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSair.Size = new Size(100, 30);
+            btnSair.Size = new Size(100, 27);
             btnSair.StateCommon.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnSair.StateCommon.Back.Color2 = Color.FromArgb(8, 142, 254);
             btnSair.StateCommon.Back.ColorAngle = 45F;
@@ -298,7 +311,7 @@
             // 
             btnExcluir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnExcluir.CornerRoundingRadius = 10F;
-            btnExcluir.Location = new Point(702, 384);
+            btnExcluir.Location = new Point(711, 0);
             btnExcluir.Margin = new Padding(5, 3, 5, 3);
             btnExcluir.Name = "btnExcluir";
             btnExcluir.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
@@ -312,7 +325,7 @@
             btnExcluir.OverrideDefault.Border.Rounding = 20F;
             btnExcluir.OverrideDefault.Border.Width = 1;
             btnExcluir.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnExcluir.Size = new Size(100, 30);
+            btnExcluir.Size = new Size(100, 27);
             btnExcluir.StateCommon.Back.Color1 = Color.Red;
             btnExcluir.StateCommon.Back.Color2 = Color.Red;
             btnExcluir.StateCommon.Back.ColorAngle = 45F;
@@ -354,7 +367,7 @@
             // 
             btnVisualizar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnVisualizar.CornerRoundingRadius = 10F;
-            btnVisualizar.Location = new Point(402, 384);
+            btnVisualizar.Location = new Point(411, 0);
             btnVisualizar.Margin = new Padding(5, 3, 5, 3);
             btnVisualizar.Name = "btnVisualizar";
             btnVisualizar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
@@ -368,7 +381,7 @@
             btnVisualizar.OverrideDefault.Border.Rounding = 20F;
             btnVisualizar.OverrideDefault.Border.Width = 1;
             btnVisualizar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnVisualizar.Size = new Size(100, 30);
+            btnVisualizar.Size = new Size(100, 27);
             btnVisualizar.StateCommon.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnVisualizar.StateCommon.Back.Color2 = Color.FromArgb(8, 142, 254);
             btnVisualizar.StateCommon.Back.ColorAngle = 45F;
@@ -408,7 +421,7 @@
             // 
             btnAlterar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnAlterar.CornerRoundingRadius = 10F;
-            btnAlterar.Location = new Point(502, 384);
+            btnAlterar.Location = new Point(511, 0);
             btnAlterar.Margin = new Padding(5, 3, 5, 3);
             btnAlterar.Name = "btnAlterar";
             btnAlterar.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
@@ -422,7 +435,7 @@
             btnAlterar.OverrideDefault.Border.Rounding = 20F;
             btnAlterar.OverrideDefault.Border.Width = 1;
             btnAlterar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnAlterar.Size = new Size(100, 30);
+            btnAlterar.Size = new Size(100, 27);
             btnAlterar.StateCommon.Back.Color1 = Color.FromArgb(250, 252, 252);
             btnAlterar.StateCommon.Back.Color2 = Color.FromArgb(250, 252, 252);
             btnAlterar.StateCommon.Back.ColorAngle = 45F;
@@ -464,7 +477,7 @@
             dtpDataInicio.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dtpDataInicio.CornerRoundingRadius = 8F;
             dtpDataInicio.Format = DateTimePickerFormat.Short;
-            dtpDataInicio.Location = new Point(639, 31);
+            dtpDataInicio.Location = new Point(653, 31);
             dtpDataInicio.Name = "dtpDataInicio";
             dtpDataInicio.Size = new Size(110, 27);
             dtpDataInicio.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -476,7 +489,7 @@
             dtpDataFim.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             dtpDataFim.CornerRoundingRadius = 8F;
             dtpDataFim.Format = DateTimePickerFormat.Short;
-            dtpDataFim.Location = new Point(754, 31);
+            dtpDataFim.Location = new Point(768, 31);
             dtpDataFim.Name = "dtpDataFim";
             dtpDataFim.Size = new Size(110, 27);
             dtpDataFim.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -487,9 +500,10 @@
             // 
             lblRotuloDataInicio.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblRotuloDataInicio.AutoSize = true;
+            lblRotuloDataInicio.BackColor = Color.Transparent;
             lblRotuloDataInicio.Font = new Font("Microsoft Sans Serif", 9.25F);
-            lblRotuloDataInicio.ForeColor = Color.FromArgb(0, 76, 172);
-            lblRotuloDataInicio.Location = new Point(639, 11);
+            lblRotuloDataInicio.ForeColor = Color.Navy;
+            lblRotuloDataInicio.Location = new Point(653, 11);
             lblRotuloDataInicio.Name = "lblRotuloDataInicio";
             lblRotuloDataInicio.Size = new Size(70, 16);
             lblRotuloDataInicio.TabIndex = 1039;
@@ -499,9 +513,10 @@
             // 
             lblRotuloDataFim.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblRotuloDataFim.AutoSize = true;
+            lblRotuloDataFim.BackColor = Color.Transparent;
             lblRotuloDataFim.Font = new Font("Microsoft Sans Serif", 9.25F);
-            lblRotuloDataFim.ForeColor = Color.FromArgb(0, 76, 172);
-            lblRotuloDataFim.Location = new Point(754, 9);
+            lblRotuloDataFim.ForeColor = Color.Navy;
+            lblRotuloDataFim.Location = new Point(768, 9);
             lblRotuloDataFim.Name = "lblRotuloDataFim";
             lblRotuloDataFim.Size = new Size(61, 16);
             lblRotuloDataFim.TabIndex = 1040;
@@ -511,7 +526,7 @@
             // 
             btnBuscar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnBuscar.CornerRoundingRadius = 10F;
-            btnBuscar.Location = new Point(870, 29);
+            btnBuscar.Location = new Point(884, 29);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnBuscar.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -566,12 +581,12 @@
             // 
             // dgvVendas
             // 
-            dgvVendas.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            dgvVendas.Location = new Point(12, 73);
+            dgvVendas.Dock = DockStyle.Fill;
+            dgvVendas.Location = new Point(3, 103);
             dgvVendas.Name = "dgvVendas";
             dgvVendas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007Blue;
             dgvVendas.RowHeadersWidth = 23;
-            dgvVendas.Size = new Size(888, 275);
+            dgvVendas.Size = new Size(921, 287);
             dgvVendas.TabIndex = 1042;
             dgvVendas.TabStop = false;
             // 
@@ -579,7 +594,7 @@
             // 
             btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCancelar.CornerRoundingRadius = 10F;
-            btnCancelar.Location = new Point(602, 384);
+            btnCancelar.Location = new Point(611, 0);
             btnCancelar.Margin = new Padding(5, 3, 5, 3);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
@@ -593,7 +608,7 @@
             btnCancelar.OverrideDefault.Border.Rounding = 20F;
             btnCancelar.OverrideDefault.Border.Width = 1;
             btnCancelar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnCancelar.Size = new Size(100, 30);
+            btnCancelar.Size = new Size(100, 27);
             btnCancelar.StateCommon.Back.Color1 = Color.Red;
             btnCancelar.StateCommon.Back.Color2 = Color.Red;
             btnCancelar.StateCommon.Back.ColorAngle = 45F;
@@ -635,7 +650,7 @@
             // 
             btnLocalizarCliente.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLocalizarCliente.CornerRoundingRadius = 10F;
-            btnLocalizarCliente.Location = new Point(602, 31);
+            btnLocalizarCliente.Location = new Point(616, 31);
             btnLocalizarCliente.Name = "btnLocalizarCliente";
             btnLocalizarCliente.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnLocalizarCliente.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -688,29 +703,87 @@
             btnLocalizarCliente.Values.Text = "";
             btnLocalizarCliente.Click += btnLocalizarCliente_Click;
             // 
+            // tableLayoutPanelGerenciamentoVendas
+            // 
+            tableLayoutPanelGerenciamentoVendas.ColumnCount = 1;
+            tableLayoutPanelGerenciamentoVendas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanelGerenciamentoVendas.Controls.Add(kryptonPanel1, 0, 0);
+            tableLayoutPanelGerenciamentoVendas.Controls.Add(kryptonPanel2, 0, 1);
+            tableLayoutPanelGerenciamentoVendas.Controls.Add(dgvVendas, 0, 2);
+            tableLayoutPanelGerenciamentoVendas.Controls.Add(kryptonPanel4, 0, 3);
+            tableLayoutPanelGerenciamentoVendas.Dock = DockStyle.Fill;
+            tableLayoutPanelGerenciamentoVendas.Location = new Point(0, 0);
+            tableLayoutPanelGerenciamentoVendas.Name = "tableLayoutPanelGerenciamentoVendas";
+            tableLayoutPanelGerenciamentoVendas.RowCount = 4;
+            tableLayoutPanelGerenciamentoVendas.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanelGerenciamentoVendas.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
+            tableLayoutPanelGerenciamentoVendas.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanelGerenciamentoVendas.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutPanelGerenciamentoVendas.Size = new Size(927, 428);
+            tableLayoutPanelGerenciamentoVendas.TabIndex = 1045;
+            // 
+            // kryptonPanel1
+            // 
+            kryptonPanel1.Controls.Add(lblTituloPDV);
+            kryptonPanel1.Dock = DockStyle.Fill;
+            kryptonPanel1.Location = new Point(3, 3);
+            kryptonPanel1.Name = "kryptonPanel1";
+            kryptonPanel1.Size = new Size(921, 24);
+            kryptonPanel1.TabIndex = 0;
+            // 
+            // lblTituloPDV
+            // 
+            lblTituloPDV.Dock = DockStyle.Fill;
+            lblTituloPDV.Location = new Point(0, 0);
+            lblTituloPDV.Name = "lblTituloPDV";
+            lblTituloPDV.Size = new Size(921, 24);
+            lblTituloPDV.StateCommon.ShortText.Color1 = Color.Navy;
+            lblTituloPDV.StateCommon.ShortText.Color2 = Color.Navy;
+            lblTituloPDV.StateCommon.ShortText.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTituloPDV.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
+            lblTituloPDV.TabIndex = 1;
+            lblTituloPDV.Values.Text = "GERENCIAMENTO DE VENDAS";
+            // 
+            // kryptonPanel2
+            // 
+            kryptonPanel2.Controls.Add(dtpDataFim);
+            kryptonPanel2.Controls.Add(btnLocalizarCliente);
+            kryptonPanel2.Controls.Add(txtVendaID);
+            kryptonPanel2.Controls.Add(btnBuscar);
+            kryptonPanel2.Controls.Add(lblRotuloVendaID);
+            kryptonPanel2.Controls.Add(lblRotuloDataFim);
+            kryptonPanel2.Controls.Add(lblRotuloNome);
+            kryptonPanel2.Controls.Add(lblRotuloDataInicio);
+            kryptonPanel2.Controls.Add(txtCliente);
+            kryptonPanel2.Controls.Add(dtpDataInicio);
+            kryptonPanel2.Dock = DockStyle.Fill;
+            kryptonPanel2.Location = new Point(3, 33);
+            kryptonPanel2.Name = "kryptonPanel2";
+            kryptonPanel2.Size = new Size(921, 64);
+            kryptonPanel2.TabIndex = 1;
+            // 
+            // kryptonPanel4
+            // 
+            kryptonPanel4.Controls.Add(btnCancelar);
+            kryptonPanel4.Controls.Add(btnAlterar);
+            kryptonPanel4.Controls.Add(btnVisualizar);
+            kryptonPanel4.Controls.Add(btnExcluir);
+            kryptonPanel4.Controls.Add(btnSair);
+            kryptonPanel4.Dock = DockStyle.Fill;
+            kryptonPanel4.Location = new Point(3, 396);
+            kryptonPanel4.Name = "kryptonPanel4";
+            kryptonPanel4.Size = new Size(921, 29);
+            kryptonPanel4.TabIndex = 3;
+            // 
             // FrmGerenciarVendas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(252, 252, 250);
             ClientSize = new Size(927, 450);
-            Controls.Add(btnLocalizarCliente);
-            Controls.Add(btnCancelar);
-            Controls.Add(dgvVendas);
-            Controls.Add(btnBuscar);
-            Controls.Add(lblRotuloDataFim);
-            Controls.Add(lblRotuloDataInicio);
-            Controls.Add(dtpDataFim);
-            Controls.Add(dtpDataInicio);
-            Controls.Add(btnSair);
-            Controls.Add(btnExcluir);
-            Controls.Add(btnVisualizar);
-            Controls.Add(btnAlterar);
-            Controls.Add(txtCliente);
-            Controls.Add(lblRotuloNome);
-            Controls.Add(lblRotuloVendaID);
-            Controls.Add(txtVendaID);
+            Controls.Add(tableLayoutPanelGerenciamentoVendas);
             Controls.Add(kryptonStatusStrip1);
+            FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmGerenciarVendas";
@@ -722,6 +795,15 @@
             kryptonStatusStrip1.ResumeLayout(false);
             kryptonStatusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVendas).EndInit();
+            tableLayoutPanelGerenciamentoVendas.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel1).EndInit();
+            kryptonPanel1.ResumeLayout(false);
+            kryptonPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel2).EndInit();
+            kryptonPanel2.ResumeLayout(false);
+            kryptonPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)kryptonPanel4).EndInit();
+            kryptonPanel4.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -758,5 +840,10 @@
         private Krypton.Toolkit.KryptonDataGridView dgvVendas;
         public Krypton.Toolkit.KryptonButton btnCancelar;
         public Krypton.Toolkit.KryptonButton btnLocalizarCliente;
+        private TableLayoutPanel tableLayoutPanelGerenciamentoVendas;
+        private Krypton.Toolkit.KryptonPanel kryptonPanel1;
+        private Krypton.Toolkit.KryptonPanel kryptonPanel2;
+        private Krypton.Toolkit.KryptonPanel kryptonPanel4;
+        private Krypton.Toolkit.KryptonLabel lblTituloPDV;
     }
 }

@@ -1393,10 +1393,10 @@
             // 
             // lblTituloPDV
             // 
-            lblTituloPDV.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            lblTituloPDV.Dock = DockStyle.Fill;
             lblTituloPDV.Location = new Point(0, 0);
             lblTituloPDV.Name = "lblTituloPDV";
-            lblTituloPDV.Size = new Size(189, 26);
+            lblTituloPDV.Size = new Size(1018, 29);
             lblTituloPDV.StateCommon.ShortText.Color1 = Color.FromArgb(252, 252, 250);
             lblTituloPDV.StateCommon.ShortText.Color2 = Color.FromArgb(252, 252, 250);
             lblTituloPDV.StateCommon.ShortText.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
