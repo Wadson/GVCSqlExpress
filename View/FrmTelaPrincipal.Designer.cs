@@ -85,8 +85,8 @@
             movimentaçãoDeEstoqueToolStripMenuItem = new ToolStripMenuItem();
             consultaMovimentaçãoDeEstoqueToolStripMenuItem = new ToolStripMenuItem();
             relatórioEstoqueToolStripMenuItem = new ToolStripMenuItem();
-            kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(components);
             dashbordToolStripMenuItem = new ToolStripMenuItem();
+            kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(components);
             ((System.ComponentModel.ISupportInitialize)kryptonPanel2).BeginInit();
             kryptonPanel2.SuspendLayout();
             kryptonStatusStrip1.SuspendLayout();
@@ -197,7 +197,7 @@
             kryptonPanel2.Dock = DockStyle.Top;
             kryptonPanel2.Location = new Point(0, 0);
             kryptonPanel2.Name = "kryptonPanel2";
-            kryptonPanel2.PaletteMode = Krypton.Toolkit.PaletteMode.Office365BlueLightMode;
+            kryptonPanel2.PaletteMode = Krypton.Toolkit.PaletteMode.Office365Silver;
             kryptonPanel2.PanelBackStyle = Krypton.Toolkit.PaletteBackStyle.GridDataCellCustom1;
             kryptonPanel2.Size = new Size(1008, 46);
             kryptonPanel2.TabIndex = 602;
@@ -496,7 +496,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.BackColor = SystemColors.GradientInactiveCaption;
+            menuStrip1.BackColor = Color.White;
             menuStrip1.Font = new Font("Segoe UI", 9F);
             menuStrip1.Items.AddRange(new ToolStripItem[] { cadastrosToolStripMenuItem1, ferramentasToolStripMenuItem, estoqueToolStripMenuItem });
             menuStrip1.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
@@ -509,6 +509,7 @@
             // cadastrosToolStripMenuItem1
             // 
             cadastrosToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { cidadeToolStripMenuItem1, clientesToolStripMenuItem1, estadoToolStripMenuItem, fornecedoresToolStripMenuItem1, produtosToolStripMenuItem1, usuáriosToolStripMenuItem1 });
+            cadastrosToolStripMenuItem1.ForeColor = Color.White;
             cadastrosToolStripMenuItem1.Name = "cadastrosToolStripMenuItem1";
             cadastrosToolStripMenuItem1.Size = new Size(71, 20);
             cadastrosToolStripMenuItem1.Text = "&Cadastros";
@@ -557,6 +558,7 @@
             // ferramentasToolStripMenuItem
             // 
             ferramentasToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cancelarVendaToolStripMenuItem });
+            ferramentasToolStripMenuItem.ForeColor = Color.White;
             ferramentasToolStripMenuItem.Name = "ferramentasToolStripMenuItem";
             ferramentasToolStripMenuItem.Size = new Size(84, 20);
             ferramentasToolStripMenuItem.Text = "Ferramentas";
@@ -571,6 +573,7 @@
             // estoqueToolStripMenuItem
             // 
             estoqueToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { movimentaçãoDeEstoqueToolStripMenuItem, consultaMovimentaçãoDeEstoqueToolStripMenuItem, relatórioEstoqueToolStripMenuItem, dashbordToolStripMenuItem });
+            estoqueToolStripMenuItem.ForeColor = Color.White;
             estoqueToolStripMenuItem.Name = "estoqueToolStripMenuItem";
             estoqueToolStripMenuItem.Size = new Size(61, 20);
             estoqueToolStripMenuItem.Text = "Estoque";
@@ -595,6 +598,13 @@
             relatórioEstoqueToolStripMenuItem.Size = new Size(265, 22);
             relatórioEstoqueToolStripMenuItem.Text = "Relatório Estoque";
             relatórioEstoqueToolStripMenuItem.Click += relatórioEstoqueToolStripMenuItem_Click;
+            // 
+            // dashbordToolStripMenuItem
+            // 
+            dashbordToolStripMenuItem.Name = "dashbordToolStripMenuItem";
+            dashbordToolStripMenuItem.Size = new Size(265, 22);
+            dashbordToolStripMenuItem.Text = "Dashboard";
+            dashbordToolStripMenuItem.Click += dashbordToolStripMenuItem_Click;
             // 
             // kryptonPalette1
             // 
@@ -631,13 +641,6 @@
             kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Back.Color2 = Color.FromArgb(250, 252, 252);
             kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.ButtonEdgeInset = 10;
             kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Content.Padding = new Padding(10, -1, -1, -1);
-            // 
-            // dashbordToolStripMenuItem
-            // 
-            dashbordToolStripMenuItem.Name = "dashbordToolStripMenuItem";
-            dashbordToolStripMenuItem.Size = new Size(265, 22);
-            dashbordToolStripMenuItem.Text = "Dashboard";
-            dashbordToolStripMenuItem.Click += dashbordToolStripMenuItem_Click;
             // 
             // FrmTelaPrincipal
             // 

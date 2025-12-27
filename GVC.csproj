@@ -39,6 +39,12 @@
 	  <Compile Update="View\FrmCadFornecedor.cs">
 	    <SubType>Form</SubType>
 	  </Compile>
+	  <Compile Update="View\FrmContasReceber.cs">
+	    <SubType>Form</SubType>
+	  </Compile>
+	  <Compile Update="View\FrmMotivoOperacao.cs">
+	    <SubType>Form</SubType>
+	  </Compile>
 	  <Compile Update="View\FrmLocalizarFornecedor.cs">
 	    <SubType>Form</SubType>
 	  </Compile>

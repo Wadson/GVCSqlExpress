@@ -119,7 +119,7 @@ namespace GVC.BLL
                     throw new Exception($"Total parcelas (R$ {totalParcelas:N2}) não bate com valor da venda (R$ {venda.ValorTotal:N2}).");
                 }
             }
-
+           
             // ====================
             // SALVA
             // ====================
@@ -168,25 +168,81 @@ namespace GVC.BLL
 
             return EnumStatusVenda.ParcialmentePago.ToDb();
         }
-        // Cancelamento de Venda abaixo
-        public void CancelarVenda(long vendaId)
+        public void CancelarVenda(long vendaId, string motivo)
         {
-            if (ExistePagamento(vendaId))
-                throw new Exception("Cancelamento não permitido.\n\n" + "Esta venda possui pagamento(s) registrado(s)." );
+            if (string.IsNullOrWhiteSpace(motivo))
+                throw new Exception("Motivo do cancelamento é obrigatório.");
 
-            new VendaDal().AtualizarStatusVenda(vendaId, "CANCELADA");
-            new ParcelaDal().CancelarParcelasPorVenda(vendaId);
+            var vendaDal = new VendaDal();
+            var itemDal = new ItemVendaDal();
+            var produtoDal = new ProdutoDALL();
+            var parcelaDal = new ParcelaDal();
+            var parcelaBll = new ParcelaBLL();
+
+            using var conn = GVC.Helpers.Conexao.Conex();
+            conn.Open();
+            using var tran = conn.BeginTransaction();
+
+            try
+            {
+                // ============================
+                // 1️⃣ ESTORNAR PAGAMENTOS
+                // ============================
+                var parcelas = parcelaDal.GetParcelas((int)vendaId);
+
+                foreach (var p in parcelas)
+                {
+                    if (p.ValorRecebido > 0)
+                    {
+                        parcelaBll.EstornarPagamento(
+                            p.ParcelaID,
+                            p.ValorRecebido,
+                            motivo
+                        );
+                    }
+                }
+
+                // ============================
+                // 2️⃣ CANCELAR PARCELAS
+                // ============================
+                parcelaDal.CancelarParcelasPorVenda(vendaId);
+
+                // ============================
+                // 3️⃣ DEVOLVER ESTOQUE
+                // ============================
+                var itens = itemDal.ListarItensPorVenda(vendaId);
+
+                foreach (var item in itens)
+                {
+                    var produto = produtoDal.BuscarPorId(item.ProdutoID);
+
+                    if (produto == null)
+                        throw new Exception($"Produto ID {item.ProdutoID} não encontrado.");
+
+                    produto.Estoque += item.Quantidade;
+                    produtoDal.Alterar(produto);
+                }
+
+                // ============================
+                // 4️⃣ CANCELAR VENDA + MOTIVO
+                // ============================
+                vendaDal.AtualizarStatusVenda(vendaId,  EnumStatusVenda.Cancelada.ToDb(), motivo );
+
+                tran.Commit();
+            }
+            catch
+            {
+                tran.Rollback();
+                throw;
+            }
         }
+
 
 
         public bool PodeAlterarVenda(int vendaID)
         {
             return !ExistePagamento(vendaID);
-        }
-        //private bool VendaPossuiPagamento(long vendaId)
-        //{
-        //    return new ParcelaDal().ExistePagamentoPorVenda(vendaId);
-        //}
+        }       
         public void ExcluirVendaFisicamente(long vendaId)
         {
             var parcelaDal = new ParcelaDal();
@@ -207,8 +263,7 @@ namespace GVC.BLL
             using var conn = Conexao.Conex();
             conn.Open();
 
-            string sql = @"
-        SELECT COUNT(*)
+            string sql = @" SELECT COUNT(*)
         FROM PagamentosParciais pp
         INNER JOIN Parcela p ON p.ParcelaID = pp.ParcelaID
         WHERE p.VendaID = @VendaID";
@@ -218,7 +273,6 @@ namespace GVC.BLL
 
             return (int)cmd.ExecuteScalar() > 0;
         }
-
        
         public VendaCompletaModel ObterVendaCompleta(long vendaId)
         {
@@ -245,6 +299,5 @@ namespace GVC.BLL
             new VendaAtualizacaoDal()
                 .AtualizarVendaCompleta(venda, itens, parcelas);
         }
-
     }
 }

@@ -257,6 +257,7 @@ WHERE ParcelaID = @ParcelaID;";   // ✅ Ajuste para SQL Server
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
             cmd.ExecuteNonQuery();
         }
+        // 26/12/2025
 
 
     }

@@ -12,9 +12,7 @@ namespace GVC.BLL
 {
     internal class ItensVendaBLL
     {
-        ItemVendaDal itensvendasdall = null;
-       
-        // ************************LISTA USUARIO*********************************************
+        ItemVendaDal itensvendasdall = null;    
         public DataTable Listar()
         {
             DataTable dtable = new DataTable();
@@ -29,7 +27,6 @@ namespace GVC.BLL
             }
             return dtable;
         }
-
         public void Salvar(ItemVendaModel itensvenda)
         {
             try
@@ -42,7 +39,6 @@ namespace GVC.BLL
                 throw erro;
             }
         }
-
         public void Excluir(ItemVendaModel itensvenda)
         {
             try
@@ -55,7 +51,6 @@ namespace GVC.BLL
                 throw erro;
             }
         }
-
         public void Atualizar(ItemVendaModel itensvenda)
         {
             try

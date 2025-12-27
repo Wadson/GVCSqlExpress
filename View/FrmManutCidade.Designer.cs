@@ -43,9 +43,9 @@
             kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             kryptonPanel1 = new Krypton.Toolkit.KryptonPanel();
+            kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
             kryptonPanel2 = new Krypton.Toolkit.KryptonPanel();
             kryptonPanel4 = new Krypton.Toolkit.KryptonPanel();
-            kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
             ((System.ComponentModel.ISupportInitialize)dataGridPesquisar).BeginInit();
             kryptonStatusStrip2.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -135,7 +135,7 @@
             btnSai.StateCommon.Border.Width = 1;
             btnSai.StateCommon.Content.ShortText.Color1 = Color.White;
             btnSai.StateCommon.Content.ShortText.Color2 = Color.White;
-            btnSai.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSai.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnSai.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnSai.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnSai.StatePressed.Back.ColorAngle = 135F;
@@ -189,7 +189,7 @@
             btnExclui.StateCommon.Border.Width = 1;
             btnExclui.StateCommon.Content.ShortText.Color1 = Color.White;
             btnExclui.StateCommon.Content.ShortText.Color2 = Color.White;
-            btnExclui.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnExclui.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnExclui.StateNormal.Back.Color1 = Color.Red;
             btnExclui.StateNormal.Back.Color2 = Color.Red;
             btnExclui.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
@@ -245,7 +245,7 @@
             btnNov.StateCommon.Border.Width = 1;
             btnNov.StateCommon.Content.ShortText.Color1 = Color.White;
             btnNov.StateCommon.Content.ShortText.Color2 = Color.White;
-            btnNov.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnNov.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnNov.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnNov.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnNov.StatePressed.Back.ColorAngle = 135F;
@@ -299,7 +299,7 @@
             btnAltera.StateCommon.Border.Width = 1;
             btnAltera.StateCommon.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254);
             btnAltera.StateCommon.Content.ShortText.Color2 = Color.White;
-            btnAltera.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAltera.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnAltera.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnAltera.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnAltera.StatePressed.Back.ColorAngle = 135F;
@@ -432,6 +432,19 @@
             kryptonPanel1.StateCommon.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Dashed;
             kryptonPanel1.TabIndex = 0;
             // 
+            // kryptonLabel1
+            // 
+            kryptonLabel1.Dock = DockStyle.Fill;
+            kryptonLabel1.Location = new Point(0, 0);
+            kryptonLabel1.Name = "kryptonLabel1";
+            kryptonLabel1.Size = new Size(1030, 29);
+            kryptonLabel1.StateCommon.ShortText.Color1 = Color.White;
+            kryptonLabel1.StateCommon.ShortText.Color2 = Color.White;
+            kryptonLabel1.StateCommon.ShortText.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            kryptonLabel1.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
+            kryptonLabel1.TabIndex = 0;
+            kryptonLabel1.Values.Text = "MANUTENÇÃO DE CIDADES";
+            // 
             // kryptonPanel2
             // 
             kryptonPanel2.Controls.Add(rbtCodig);
@@ -456,19 +469,6 @@
             kryptonPanel4.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007SilverDarkMode;
             kryptonPanel4.Size = new Size(1030, 34);
             kryptonPanel4.TabIndex = 2;
-            // 
-            // kryptonLabel1
-            // 
-            kryptonLabel1.Dock = DockStyle.Fill;
-            kryptonLabel1.Location = new Point(0, 0);
-            kryptonLabel1.Name = "kryptonLabel1";
-            kryptonLabel1.Size = new Size(1030, 29);
-            kryptonLabel1.StateCommon.ShortText.Color1 = Color.White;
-            kryptonLabel1.StateCommon.ShortText.Color2 = Color.White;
-            kryptonLabel1.StateCommon.ShortText.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            kryptonLabel1.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
-            kryptonLabel1.TabIndex = 0;
-            kryptonLabel1.Values.Text = "MANUTENÇÃO DE CIDADES";
             // 
             // FrmManutCidade
             // 

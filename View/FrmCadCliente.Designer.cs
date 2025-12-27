@@ -373,7 +373,7 @@
             btnSair.OverrideDefault.Border.Rounding = 20F;
             btnSair.OverrideDefault.Border.Width = 1;
             btnSair.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSair.Size = new Size(80, 35);
+            btnSair.Size = new Size(80, 27);
             btnSair.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnSair.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnSair.StateCommon.Back.ColorAngle = 45F;
@@ -385,7 +385,7 @@
             btnSair.StateCommon.Border.Width = 1;
             btnSair.StateCommon.Content.ShortText.Color1 = SystemColors.ActiveCaptionText;
             btnSair.StateCommon.Content.ShortText.Color2 = Color.Black;
-            btnSair.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F);
+            btnSair.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnSair.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnSair.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnSair.StatePressed.Back.ColorAngle = 135F;
@@ -426,7 +426,7 @@
             btnNovo.OverrideDefault.Border.Rounding = 20F;
             btnNovo.OverrideDefault.Border.Width = 1;
             btnNovo.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnNovo.Size = new Size(80, 35);
+            btnNovo.Size = new Size(80, 27);
             btnNovo.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnNovo.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnNovo.StateCommon.Back.ColorAngle = 45F;
@@ -438,7 +438,7 @@
             btnNovo.StateCommon.Border.Width = 1;
             btnNovo.StateCommon.Content.ShortText.Color1 = SystemColors.ActiveCaptionText;
             btnNovo.StateCommon.Content.ShortText.Color2 = Color.Black;
-            btnNovo.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F);
+            btnNovo.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnNovo.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnNovo.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnNovo.StatePressed.Back.ColorAngle = 135F;
@@ -480,7 +480,7 @@
             btnSalvar.OverrideDefault.Border.Rounding = 20F;
             btnSalvar.OverrideDefault.Border.Width = 1;
             btnSalvar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSalvar.Size = new Size(80, 35);
+            btnSalvar.Size = new Size(80, 27);
             btnSalvar.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnSalvar.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnSalvar.StateCommon.Back.ColorAngle = 45F;
@@ -492,7 +492,7 @@
             btnSalvar.StateCommon.Border.Width = 1;
             btnSalvar.StateCommon.Content.ShortText.Color1 = SystemColors.ActiveCaptionText;
             btnSalvar.StateCommon.Content.ShortText.Color2 = Color.Black;
-            btnSalvar.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F);
+            btnSalvar.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnSalvar.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnSalvar.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnSalvar.StatePressed.Back.ColorAngle = 135F;
@@ -598,7 +598,7 @@
             txtCep.StateCommon.Content.Color1 = Color.Gray;
             txtCep.StateCommon.Content.Font = new Font("Segoe UI", 10.25F);
             txtCep.StateCommon.Content.Padding = new Padding(10, 0, 10, 0);
-            txtCep.TabIndex = 10;           
+            txtCep.TabIndex = 10;
             txtCep.KeyPress += txtCep_KeyPress;
             txtCep.Leave += txtCep_Leave;
             // 
@@ -1019,7 +1019,7 @@
             txtCnpj.StateCommon.Content.Font = new Font("Segoe UI", 10.25F);
             txtCnpj.StateCommon.Content.Padding = new Padding(10, 0, 10, 0);
             txtCnpj.TabIndex = 1038;
-            txtCnpj.Visible = false;           
+            txtCnpj.Visible = false;
             // 
             // lblRotuloCnpj
             // 

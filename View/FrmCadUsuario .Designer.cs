@@ -60,7 +60,7 @@
             // btnSalvar
             // 
             btnSalvar.CornerRoundingRadius = 10F;
-            btnSalvar.Location = new Point(180, 172);
+            btnSalvar.Location = new Point(386, 175);
             btnSalvar.Margin = new Padding(4, 3, 4, 3);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
@@ -74,7 +74,7 @@
             btnSalvar.OverrideDefault.Border.Rounding = 20F;
             btnSalvar.OverrideDefault.Border.Width = 1;
             btnSalvar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSalvar.Size = new Size(100, 30);
+            btnSalvar.Size = new Size(80, 27);
             btnSalvar.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnSalvar.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnSalvar.StateCommon.Back.ColorAngle = 45F;
@@ -113,7 +113,7 @@
             // btnNovo
             // 
             btnNovo.CornerRoundingRadius = 10F;
-            btnNovo.Location = new Point(283, 172);
+            btnNovo.Location = new Point(473, 175);
             btnNovo.Margin = new Padding(4, 3, 4, 3);
             btnNovo.Name = "btnNovo";
             btnNovo.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
@@ -127,7 +127,7 @@
             btnNovo.OverrideDefault.Border.Rounding = 20F;
             btnNovo.OverrideDefault.Border.Width = 1;
             btnNovo.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnNovo.Size = new Size(100, 30);
+            btnNovo.Size = new Size(80, 27);
             btnNovo.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnNovo.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnNovo.StateCommon.Back.ColorAngle = 45F;
@@ -168,7 +168,7 @@
             // btnSair
             // 
             btnSair.CornerRoundingRadius = 10F;
-            btnSair.Location = new Point(391, 172);
+            btnSair.Location = new Point(560, 175);
             btnSair.Margin = new Padding(4, 3, 4, 3);
             btnSair.Name = "btnSair";
             btnSair.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
@@ -182,7 +182,7 @@
             btnSair.OverrideDefault.Border.Rounding = 20F;
             btnSair.OverrideDefault.Border.Width = 1;
             btnSair.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSair.Size = new Size(100, 30);
+            btnSair.Size = new Size(80, 27);
             btnSair.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnSair.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnSair.StateCommon.Back.ColorAngle = 45F;
@@ -244,7 +244,7 @@
             txtEmail.Margin = new Padding(4, 3, 4, 3);
             txtEmail.Multiline = true;
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(385, 24);
+            txtEmail.Size = new Size(342, 24);
             txtEmail.StateCommon.Back.Color1 = Color.White;
             txtEmail.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             txtEmail.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
@@ -259,7 +259,7 @@
             // 
             // txtNovaSenha
             // 
-            txtNovaSenha.Location = new Point(330, 132);
+            txtNovaSenha.Location = new Point(290, 132);
             txtNovaSenha.Margin = new Padding(4, 3, 4, 3);
             txtNovaSenha.Name = "txtNovaSenha";
             txtNovaSenha.Size = new Size(175, 24);
@@ -301,7 +301,7 @@
             // 
             lblNovaSenha.AutoSize = true;
             lblNovaSenha.Font = new Font("Microsoft Sans Serif", 10.25F);
-            lblNovaSenha.Location = new Point(337, 112);
+            lblNovaSenha.Location = new Point(297, 112);
             lblNovaSenha.Margin = new Padding(4, 0, 4, 0);
             lblNovaSenha.Name = "lblNovaSenha";
             lblNovaSenha.Size = new Size(86, 17);
@@ -323,7 +323,7 @@
             // 
             lblRepitaSenha.AutoSize = true;
             lblRepitaSenha.Font = new Font("Microsoft Sans Serif", 10.25F);
-            lblRepitaSenha.Location = new Point(512, 112);
+            lblRepitaSenha.Location = new Point(469, 112);
             lblRepitaSenha.Margin = new Padding(4, 0, 4, 0);
             lblRepitaSenha.Name = "lblRepitaSenha";
             lblRepitaSenha.Size = new Size(94, 17);
@@ -332,7 +332,7 @@
             // 
             // txtRepitaSenha
             // 
-            txtRepitaSenha.Location = new Point(508, 132);
+            txtRepitaSenha.Location = new Point(465, 132);
             txtRepitaSenha.Margin = new Padding(4, 3, 4, 3);
             txtRepitaSenha.Name = "txtRepitaSenha";
             txtRepitaSenha.Size = new Size(175, 24);
@@ -375,7 +375,7 @@
             txtCPF.Location = new Point(482, 31);
             txtCPF.Margin = new Padding(4, 3, 4, 3);
             txtCPF.Name = "txtCPF";
-            txtCPF.Size = new Size(201, 24);
+            txtCPF.Size = new Size(158, 24);
             txtCPF.StateCommon.Back.Color1 = Color.White;
             txtCPF.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             txtCPF.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
@@ -449,7 +449,7 @@
             dtpDataNascimento.Name = "dtpDataNascimento";
             dtpDataNascimento.Palette = kryptonPalette1;
             dtpDataNascimento.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            dtpDataNascimento.Size = new Size(132, 27);
+            dtpDataNascimento.Size = new Size(109, 27);
             dtpDataNascimento.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
             dtpDataNascimento.StateCommon.Border.Rounding = 10F;
             dtpDataNascimento.StateCommon.Border.Width = 1;
@@ -459,7 +459,7 @@
             // 
             lblSenhaAtual.AutoSize = true;
             lblSenhaAtual.Font = new Font("Microsoft Sans Serif", 10.25F);
-            lblSenhaAtual.Location = new Point(154, 112);
+            lblSenhaAtual.Location = new Point(114, 112);
             lblSenhaAtual.Margin = new Padding(4, 0, 4, 0);
             lblSenhaAtual.Name = "lblSenhaAtual";
             lblSenhaAtual.Size = new Size(85, 17);
@@ -468,7 +468,7 @@
             // 
             // txtSenhaAtual
             // 
-            txtSenhaAtual.Location = new Point(150, 132);
+            txtSenhaAtual.Location = new Point(110, 132);
             txtSenhaAtual.Margin = new Padding(4, 3, 4, 3);
             txtSenhaAtual.Name = "txtSenhaAtual";
             txtSenhaAtual.Size = new Size(175, 24);
@@ -523,7 +523,7 @@
             kryptonStatusStrip1.Name = "kryptonStatusStrip1";
             kryptonStatusStrip1.ProgressBars = null;
             kryptonStatusStrip1.RenderMode = ToolStripRenderMode.ManagerRenderMode;
-            kryptonStatusStrip1.Size = new Size(696, 22);
+            kryptonStatusStrip1.Size = new Size(644, 22);
             kryptonStatusStrip1.TabIndex = 1032;
             kryptonStatusStrip1.Text = "kryptonStatusStrip1";
             // 
@@ -538,7 +538,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(250, 252, 252);
-            ClientSize = new Size(696, 233);
+            ClientSize = new Size(644, 233);
             Controls.Add(kryptonStatusStrip1);
             Controls.Add(label1);
             Controls.Add(txtNomeCompleto);

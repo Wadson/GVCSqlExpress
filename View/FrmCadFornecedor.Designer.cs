@@ -335,7 +335,7 @@
             // btnSair
             // 
             btnSair.CornerRoundingRadius = 10F;
-            btnSair.Location = new Point(577, 367);
+            btnSair.Location = new Point(577, 376);
             btnSair.Name = "btnSair";
             btnSair.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnSair.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -348,7 +348,7 @@
             btnSair.OverrideDefault.Border.Rounding = 20F;
             btnSair.OverrideDefault.Border.Width = 1;
             btnSair.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSair.Size = new Size(80, 35);
+            btnSair.Size = new Size(80, 27);
             btnSair.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnSair.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnSair.StateCommon.Back.ColorAngle = 45F;
@@ -360,7 +360,7 @@
             btnSair.StateCommon.Border.Width = 1;
             btnSair.StateCommon.Content.ShortText.Color1 = SystemColors.ActiveCaptionText;
             btnSair.StateCommon.Content.ShortText.Color2 = Color.Black;
-            btnSair.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F);
+            btnSair.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnSair.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnSair.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnSair.StatePressed.Back.ColorAngle = 135F;
@@ -388,7 +388,7 @@
             // btnNovo
             // 
             btnNovo.CornerRoundingRadius = 10F;
-            btnNovo.Location = new Point(491, 367);
+            btnNovo.Location = new Point(491, 376);
             btnNovo.Name = "btnNovo";
             btnNovo.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
             btnNovo.OverrideDefault.Back.Color2 = Color.FromArgb(250, 252, 252);
@@ -401,7 +401,7 @@
             btnNovo.OverrideDefault.Border.Rounding = 20F;
             btnNovo.OverrideDefault.Border.Width = 1;
             btnNovo.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnNovo.Size = new Size(80, 35);
+            btnNovo.Size = new Size(80, 27);
             btnNovo.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnNovo.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnNovo.StateCommon.Back.ColorAngle = 45F;
@@ -413,7 +413,7 @@
             btnNovo.StateCommon.Border.Width = 1;
             btnNovo.StateCommon.Content.ShortText.Color1 = SystemColors.ActiveCaptionText;
             btnNovo.StateCommon.Content.ShortText.Color2 = Color.Black;
-            btnNovo.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F);
+            btnNovo.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnNovo.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnNovo.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnNovo.StatePressed.Back.ColorAngle = 135F;
@@ -442,7 +442,7 @@
             // btnSalvar
             // 
             btnSalvar.CornerRoundingRadius = 10F;
-            btnSalvar.Location = new Point(405, 367);
+            btnSalvar.Location = new Point(405, 376);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnSalvar.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -455,7 +455,7 @@
             btnSalvar.OverrideDefault.Border.Rounding = 20F;
             btnSalvar.OverrideDefault.Border.Width = 1;
             btnSalvar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSalvar.Size = new Size(80, 35);
+            btnSalvar.Size = new Size(80, 27);
             btnSalvar.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnSalvar.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnSalvar.StateCommon.Back.ColorAngle = 45F;
@@ -467,7 +467,7 @@
             btnSalvar.StateCommon.Border.Width = 1;
             btnSalvar.StateCommon.Content.ShortText.Color1 = SystemColors.ActiveCaptionText;
             btnSalvar.StateCommon.Content.ShortText.Color2 = Color.Black;
-            btnSalvar.StateCommon.Content.ShortText.Font = new Font("Microsoft Sans Serif", 12F);
+            btnSalvar.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 9.75F);
             btnSalvar.StatePressed.Back.Color1 = Color.FromArgb(20, 145, 198);
             btnSalvar.StatePressed.Back.Color2 = Color.FromArgb(22, 121, 206);
             btnSalvar.StatePressed.Back.ColorAngle = 135F;

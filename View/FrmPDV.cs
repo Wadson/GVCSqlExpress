@@ -91,7 +91,7 @@ namespace GVC.View
 
             InicializarFormulario(); // <<< OBRIGATÓRIO
 
-            dgvitens.CellEndEdit += dgvitens_CellEndEdit;
+            dgvItensVenda.CellEndEdit += dgvitens_CellEndEdit;
             this.Text = "Frente de Caixa";
             this.StateCommon.Header.Content.ShortText.Color1 = Color.Red;
             this.StateCommon.Header.Content.ShortText.Color2 = Color.White;
@@ -121,7 +121,7 @@ namespace GVC.View
             ConfigurarGridItensVenda();
 
             _itensBindingSource.DataSource = _itensBinding;
-            dgvitens.DataSource = _itensBindingSource;
+            dgvItensVenda.DataSource = _itensBindingSource;
 
             txtQuantidade.Text = "1";
             txtPrecoUnitario.Text = "0,00";
@@ -193,39 +193,21 @@ namespace GVC.View
                 }
             }
         }
-        private void ConfigurarGridParcelas()
+
+
+
+        private void AtualizarContadorItens()
         {
-            dgvParcelas.Columns.Clear();
-
-            dgvParcelas.Columns.Add("Parcela", "Parcela");
-            dgvParcelas.Columns.Add("Vencimento", "Vencimento");
-            dgvParcelas.Columns.Add("Valor", "Valor");
-            dgvParcelas.Columns.Add("Status", "Status");
-
-            // Largura da coluna Parcela
-            dgvParcelas.Columns["Parcela"].Width = 60;
-
-            // Centralizar Parcela
-            dgvParcelas.Columns["Parcela"].DefaultCellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleCenter;
-
-            // Centralizar Status
-            dgvParcelas.Columns["Status"].DefaultCellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleCenter;
-
-            // Alinhar Valor à direita
-            dgvParcelas.Columns["Valor"].DefaultCellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleRight;
-
-            // Configurações gerais
-            dgvParcelas.AllowUserToAddRows = false;
-            dgvParcelas.RowHeadersVisible = false;
+            int totalItens = _itensBinding.Count;
+            txtTotalItens.Text = totalItens.ToString() ;
         }
-
-
-
         private void FrmPDV_Load(object sender, EventArgs e)
         {
+            _itensBinding = new BindingList<ItemVendaModel>();
+            _itensBinding.ListChanged += (sender, args) => AtualizarContadorItens();
+            dgvItensVenda.DataSource = _itensBinding;
+
+
             HabilitarTodosOsKryptonPanels();
             EstadoInicial();
 
@@ -250,18 +232,50 @@ namespace GVC.View
             if (_modo == ModoVenda.Nova)
             {
                 EstadoInicial();
-            }          
+            }
         }
         #endregion
 
         #region ===== GRID =========================================
+        private void ConfigurarGridParcelas()
+        {
+            dgvParcelas.Columns.Clear();
+
+            dgvParcelas.Columns.Add("Parcela", "Parcela");
+            dgvParcelas.Columns.Add("Vencimento", "Vencimento");
+            dgvParcelas.Columns.Add("Valor", "Valor");
+            dgvParcelas.Columns.Add("Status", "Status");
+
+            // Largura da coluna Parcela
+            dgvParcelas.Columns["Parcela"].Width = 60;
+
+            // Centralizar Parcela
+            dgvParcelas.Columns["Parcela"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+
+            // Centralizar Status
+            dgvParcelas.Columns["Status"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+
+            // Ocultar coluna "Status"
+            dgvParcelas.Columns["Status"].Visible = false;
+
+
+            // Alinhar Valor à direita
+            dgvParcelas.Columns["Valor"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleRight;
+
+            // Configurações gerais
+            dgvParcelas.AllowUserToAddRows = false;
+            dgvParcelas.RowHeadersVisible = false;
+        }
         private void ConfigurarGridItensVenda()
         {
-            dgvitens.AutoGenerateColumns = false;
-            dgvitens.Columns.Clear();
+            dgvItensVenda.AutoGenerateColumns = false;
+            dgvItensVenda.Columns.Clear();
 
             // 🔹 Coluna Código
-            dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+            dgvItensVenda.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Código",
                 DataPropertyName = nameof(ItemVendaModel.ProdutoID),
@@ -276,11 +290,11 @@ namespace GVC.View
             });
 
             // 🔹 Coluna Descrição
-            dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+            dgvItensVenda.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Descrição",
                 DataPropertyName = nameof(ItemVendaModel.ProdutoDescricao),
-                Width = 620, // 🔹 Ajuste fino
+                Width = 400, // 🔹 Ajuste fino
                 ReadOnly = true,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
@@ -291,11 +305,11 @@ namespace GVC.View
             });
 
             // 🔹 Coluna Qtde (CENTRALIZADA)
-            dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+            dgvItensVenda.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Qtde",
                 DataPropertyName = nameof(ItemVendaModel.Quantidade),
-                Width = 80,
+                Width = 60,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Alignment = DataGridViewContentAlignment.MiddleCenter, // 🔹 CENTRALIZADO
@@ -307,11 +321,11 @@ namespace GVC.View
             });
 
             // 🔹 Coluna Preço
-            dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+            dgvItensVenda.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Preço Unit.",
                 DataPropertyName = nameof(ItemVendaModel.PrecoUnitario),
-                Width = 100,
+                Width = 90,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "N2",
@@ -322,11 +336,11 @@ namespace GVC.View
             });
 
             // 🔹 Coluna Subtotal
-            dgvitens.Columns.Add(new DataGridViewTextBoxColumn
+            dgvItensVenda.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "Subtotal",
                 DataPropertyName = nameof(ItemVendaModel.Subtotal),
-                Width = 130,
+                Width = 120,
                 ReadOnly = true,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
@@ -340,38 +354,40 @@ namespace GVC.View
             });
 
             // 🔹 Coluna Remover
-            dgvitens.Columns.Add(new DataGridViewButtonColumn
+            dgvItensVenda.Columns.Add(new DataGridViewButtonColumn
             {
-                Text = "✕", // 🔹 Símbolo mais limpo
+                Name = "Rm",
+                Text = "✕",
                 UseColumnTextForButtonValue = true,
-                Width = 40,
+                Width = 30,
                 FlatStyle = FlatStyle.Flat,
+                HeaderText = "Rm", // ← Mantenha só esta
+
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Alignment = DataGridViewContentAlignment.MiddleCenter,
                     Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                     ForeColor = Color.White,
-                    BackColor = Color.FromArgb(192, 0, 0), // 🔹 Vermelho escuro
+                    BackColor = Color.FromArgb(192, 0, 0),
                     SelectionBackColor = Color.FromArgb(220, 0, 0)
                 },
-                HeaderText = "Remover",
                 HeaderCell = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } }
             });
 
             // 🔹 Configurações gerais do Grid
-            dgvitens.AllowUserToAddRows = false;
-            dgvitens.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvitens.MultiSelect = false; // 🔹 Só permite selecionar uma linha por vez
-            dgvitens.EnableHeadersVisualStyles = false;
-            dgvitens.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvitens.ColumnHeadersHeight = 30; // 🔹 Altura padrão
-            dgvitens.RowHeadersVisible = false;
-            dgvitens.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvitens.AllowUserToResizeRows = false;
-            dgvitens.RowTemplate.Height = 28; // 🔹 Altura das linhas
+            dgvItensVenda.AllowUserToAddRows = false;
+            dgvItensVenda.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvItensVenda.MultiSelect = false; // 🔹 Só permite selecionar uma linha por vez
+            dgvItensVenda.EnableHeadersVisualStyles = false;
+            dgvItensVenda.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dgvItensVenda.ColumnHeadersHeight = 30; // 🔹 Altura padrão
+            dgvItensVenda.RowHeadersVisible = false;
+            dgvItensVenda.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvItensVenda.AllowUserToResizeRows = false;
+            dgvItensVenda.RowTemplate.Height = 28; // 🔹 Altura das linhas
 
             // 🔹 Estilo dos cabeçalhos
-            dgvitens.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+            dgvItensVenda.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
             {
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
                 BackColor = Color.SteelBlue,
@@ -381,14 +397,14 @@ namespace GVC.View
             };
 
             // 🔹 Estilo das linhas alternadas (zebra)
-            dgvitens.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
+            dgvItensVenda.AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
             {
                 BackColor = Color.FromArgb(245, 245, 245) // 🔹 Cinza muito claro
             };
 
             // 🔹 Estilo de seleção
-            dgvitens.DefaultCellStyle.SelectionBackColor = Color.LightBlue;
-            dgvitens.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dgvItensVenda.DefaultCellStyle.SelectionBackColor = Color.LightBlue;
+            dgvItensVenda.DefaultCellStyle.SelectionForeColor = Color.Black;
         }
 
 
@@ -439,7 +455,7 @@ namespace GVC.View
             _itensBindingSource.ResetBindings(false);
 
             // Força a atualização da grid
-            dgvitens.Refresh();
+            dgvItensVenda.Refresh();
 
             // Atualiza os totais da venda
             AtualizarTotais();
@@ -448,22 +464,9 @@ namespace GVC.View
             LimparCamposProduto();
 
             // Foca no campo Nome do Produto
-            txtNomeProduto.Focus();            
+            txtNomeProduto.Focus();
             // ✅ LIBERA GRID E PRÓXIMO PASSO
             EstadoItemAdicionado();
-        }
-
-        private void dgvItensVenda_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == dgvitens.Columns.Count - 1 && e.RowIndex >= 0)
-            {
-                var item = dgvitens.Rows[e.RowIndex].DataBoundItem as ItemVendaModel;
-                if (item != null)
-                {
-                    _itensBinding.Remove(item);
-                    AtualizarTotais();
-                }
-            }
         }
 
         #endregion
@@ -645,7 +648,7 @@ namespace GVC.View
         {
             // ===== ESTADO =====
             ClienteID = 0;
-            ProdutoID = 0;          
+            ProdutoID = 0;
             _clienteFoiSelecionado = false;
 
             // ===== CLIENTE =====
@@ -654,7 +657,7 @@ namespace GVC.View
 
             // ===== ITENS =====
             _itensBinding.Clear();
-            dgvitens.Refresh();
+            dgvItensVenda.Refresh();
 
             // ===== PARCELAS =====
             dgvParcelas.Rows.Clear();
@@ -700,7 +703,8 @@ namespace GVC.View
             // Se nada estiver selecionado, desabilita o botão
             if (cmbFormaPagamento.SelectedItem == null)
             {
-                btnGerar.Enabled = false;
+                btnGerarParcelas.Enabled = false;
+                btnCancelarParcelas.Enabled = false;
                 return;
             }
 
@@ -711,8 +715,8 @@ namespace GVC.View
             var formasValidas = new[] { "Boleto Bancário", "Cheque", "Crediário", "Financiamento" };
 
             // Habilita o botão se a forma de pagamento estiver na lista
-            btnGerar.Enabled = formasValidas.Contains(formaPgto);
-
+            btnGerarParcelas.Enabled = formasValidas.Contains(formaPgto);
+            btnCancelarParcelas.Enabled = formasValidas.Contains(formaPgto);
             // Executa lógica adicional se houver item selecionado
             if (cmbFormaPagamento.SelectedIndex >= 0)
             {
@@ -723,7 +727,7 @@ namespace GVC.View
         #region Helpers
         private void HabilitarTodosOsKryptonPanels()
         {
-            foreach (Control c in tableLayoutPanel1.Controls)
+            foreach (Control c in tableLayoutPanel2.Controls)
             {
                 if (c is KryptonPanel kp)
                     kp.Enabled = true;
@@ -744,14 +748,14 @@ namespace GVC.View
             btnAdicionarItem.Enabled = false;
 
             // ITENS / PAGAMENTO
-            dgvitens.Enabled = false;
+            dgvItensVenda.Enabled = false;
             cmbFormaPagamento.Enabled = false;
             txtValorRecebido.Enabled = false;
             txtDesconto.Enabled = false;
             txtObservacao.Enabled = false;
 
             // PARCELAS
-            btnGerar.Enabled = false;
+            btnGerarParcelas.Enabled = false;
             numParcelas.Enabled = false;
             numIntervalo.Enabled = false;
             dtPrimeira.Enabled = false;
@@ -791,12 +795,12 @@ namespace GVC.View
 
         private void EstadoItemAdicionado()
         {
-            dgvitens.Enabled = true;
+            dgvItensVenda.Enabled = true;
 
             cmbFormaPagamento.Enabled = true;
             txtValorRecebido.Enabled = true;
             txtDesconto.Enabled = true;
-            btnGerar.Enabled = true;
+            btnGerarParcelas.Enabled = true;
 
             cmbFormaPagamento.Focus();
         }
@@ -804,7 +808,7 @@ namespace GVC.View
 
         private void EstadoFormaPagamentoSelecionada()
         {
-            btnGerar.Enabled = true;
+            btnGerarParcelas.Enabled = true;
             numIntervalo.Enabled = true;
             numParcelas.Enabled = true;
             dtPrimeira.Enabled = true;
@@ -812,7 +816,7 @@ namespace GVC.View
         }
 
 
-       
+
         private void AtualizarSubtotalItem2()
         {
             decimal quantidade = 0m;
@@ -860,9 +864,9 @@ namespace GVC.View
         {
             if (e.RowIndex < 0) return;
 
-            dgvitens.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            dgvItensVenda.CommitEdit(DataGridViewDataErrorContexts.Commit);
 
-            var item = dgvitens.Rows[e.RowIndex].DataBoundItem as ItemVendaModel;
+            var item = dgvItensVenda.Rows[e.RowIndex].DataBoundItem as ItemVendaModel;
             if (item == null) return;
 
             // Blindagem + recálculo imediato
@@ -1082,10 +1086,10 @@ namespace GVC.View
             }
 
             // Limpa o DataGridView
-            dgvitens.Rows.Clear();
+            dgvItensVenda.Rows.Clear();
             dgvParcelas.Rows.Clear();
             // Se quiser também resetar seleções
-            dgvitens.ClearSelection();
+            dgvItensVenda.ClearSelection();
             dgvParcelas.ClearSelection();
 
             // Define o resultado do diálogo como Cancelar
@@ -1114,10 +1118,10 @@ namespace GVC.View
 
             if (possuiPagamento)
             {
-                dgvitens.Enabled = false;
+                dgvItensVenda.Enabled = false;
                 dgvParcelas.Enabled = false;
                 btnAdicionarItem.Enabled = false;
-                btnGerar.Enabled = false;
+                btnGerarParcelas.Enabled = false;
 
                 txtDesconto.Enabled = false;
                 cmbFormaPagamento.Enabled = false;
@@ -1160,7 +1164,7 @@ namespace GVC.View
                 pesquisaProduto.Owner = this;
 
                 if (pesquisaProduto.ShowDialog() == DialogResult.OK)
-                {                   
+                {
                     txtNomeProduto.Text = pesquisaProduto.ProdutoSelecionado;
                     txtPrecoUnitario.Text = pesquisaProduto.PrecoUnitario.ToString("N2");
                     ProdutoID = pesquisaProduto.ProdutoID;
@@ -1196,10 +1200,26 @@ namespace GVC.View
         private void btnNovaVenda_Click(object sender, EventArgs e)
         {
 
-        }       
+        }
+
+        private void dgvItensVenda_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dgvItensVenda.Columns.Count - 1 && e.RowIndex >= 0)
+            {
+                var item = dgvItensVenda.Rows[e.RowIndex].DataBoundItem as ItemVendaModel;
+                if (item != null)
+                {
+                    _itensBinding.Remove(item);
+                    AtualizarTotais();
+                }
+            }
+        }
+       
+        private void FrmPDV_FormClosed(object sender, FormClosedEventArgs e)
+        {
+        }
     }
 }
-
 
 /*
                    

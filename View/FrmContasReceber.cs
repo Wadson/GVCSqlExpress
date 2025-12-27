@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace GVC.View
 {
-    public partial class FrmContasAReceber : KryptonForm
+    public partial class FrmContasReceber : KryptonForm
     {
         private bool bloqueiaPesquisa = false;
         public int ClienteID { get; set; }
@@ -26,7 +26,7 @@ namespace GVC.View
         private readonly VendaBLL _vendaBll = new VendaBLL();
         private readonly ItensVendaBLL _itensVendaBll = new ItensVendaBLL();
 
-        public FrmContasAReceber()
+        public FrmContasReceber()
         {
             InitializeComponent();
         }

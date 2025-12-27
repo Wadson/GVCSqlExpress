@@ -48,6 +48,9 @@ namespace GVC.DALL
                                      Status, DataPagamento, Juros, Multa, Observacao)
                 VALUES (@VendaID, @NumeroParcela, @DataVencimento, @ValorParcela, @ValorRecebido,
                         @Status, @DataPagamento, @Juros, @Multa, @Observacao)";
+            string sqlBaixarEstoque = @" UPDATE Produtos SET Estoque = Estoque - @Quantidade
+    WHERE ProdutoID = @ProdutoID AND Estoque >= @Quantidade";
+
 
             using var conn = GVC.Helpers.Conexao.Conex();
             conn.Open();
@@ -74,7 +77,6 @@ namespace GVC.DALL
                     if (itens != null && itens.Any())
                     {
                         // NO VendaDal, método AddVendaCompleta:
-
                         foreach (var item in itens)
                         {
                             item.VendaID = vendaId;
@@ -96,6 +98,20 @@ namespace GVC.DALL
                             cmdItem.Parameters.AddWithValue("@DescontoItem", descontoItemValor);
 
                             cmdItem.ExecuteNonQuery();
+
+                            using var cmdEstoque = new SqlCommand(sqlBaixarEstoque, conn, transaction);
+                            cmdEstoque.Parameters.AddWithValue("@ProdutoID", item.ProdutoID);
+                            cmdEstoque.Parameters.AddWithValue("@Quantidade", item.Quantidade);
+
+                            int linhasAfetadas = cmdEstoque.ExecuteNonQuery();
+
+                            if (linhasAfetadas == 0)
+                            {
+                                throw new Exception(
+                                    $"Estoque insuficiente para o produto ID {item.ProdutoID}."
+                                );
+                            }
+
                         }
                     }
 
@@ -318,15 +334,37 @@ namespace GVC.DALL
             using var cmd = new SqlCommand(sql, conn);
             return (int)cmd.ExecuteScalar();
         }
-
         public void AtualizarStatusVenda(long vendaId, string novoStatus)
         {
             string sql = @"UPDATE Venda SET StatusVenda = @Status WHERE VendaID = @VendaID";
+
             using var conn = GVC.Helpers.Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
             cmd.Parameters.AddWithValue("@Status", novoStatus);
+            cmd.ExecuteNonQuery();
+        }
+
+        public void AtualizarStatusVenda(long vendaId, string novoStatus, string motivo)
+        {
+            string sql = @"
+        UPDATE Venda 
+        SET StatusVenda = @Status,
+            Observacoes =
+                CASE 
+                    WHEN Observacoes IS NULL OR Observacoes = ''
+                        THEN @Motivo
+                    ELSE Observacoes + CHAR(13) + CHAR(10) + @Motivo
+                END
+        WHERE VendaID = @VendaID";
+
+            using var conn = GVC.Helpers.Conexao.Conex();
+            conn.Open();
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@VendaID", vendaId);
+            cmd.Parameters.AddWithValue("@Status", novoStatus);
+            cmd.Parameters.AddWithValue("@Motivo", $"CANCELAMENTO: {motivo}");
             cmd.ExecuteNonQuery();
         }
 

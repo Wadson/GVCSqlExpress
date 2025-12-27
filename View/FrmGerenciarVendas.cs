@@ -25,46 +25,58 @@ namespace GVC.View
 
         private void btnVisualizar_Click(object sender, EventArgs e)
         {
-
         }
 
         private void btnAlterar_Click(object sender, EventArgs e)
         {
             long vendaId = ObterVendaSelecionada();
 
-            // Validação de regra
-            if (new VendaBLL().VendaPossuiPagamento(vendaId))
-            {
-                MessageBox.Show(
-                    "Esta venda possui pagamentos registrados.\n" +
-                    "Não é permitido alterá-la.\n\n" +
-                    "Cancele a venda e refaça.",
-                    "Alteração não permitida",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
+            var confirmacao = MessageBox.Show(
+                "Esta venda possui pagamentos recebidos.\n\n" +
+                "Ao cancelar:\n" +
+                "• O estoque será devolvido\n" +
+                "• Os valores recebidos serão ESTORNADOS\n\n" +
+                "Deseja continuar?",
+                "Cancelamento com estorno",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
 
-            using (var frm = new FrmVendas(vendaId))
+            if (confirmacao != DialogResult.Yes)
+                return;
+
+            using (var frmMotivo = new FrmMotivoOperacao("Motivo da Alteração"))
             {
-                frm.ShowDialog();
-                CarregarVendas();
+                if (frmMotivo.ShowDialog() != DialogResult.OK)
+                    return;
+
+                new VendaBLL().CancelarVenda(vendaId, frmMotivo.Motivo);
+
+                using (var frm = new FrmVendas(vendaId))
+                {
+                    frm.ShowDialog();
+                    CarregarVendas();
+                }
             }
         }
-
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             long vendaId = ObterVendaSelecionada();
 
-            try
+            using (var frmMotivo = new FrmMotivoOperacao("Cancelamento de Venda"))
             {
-                new VendaBLL().CancelarVenda(vendaId);
-                MessageBox.Show("Venda cancelada com sucesso.");
-                CarregarVendas();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                if (frmMotivo.ShowDialog() != DialogResult.OK)
+                    return;
+
+                try
+                {
+                    new VendaBLL().CancelarVenda(vendaId, frmMotivo.Motivo);
+                    MessageBox.Show("Venda cancelada com sucesso.");
+                    CarregarVendas();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
@@ -117,20 +129,10 @@ namespace GVC.View
 
             return Convert.ToInt64(valor);
         }
-
-
         private void CarregarVendas()
         {
-            string sql = @" SELECT
-            v.VendaID,
-            c.Nome AS Cliente,
-            v.DataVenda,
-            v.ValorTotal,
-            v.Desconto,
-            v.StatusVenda
-        FROM Venda v
-        INNER JOIN Clientes c ON c.ClienteID = v.ClienteID
-        WHERE 1 = 1 ";
+            string sql = @" SELECT  v.VendaID, c.Nome AS Cliente, v.DataVenda, v.ValorTotal, v.Desconto, v.StatusVenda
+        FROM Venda v INNER JOIN Clientes c ON c.ClienteID = v.ClienteID WHERE 1 = 1 ";
 
             if (!string.IsNullOrWhiteSpace(txtVendaID.Text))
                 sql += " AND v.VendaID = @VendaID";
@@ -215,19 +217,16 @@ namespace GVC.View
             };
         }
 
-
         private void FrmGerenciarVendas_Load(object sender, EventArgs e)
         {
             dtpDataInicio.Value = DateTime.Today.AddMonths(-1);
             dtpDataFim.Value = DateTime.Today;
             CarregarVendas();
         }
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             CarregarVendas();
         }
-
         private void btnLocalizarCliente_Click(object sender, EventArgs e)
         {
             // SALVA O TEXTO ATUAL ANTES DE PERDER O FOCO

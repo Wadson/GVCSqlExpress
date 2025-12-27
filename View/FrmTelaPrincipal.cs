@@ -66,8 +66,8 @@ namespace GVC.View
         }
 
         private void btnContaReceber_Click(object sender, EventArgs e)
-        {
-            FrmContasAReceber frm = new FrmContasAReceber();
+        {           
+            FrmContasReceber frm = new FrmContasReceber();
             AbrirFormEnPanel(frm);
         }
 

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using GVC.Helpers;
 using GVC.MODEL;
 using Microsoft.Data.SqlClient; // Alterado para SQL Server
 using System;
@@ -63,7 +64,7 @@ LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
                 }
             }
             return lista;
-        }
+        }       
 
         // ==================== BUSCAR POR ID ====================
         public ProdutosModel? BuscarPorId(long id)
@@ -196,6 +197,22 @@ LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
             }
             return lista;
         }
+        public void BaixarEstoque(long produtoId, int quantidade, SqlTransaction tran)
+        {
+            string sql = @"UPDATE ProdutosSET Estoque = Estoque - @Quantidade
+                        WHERE ProdutoID = @ProdutoID AND Estoque >= @Quantidade";
+
+            using (var con = new SqlConnection(_connectionString))
+            {
+                using var cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@Quantidade", quantidade);
+                cmd.Parameters.AddWithValue("@ProdutoID", produtoId);
+
+                int linhas = cmd.ExecuteNonQuery();
+                if (linhas == 0)
+                    throw new Exception("Estoque insuficiente para o produto.");
+            }            
+        }
 
         // ==================== PESQUISAR POR CÓDIGO (Busca parcial) ====================
         public List<ProdutosModel> PesquisarProdutoPorCodigo(string codigo)
@@ -262,7 +279,9 @@ LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
             else
                 cmd.Parameters.AddWithValue("@FornecedorID", DBNull.Value);
         }
+
     }
+
 
     // Helper para verificar se a coluna existe no reader
     public static class DataReaderExtensions
