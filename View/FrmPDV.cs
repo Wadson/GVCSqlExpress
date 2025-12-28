@@ -686,23 +686,12 @@ namespace GVC.View
             catch (SqlException sqlEx)
             {
                 MessageBox.Show(
-                    $"Erro SQL (Número: {sqlEx.Number}): {sqlEx.Message}",
-                    "Erro SQL",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-
-                Debug.WriteLine("=== ERRO SQL ===");
-                Debug.WriteLine(sqlEx);
+                    $"Erro SQL (Número: {sqlEx.Number}): {sqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error );
+               
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Erro ao salvar venda",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                MessageBox.Show( ex.Message,"Erro ao salvar venda", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1588,6 +1577,7 @@ namespace GVC.View
 
             if (lstProdutos.Items.Count > 1)
                 lstProdutos.SelectedIndex = 1;
+            txtObservacao.Enabled = true;
         }
 
         private void lstProdutos_DoubleClick(object sender, EventArgs e)

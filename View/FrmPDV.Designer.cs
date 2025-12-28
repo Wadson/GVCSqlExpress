@@ -243,7 +243,7 @@
             cmbFormaPagamento.Items.AddRange(new object[] { "Á Vista", "Crediário Parcelado", "Cartão de Crédito", "Cartão de Débito", "Pix", "Transferência" });
             cmbFormaPagamento.Location = new Point(5, 22);
             cmbFormaPagamento.Name = "cmbFormaPagamento";
-            cmbFormaPagamento.Size = new Size(252, 27);
+            cmbFormaPagamento.Size = new Size(308, 27);
             cmbFormaPagamento.StateCommon.ComboBox.Border.Color1 = Color.FromArgb(8, 142, 250);
             cmbFormaPagamento.StateCommon.ComboBox.Border.Color2 = Color.FromArgb(8, 142, 250);
             cmbFormaPagamento.StateCommon.ComboBox.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -762,7 +762,7 @@
             // 
             btnGerarParcelas.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnGerarParcelas.CornerRoundingRadius = 6F;
-            btnGerarParcelas.Location = new Point(260, 73);
+            btnGerarParcelas.Location = new Point(316, 73);
             btnGerarParcelas.Name = "btnGerarParcelas";
             btnGerarParcelas.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnGerarParcelas.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -819,7 +819,7 @@
             // 
             btnCancelarParcelas.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnCancelarParcelas.CornerRoundingRadius = 6F;
-            btnCancelarParcelas.Location = new Point(263, 22);
+            btnCancelarParcelas.Location = new Point(319, 22);
             btnCancelarParcelas.Name = "btnCancelarParcelas";
             btnCancelarParcelas.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnCancelarParcelas.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -875,10 +875,10 @@
             // numIntervalo
             // 
             numIntervalo.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            numIntervalo.Location = new Point(174, 74);
+            numIntervalo.Location = new Point(213, 74);
             numIntervalo.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numIntervalo.Name = "numIntervalo";
-            numIntervalo.Size = new Size(80, 26);
+            numIntervalo.Size = new Size(100, 26);
             numIntervalo.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             numIntervalo.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
             numIntervalo.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -895,7 +895,7 @@
             lblIntervalo.BackColor = Color.Transparent;
             lblIntervalo.Font = new Font("Segoe UI", 9.75F);
             lblIntervalo.ForeColor = Color.FromArgb(44, 62, 80);
-            lblIntervalo.Location = new Point(179, 56);
+            lblIntervalo.Location = new Point(218, 56);
             lblIntervalo.Name = "lblIntervalo";
             lblIntervalo.Size = new Size(41, 17);
             lblIntervalo.TabIndex = 1047;
@@ -921,7 +921,7 @@
             numParcelas.Location = new Point(5, 73);
             numParcelas.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numParcelas.Name = "numParcelas";
-            numParcelas.Size = new Size(80, 26);
+            numParcelas.Size = new Size(100, 26);
             numParcelas.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             numParcelas.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
             numParcelas.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
@@ -951,7 +951,7 @@
             lblPrimeiroVenc.BackColor = Color.Transparent;
             lblPrimeiroVenc.Font = new Font("Segoe UI", 9.75F);
             lblPrimeiroVenc.ForeColor = Color.FromArgb(44, 62, 80);
-            lblPrimeiroVenc.Location = new Point(89, 55);
+            lblPrimeiroVenc.Location = new Point(110, 55);
             lblPrimeiroVenc.Name = "lblPrimeiroVenc";
             lblPrimeiroVenc.Size = new Size(77, 17);
             lblPrimeiroVenc.TabIndex = 1045;
@@ -963,10 +963,10 @@
             dtPrimeira.CalendarTodayDate = new DateTime(2025, 12, 24, 0, 0, 0, 0);
             dtPrimeira.CornerRoundingRadius = 6F;
             dtPrimeira.Format = DateTimePickerFormat.Short;
-            dtPrimeira.Location = new Point(88, 74);
+            dtPrimeira.Location = new Point(109, 74);
             dtPrimeira.Name = "dtPrimeira";
             dtPrimeira.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Blue;
-            dtPrimeira.Size = new Size(80, 25);
+            dtPrimeira.Size = new Size(100, 25);
             dtPrimeira.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             dtPrimeira.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
             dtPrimeira.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;

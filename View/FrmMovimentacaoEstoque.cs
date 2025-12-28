@@ -115,12 +115,7 @@ namespace GVC.View
 
                 new EstoqueBLL().MovimentarEstoque(mov);
 
-                MessageBox.Show(
-                    "Movimentação realizada com sucesso!",
-                    "Estoque",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
+                MessageBox.Show( "Movimentação realizada com sucesso!","Estoque", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 LimparFormulario();
             }

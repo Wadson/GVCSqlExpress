@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GVC.BLL;
+using GVC.DAL;
 using GVC.MODEL;
 using GVC.UTIL;
 using Krypton.Toolkit;
@@ -148,11 +149,12 @@ namespace GVC.View
             });
             dgvContasAReceber.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "Observacao",
-                HeaderText = "Observações",
+                DataPropertyName = "Observacoes", // 🔴 NOME CORRETO
+                HeaderText = "Observações da Venda",
                 Width = 200,
                 ValueType = typeof(string)
             });
+
 
             // Opcional: estilo geral
             dgvContasAReceber.AllowUserToAddRows = false;
@@ -283,108 +285,27 @@ namespace GVC.View
         }
         private void CarregarContasAReceber()
         {
-            var sql = new StringBuilder();
-            sql.Append(@"
-        SELECT 
-            p.ParcelaID       AS ParcelaID,
-            p.VendaID         AS VendaID,
-            p.NumeroParcela   AS NumeroParcela,
-            c.Nome            AS NomeCliente,
-            v.DataVenda       AS DataVenda,
-            p.DataVencimento  AS DataVencimento,
-            p.ValorParcela    AS ValorParcela,
-            p.ValorRecebido   AS ValorRecebido,
-            (p.ValorParcela + p.Juros + p.Multa - p.ValorRecebido) AS Saldo,
-            p.Status          AS StatusParcela,
-            fp.FormaPgto      AS FormaPgto
-        FROM Parcela p
-        JOIN Venda v   ON v.VendaID   = p.VendaID
-        JOIN Clientes c ON c.ClienteID = v.ClienteID
-        LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = v.FormaPgtoID
-        WHERE 1 = 1
-    ");
+            var dal = new ContasAReceberDAL();
 
-            var param = new DynamicParameters();
+            var lista = dal.ListarContasAReceber(
+                cmbTipoPesquisa.Text,
+                txtNomeCliente.Text,
+                txtNumeroVenda.Text,
+                dtpVencInicial.Value,
+                dtpVencFinal.Value,
+                cmbStatusParcela.Text
+            );
+            Debug.WriteLine(">>> MÉTODO EXECUTADO <<<");
+            Debug.WriteLine($"Qtd registros: {lista.Count}");
 
-            switch (cmbTipoPesquisa.Text)
-            {
-                case "Nome do Cliente":
-                    if (!string.IsNullOrWhiteSpace(txtNomeCliente.Text))
-                    {
-                        sql.Append(" AND c.Nome LIKE @Nome ");
-                        param.Add("@Nome", $"%{txtNomeCliente.Text}%");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Informe o nome do cliente.");
-                        return;
-                    }
-                    break;
-
-                case "Número da Venda":
-                    if (!string.IsNullOrWhiteSpace(txtNumeroVenda.Text) && int.TryParse(txtNumeroVenda.Text, out int vendaId))
-                    {
-                        sql.Append(" AND v.VendaID = @VendaID ");
-                        param.Add("@VendaID", vendaId);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Informe um número de venda válido.");
-                        return;
-                    }
-                    break;
-
-                case "Data da Venda":
-                    sql.Append(" AND CAST(v.DataVenda AS DATE) = @DataVenda ");
-                    param.Add("@DataVenda", dtpVencInicial.Value.Date);
-                    break;
-
-                case "Período da Venda":
-                    sql.Append(" AND v.DataVenda >= @Ini AND v.DataVenda < @Fim ");
-                    param.Add("@Ini", dtpVencInicial.Value.Date);
-                    param.Add("@Fim", dtpVencFinal.Value.Date.AddDays(1));
-                    break;
-
-
-                case "Vencimento":
-                    sql.Append(" AND CAST(p.DataVencimento AS DATE) = @Venc ");
-                    param.Add("@Venc", dtpVencInicial.Value.Date);
-                    break;
-
-                case "Período de Vencimento":
-                    sql.Append(" AND p.DataVencimento >= @VencIni AND p.DataVencimento < @VencFim ");
-                    param.Add("@VencIni", dtpVencInicial.Value.Date);
-                    param.Add("@VencFim", dtpVencFinal.Value.Date.AddDays(1));
-                    break;
-
-
-                case "Status da Parcela":
-                    if (!string.IsNullOrWhiteSpace(cmbStatusParcela.Text))
-                    {
-                        sql.Append(" AND p.Status = @Status ");
-                        param.Add("@Status", cmbStatusParcela.Text);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Selecione um status da parcela.");
-                        return;
-                    }
-                    break;
-            }
-
-            using var conn = Helpers.Conexao.Conex();
-
-            var lista = conn.Query(sql.ToString(), param).ToList();
-            dgvContasAReceber.DataSource = lista;
-            ConfigurarGridContasAReceber();
-            AtualizarTotalSelecionado();
+            ConfigurarGridContasAReceber(); // 🔴 PRIMEIRO CONFIGURA
+            dgvContasAReceber.DataSource = lista; // 🔴 DEPOIS BINDA
 
             AtualizarResumo(lista);
-            AtualizarTotalSelecionado();
             AtualizarResumoGeral(lista);
+            AtualizarTotalSelecionado();
             AtualizarParcelasAtrasadasNoBanco();
         }
-
 
         private void AtualizarResumo(IEnumerable<dynamic> dados)
         {

@@ -666,6 +666,7 @@
             // 
             // txtObservacao
             // 
+            txtObservacao.CharacterCasing = CharacterCasing.Upper;
             txtObservacao.Location = new Point(6, 40);
             txtObservacao.Name = "txtObservacao";
             txtObservacao.Size = new Size(616, 24);

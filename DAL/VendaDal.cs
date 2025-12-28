@@ -48,8 +48,10 @@ namespace GVC.DALL
                                      Status, DataPagamento, Juros, Multa, Observacao)
                 VALUES (@VendaID, @NumeroParcela, @DataVencimento, @ValorParcela, @ValorRecebido,
                         @Status, @DataPagamento, @Juros, @Multa, @Observacao)";
-            string sqlBaixarEstoque = @" UPDATE Produtos SET Estoque = Estoque - @Quantidade
-    WHERE ProdutoID = @ProdutoID AND Estoque >= @Quantidade";
+
+            string sqlBaixarEstoque = @" UPDATE Produtos 
+                                         SET Estoque = Estoque - @Quantidade
+                                         WHERE ProdutoID = @ProdutoID AND Estoque >= @Quantidade";
 
 
             using var conn = GVC.Helpers.Conexao.Conex();
@@ -378,19 +380,19 @@ namespace GVC.DALL
         public VendaModel ObterVendaPorId(int vendaId)
         {
             string sql = @" SELECT
-                                v.VendaID,
-                                v.ClienteID,
-                                v.FormaPgtoID,
-                                v.DataVenda,
-                                v.ValorTotal,
-                                v.Desconto,
-                                v.Observacoes,
-                                v.StatusVenda,
-                                v.VendedorID
-                                c.Nome AS NomeCliente
-                            FROM Venda v
-                            LEFT JOIN Clientes c ON c.ClienteID = v.ClienteID
-                            WHERE v.VendaID = @VendaID";
+    v.VendaID,
+    v.ClienteID,
+    v.FormaPgtoID,
+    v.DataVenda,
+    v.ValorTotal,
+    v.Desconto,
+    v.Observacoes,
+    v.StatusVenda,
+    v.VendedorID,
+    c.Nome AS NomeCliente
+FROM Venda v
+LEFT JOIN Clientes c ON c.ClienteID = v.ClienteID
+WHERE v.VendaID = @VendaID";
 
             using var conn = GVC.Helpers.Conexao.Conex();
             conn.Open();
