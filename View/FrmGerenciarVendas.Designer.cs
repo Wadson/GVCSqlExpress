@@ -581,10 +581,11 @@
             // 
             // dgvVendas
             // 
-            dgvVendas.Dock = DockStyle.Fill;
+            dgvVendas.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dgvVendas.Location = new Point(3, 103);
             dgvVendas.Name = "dgvVendas";
-            dgvVendas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007Blue;
+            dgvVendas.Palette = kryptonPalette1;
+            dgvVendas.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             dgvVendas.RowHeadersWidth = 23;
             dgvVendas.Size = new Size(921, 287);
             dgvVendas.TabIndex = 1042;
@@ -728,6 +729,7 @@
             kryptonPanel1.Dock = DockStyle.Fill;
             kryptonPanel1.Location = new Point(3, 3);
             kryptonPanel1.Name = "kryptonPanel1";
+            kryptonPanel1.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
             kryptonPanel1.Size = new Size(921, 24);
             kryptonPanel1.TabIndex = 0;
             // 
@@ -759,6 +761,8 @@
             kryptonPanel2.Dock = DockStyle.Fill;
             kryptonPanel2.Location = new Point(3, 33);
             kryptonPanel2.Name = "kryptonPanel2";
+            kryptonPanel2.Palette = kryptonPalette1;
+            kryptonPanel2.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             kryptonPanel2.Size = new Size(921, 64);
             kryptonPanel2.TabIndex = 1;
             // 
@@ -772,6 +776,8 @@
             kryptonPanel4.Dock = DockStyle.Fill;
             kryptonPanel4.Location = new Point(3, 396);
             kryptonPanel4.Name = "kryptonPanel4";
+            kryptonPanel4.Palette = kryptonPalette1;
+            kryptonPanel4.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             kryptonPanel4.Size = new Size(921, 29);
             kryptonPanel4.TabIndex = 3;
             // 

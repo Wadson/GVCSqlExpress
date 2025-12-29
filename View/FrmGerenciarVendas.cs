@@ -180,7 +180,9 @@ namespace GVC.View
         {
             if (dgvVendas.Columns.Count == 0) return;
 
+            // ===============================
             // Cabeçalhos
+            // ===============================
             dgvVendas.Columns["VendaID"].HeaderText = "Venda";
             dgvVendas.Columns["Cliente"].HeaderText = "Cliente";
             dgvVendas.Columns["DataVenda"].HeaderText = "Data";
@@ -188,46 +190,74 @@ namespace GVC.View
             dgvVendas.Columns["Desconto"].HeaderText = "Desconto";
             dgvVendas.Columns["StatusVenda"].HeaderText = "Status";
 
-            // Larguras
-            dgvVendas.Columns["VendaID"].Width = 100;
-            dgvVendas.Columns["Cliente"].Width = 400; // aumentada
+            // ===============================
+            // Colunas FIXAS
+            // ===============================
+            dgvVendas.Columns["VendaID"].Width = 80;
+            dgvVendas.Columns["DataVenda"].Width = 100;
+            dgvVendas.Columns["ValorTotal"].Width = 110;
+            dgvVendas.Columns["Desconto"].Width = 110;
+            dgvVendas.Columns["StatusVenda"].Width = 140;
+
+            // ===============================
+            // Coluna Cliente FLEXÍVEL
+            // ===============================
+            dgvVendas.Columns["Cliente"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvVendas.Columns["Cliente"].MinimumWidth = 200;
+
+            // ===============================
+            // Formatação
+            // ===============================
             dgvVendas.Columns["DataVenda"].DefaultCellStyle.Format = "dd/MM/yyyy";
             dgvVendas.Columns["ValorTotal"].DefaultCellStyle.Format = "C2";
             dgvVendas.Columns["Desconto"].DefaultCellStyle.Format = "C2";
 
-            // Centralizar VendaID
             dgvVendas.Columns["VendaID"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvVendas.Columns["ValorTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvVendas.Columns["Desconto"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvVendas.Columns["StatusVenda"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            // Seleção e leitura
+            // ===============================
+            // Grid
+            // ===============================
             dgvVendas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvVendas.MultiSelect = false;
             dgvVendas.ReadOnly = true;
+            dgvVendas.AllowUserToResizeColumns = false;
+            dgvVendas.AllowUserToResizeRows = false;
+            dgvVendas.RowHeadersVisible = false;
+            dgvVendas.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
-            // Evento para colorir Status
-            dgvVendas.CellFormatting += (s, e) =>
-            {
-                if (dgvVendas.Columns[e.ColumnIndex].Name == "StatusVenda" && e.Value != null)
-                {
-                    string status = e.Value.ToString();
-                    if (status.Equals("Vencida", StringComparison.OrdinalIgnoreCase))
-                    {
-                        e.CellStyle.BackColor = Color.Red;
-                        e.CellStyle.ForeColor = Color.White;
-                    }
-                    else if (status.Equals("Aberta", StringComparison.OrdinalIgnoreCase))
-                    {
-                        e.CellStyle.BackColor = Color.Orange;
-                        e.CellStyle.ForeColor = Color.Black;
-                    }
-                    else if (status.Equals("Pago", StringComparison.OrdinalIgnoreCase))
-                    {
-                        e.CellStyle.BackColor = Color.Green;
-                        e.CellStyle.ForeColor = Color.White;
-                    }
-                }
-            };
+            // ===============================
+            // Evento Status (remove duplicação)
+            // ===============================
+            dgvVendas.CellFormatting -= dgvVendas_CellFormatting;
+            dgvVendas.CellFormatting += dgvVendas_CellFormatting;
         }
 
+        private void dgvVendas_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvVendas.Columns[e.ColumnIndex].Name == "StatusVenda" && e.Value != null)
+            {
+                string status = e.Value.ToString();
+
+                if (status.Equals("Vencida", StringComparison.OrdinalIgnoreCase))
+                {
+                    e.CellStyle.BackColor = Color.Red;
+                    e.CellStyle.ForeColor = Color.White;
+                }
+                else if (status.Equals("Aberta", StringComparison.OrdinalIgnoreCase))
+                {
+                    e.CellStyle.BackColor = Color.Orange;
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else if (status.Equals("Pago", StringComparison.OrdinalIgnoreCase))
+                {
+                    e.CellStyle.BackColor = Color.Green;
+                    e.CellStyle.ForeColor = Color.White;
+                }
+            }
+        }
         private void FrmGerenciarVendas_Load(object sender, EventArgs e)
         {
             dtpDataInicio.Value = DateTime.Today.AddMonths(-1);

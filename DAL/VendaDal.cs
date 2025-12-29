@@ -244,20 +244,20 @@ namespace GVC.DALL
 
         public DataTable ListarVendas()
         {
-            string sql = @" SELECT
-                v.VendaID,
-                v.DataVenda,
-                c.Nome,
-                v.ValorTotal,
-                v.Desconto,
-                v.Observacoes,
-                v.StatusVenda,
-                v.VendedorID
-                f.FormaPgto AS FormaPagamento
-            FROM Venda v
-            INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
-            LEFT JOIN FormaPgto f ON v.FormaPgtoID = f.FormaPgtoID
-            ORDER BY v.DataVenda DESC";
+            string sql = @"SELECT
+        v.VendaID,
+        v.DataVenda,
+        c.Nome AS Cliente,
+        v.ValorTotal,
+        v.Desconto,
+        v.Observacoes,
+        v.StatusVenda,
+        v.VendedorID,
+        f.FormaPgto AS FormaPagamento
+    FROM Venda v
+    INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
+    LEFT JOIN FormaPgto f ON v.FormaPgtoID = f.FormaPgtoID
+    ORDER BY v.DataVenda DESC";
 
             using var conn = GVC.Helpers.Conexao.Conex();
             conn.Open();
@@ -267,6 +267,7 @@ namespace GVC.DALL
             dt.Load(reader);
             return dt;
         }
+
 
         public DataTable VendaLocalizarPorCliente(long clienteId)
         {

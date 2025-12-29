@@ -29,10 +29,11 @@ namespace GVC.View
         private readonly ModoVenda _modo;
         private readonly long _vendaId;
         public long VendaID { get; private set; }
-
-        private bool _carregandoVenda = false;
+       
         private bool _clienteFoiSelecionado = false;
         public string StatusVenda { get; set; }
+        private bool _ignorarEventosBusca = false;
+
 
         // ----------------------
         // Identificadores
@@ -150,26 +151,51 @@ namespace GVC.View
         }
         private void CarregarVenda()
         {
-            _carregandoVenda = true; // 🔒 BLOQUEIA EVENTOS
+            _ignorarEventosBusca = true; // 🔒 BLOQUEIA EVENTOS
 
             var vendaCompleta = new VendaBLL().ObterVendaCompleta(_vendaId);
 
-            // ===== CLIENTE =====
+            // ======================
+            // DADOS DA VENDA
+            // ======================
+            txtVendaID.Text = vendaCompleta.VendaID.ToString();
+            txtDataVenda.Text = vendaCompleta.DataVenda.ToString("dd/MM/yyyy");
+
+            // ======================
+            // CLIENTE
+            // ======================
             _clienteId = vendaCompleta.ClienteID;
             txtClienteBuscar.Text = vendaCompleta.ClienteNome;
+
+            // ======================
+            // VENDEDOR
+            // ======================
+            _vendedorId = vendaCompleta.VendedorID;
+            txtVendedorBuscar.Text = vendaCompleta.VendedorNome;
+
+            // ======================
+            // OUTROS CAMPOS
+            // ======================
             txtDesconto.Text = vendaCompleta.Desconto.ToString("N2");
             txtObservacao.Text = vendaCompleta.Observacoes;
 
-            // ===== ITENS =====
+            // ======================
+            // ITENS
+            // ======================
             _itensBinding.Clear();
             foreach (var item in vendaCompleta.Itens)
                 _itensBinding.Add(item);
 
             _itensBindingSource.ResetBindings(false);
 
-            // ===== TOTAIS =====
+            // ======================
+            // TOTAIS
+            // ======================
             AtualizarTotais();
-            // ===== PARCELAS =====
+
+            // ======================
+            // PARCELAS
+            // ======================
             dgvParcelas.Rows.Clear();
             parcelasDaVenda.Clear();
 
@@ -193,10 +219,14 @@ namespace GVC.View
                 );
             }
 
+            // ======================
+            // FORMA DE PAGAMENTO
+            // ======================
             SelecionarFormaPagamento(vendaCompleta.FormaPgtoID);
 
-            _carregandoVenda = false; // 🔓 LIBERA EVENTOS
+            _ignorarEventosBusca = false; // 🔓 LIBERA EVENTOS
         }
+
 
         private void SelecionarFormaPagamento(int formaPgtoId)
         {
@@ -1155,7 +1185,7 @@ namespace GVC.View
         }
         private void GerarParcelas()
         {
-            if (_carregandoVenda)
+            if (_ignorarEventosBusca)
                 return; // 🔒 NÃO GERA PARCELAS AO CARREGAR
 
             // pode deletar acima se não der certo
@@ -1409,27 +1439,6 @@ namespace GVC.View
             }
         }
 
-
-        private void txtVendedorBuscar_TextChanged(object sender, EventArgs e)
-        {
-            var texto = txtVendedorBuscar.Text.Trim();
-
-            if (texto.Length == 0)
-            {
-                lstVendedores.Visible = false;
-                return;
-            }
-
-            var dal = new ClienteDal();
-            var vendedores = dal.ListarVendedores(texto);
-
-            lstVendedores.DataSource = null;
-            lstVendedores.DataSource = vendedores;
-            lstVendedores.DisplayMember = "Nome";
-            lstVendedores.ValueMember = "ClienteID";
-            lstVendedores.Visible = vendedores.Count > 0;
-        }
-
         private void txtVendedorBuscar_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down && lstVendedores.Visible)
@@ -1481,17 +1490,7 @@ namespace GVC.View
         }
 
         private void lstClientes_KeyDown(object sender, KeyEventArgs e)
-        {
-            //if (e.KeyCode == Keys.Enter)
-            //{
-            //    ConfirmarCliente();
-            //    e.Handled = true;
-            //}
-            //else if (e.KeyCode == Keys.Escape)
-            //{
-            //    lstClientes.Visible = false;
-            //    txtClienteBuscar.Focus();
-            //}
+        {          
             if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
@@ -1517,9 +1516,33 @@ namespace GVC.View
                 e.Handled = true;
             }
         }
+        private void txtVendedorBuscar_TextChanged(object sender, EventArgs e)
+        {
+            if (_ignorarEventosBusca)
+                return;
 
+            var texto = txtVendedorBuscar.Text.Trim();
+
+            if (texto.Length == 0)
+            {
+                lstVendedores.Visible = false;
+                return;
+            }
+
+            var dal = new ClienteDal();
+            var vendedores = dal.ListarVendedores(texto);
+
+            lstVendedores.DataSource = null;
+            lstVendedores.DataSource = vendedores;
+            lstVendedores.DisplayMember = "Nome";
+            lstVendedores.ValueMember = "ClienteID";
+            lstVendedores.Visible = vendedores.Count > 0;
+        }
         private void txtClienteBuscar_TextChanged(object sender, EventArgs e)
         {
+            if (_ignorarEventosBusca)
+                return;
+
             var texto = txtClienteBuscar.Text.Trim();
 
             if (texto.Length == 0)
@@ -1529,24 +1552,25 @@ namespace GVC.View
             }
 
             var dal = new ClienteDal();
-            var vendedores = dal.ListarClienteDinamico(texto);
+            var clientes = dal.ListarClienteDinamico(texto);
 
             lstClientes.DataSource = null;
-            lstClientes.DataSource = vendedores;
+            lstClientes.DataSource = clientes;
             lstClientes.DisplayMember = "Nome";
             lstClientes.ValueMember = "ClienteID";
+
             if (_clienteId > 0 && !string.IsNullOrWhiteSpace(txtClienteBuscar.Text))
             {
                 EstadoClienteSelecionado();
                 txtVendedorBuscar.Focus();
             }
 
-            lstClientes.Visible = vendedores.Count > 0;
+            lstClientes.Visible = clientes.Count > 0;
         }
 
         private void txtProdutoBuscar_TextChanged(object sender, EventArgs e)
         {
-            if (_ignorandoBuscaProduto)
+            if (_ignorarEventosBusca || _ignorandoBuscaProduto)
                 return;
 
             var texto = txtProdutoBuscar.Text.Trim();
@@ -1561,7 +1585,6 @@ namespace GVC.View
             var produtos = dal.ListarProdutoDinamico(texto);
 
             lstProdutos.Items.Clear();
-
             lstProdutos.Items.Add(CriarCabecalhoProduto());
 
             foreach (var p in produtos)
@@ -1571,6 +1594,7 @@ namespace GVC.View
 
             if (lstProdutos.Items.Count > 1)
                 lstProdutos.SelectedIndex = 1;
+
             txtObservacao.Enabled = true;
         }
 
