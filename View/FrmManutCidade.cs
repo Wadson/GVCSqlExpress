@@ -92,7 +92,7 @@ namespace GVC
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro..." + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro..." + ex.Message);
             }
         }
         public void PersonalizarDataGridView(KryptonDataGridView dgv)

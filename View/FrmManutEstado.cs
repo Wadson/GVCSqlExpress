@@ -117,7 +117,7 @@ namespace GVC
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro..." + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro..." + ex.Message);
             }
         }
         private void FrmManutUsuario_Load(object sender, EventArgs e)

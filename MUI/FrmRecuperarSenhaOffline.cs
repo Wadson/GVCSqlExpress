@@ -40,7 +40,7 @@ namespace GVC.MUI
 
                             if (DateTime.Now > expira)
                             {
-                                MessageBox.Show("Token expirado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                Utilitario.Mensagens.Erro("Token expirado.");
                                 return false;
                             }
 
@@ -190,36 +190,35 @@ namespace GVC.MUI
 
                 if (!DateTime.TryParse(txtDataNascimento.Text, out DateTime dataNascimento))
                 {
-                    MessageBox.Show("Data de nascimento inválida.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Erro("Data de nascimento inválida.");
                     return;
                 }
 
                 var usuario = ObterUsuarioPorCPFDataNascimento(cpf, dataNascimento);
                 if (usuario == null)
                 {
-                    MessageBox.Show("CPF ou Data de Nascimento não encontrados.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso("CPF ou Data de Nascimento não encontrados.");
                     return;
                 }
 
                 string token = GerarToken();
                 if (!SalvarToken(usuario.UsuarioID, token))
                 {
-                    MessageBox.Show("Erro ao gerar token.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso("Erro ao gerar token.");
                     return;
                 }
 
                 txtTokens.Text = token;
                 lblTokenInfo.Text = "Token válido por 15 minutos.";
 
-                MessageBox.Show("Token gerado com sucesso! Use-o para redefinir sua senha.",
-                                "Recuperação de Senha", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso("Token gerado com sucesso! Use-o para redefinir sua senha.");
 
                 // *** AGORA SIM — TROCA DE PAINEL ***
                 painelRedefinir.BringToFront();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro inesperado: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso("Erro inesperado: " + ex.Message);
             }
         }
 
@@ -230,7 +229,7 @@ namespace GVC.MUI
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                MessageBox.Show("Digite o token recebido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Digite o token recebido.");
                 return;
             }
 
@@ -239,24 +238,24 @@ namespace GVC.MUI
 
             if (novaSenha.Length != confirmarSenha.Length)
             {
-                MessageBox.Show("As senhas não conferem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso("As senhas não conferem!");
                 return;
             }
 
             if (novaSenha.Length < 6)
             {
-                MessageBox.Show("A senha deve ter pelo menos 6 caracteres.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("A senha deve ter pelo menos 6 caracteres.");
                 return;
             }
 
             if (RedefinirSenha(token, novaSenha))
             {
-                MessageBox.Show("Senha redefinida com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso("Senha redefinida com sucesso!");
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Token inválido ou expirado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso("Token inválido ou expirado.");
             }
         }
 
@@ -310,7 +309,7 @@ namespace GVC.MUI
             if (DateTime.TryParse(texto, out DateTime dt))
                 txtDataNascimento.Text = dt.ToString("dd/MM/yyyy");
             else
-                MessageBox.Show("Data inválida.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Data inválida.");
         }
 
         private void txtDataNascimento_TextChanged(object sender, EventArgs e)

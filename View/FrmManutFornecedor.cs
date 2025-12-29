@@ -137,8 +137,7 @@ namespace GVC.View
 
             if (row == null)
             {
-                MessageBox.Show("Selecione um fornecedor na lista!", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um fornecedor na lista!");
                 return;
             }
 
@@ -214,8 +213,7 @@ namespace GVC.View
         {
             if (dgvFornecedor.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um fornecedor na lista!", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um fornecedor na lista!");
                 return;
             }
 
@@ -237,8 +235,7 @@ namespace GVC.View
         {
             if (dgvFornecedor.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um fornecedor na lista!", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um fornecedor na lista!");
                 return;
             }
 

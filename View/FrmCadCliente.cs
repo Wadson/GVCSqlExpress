@@ -127,10 +127,7 @@ namespace GVC.View
             // Validação completa
             if (cepNumeros.Length != 8 || !CepService.ValidarCep(cepNumeros))
             {
-                MessageBox.Show($"CEP '{txtCep.Text}' é inválido.\nDigite 8 dígitos.",
-                               "CEP Inválido",
-                               MessageBoxButtons.OK,
-                               MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso($"CEP '{txtCep.Text}' é inválido.\nDigite 8 dígitos.");
                 txtCep.SelectAll();
                 txtCep.Focus();
                 return false;
@@ -168,10 +165,7 @@ namespace GVC.View
 
             if (endereco == null || !endereco.EhValido)
             {
-                MessageBox.Show($"CEP {txtCep.Text} não encontrado.",
-                               "CEP não encontrado",
-                               MessageBoxButtons.OK,
-                               MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso($"CEP {txtCep.Text} não encontrado.");
                 return null;
             }
 
@@ -231,10 +225,7 @@ namespace GVC.View
         private void TratarErroBusca(Exception ex)
         {
             Debug.WriteLine($"Erro ao buscar CEP: {ex.Message}");
-            MessageBox.Show($"Erro ao buscar CEP: {ex.Message}",
-                           "Erro na Busca",
-                           MessageBoxButtons.OK,
-                           MessageBoxIcon.Error);
+            Utilitario.Mensagens.Aviso($"Erro ao buscar CEP: {ex.Message}");
         }
 
         /// <summary>
@@ -724,8 +715,7 @@ namespace GVC.View
                 var cliente = MontarObjetoCliente();
                 _clienteBll.Salvar(cliente);
 
-                MessageBox.Show("Cliente cadastrado com sucesso!", "Sucesso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                Utilitario.Mensagens.Aviso("Cliente cadastrado com sucesso!");
 
                 AtualizarManutencao();
                 LimparCampos();
@@ -734,7 +724,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Erro ao salvar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso(ex.Message);
             }
         }
         public void AlterarRegistro()
@@ -747,8 +737,7 @@ namespace GVC.View
 
                 _clienteBll.Alterar(cliente);
 
-                MessageBox.Show("Cliente alterado com sucesso!", "Sucesso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                Utilitario.Mensagens.Info("Cliente alterado com sucesso!");
                 toolStripStatusLabelUsuarioAtualizacao.Text = FrmLogin.UsuarioConectado;
                 ToolStripLabelDataUtimaCompra.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                 this.Close();
@@ -758,9 +747,9 @@ namespace GVC.View
             catch (Exception ex)
             {
                 if (ex.Message.Contains("Outro cliente já está cadastrado"))
-                    MessageBox.Show(ex.Message, "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso(ex.Message);
                 else
-                    MessageBox.Show("Erro inesperado: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso("Erro inesperado: " + ex.Message);
             }
 
         }
@@ -773,8 +762,7 @@ namespace GVC.View
                 try
                 {
                     _clienteBll.Excluir(ClienteID);
-                    MessageBox.Show("Cliente excluído com sucesso!", "Excluído",
-                        MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    Utilitario.Mensagens.Aviso("Cliente excluído com sucesso!");
 
                    AtualizarManutencao();
 
@@ -782,8 +770,7 @@ namespace GVC.View
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao excluir: " + ex.Message, "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Erro("Erro ao excluir: " + ex.Message);
                 }
             }
         }
@@ -1118,7 +1105,7 @@ namespace GVC.View
             {
                 if (numero.Length != 11 || !Utilitario.ValidarCPF(numero))
                 {
-                    MessageBox.Show("CPF inválido!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("CPF inválido!");
                     txtCpf.Focus();
                     txtCpf.StateCommon.Border.Color1 = System.Drawing.Color.Crimson;
                     return;
@@ -1130,7 +1117,7 @@ namespace GVC.View
             {
                 if (numero.Length != 14 || !Utilitario.ValidarCNPJ(numero))
                 {
-                    MessageBox.Show("CNPJ inválido!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Erro("CNPJ inválido!");
                     txtCpf.Focus();
                     txtCpf.StateCommon.Border.Color1 = System.Drawing.Color.Crimson;
                     return;
@@ -1216,8 +1203,7 @@ namespace GVC.View
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao buscar cidade: {ex.Message}", "Erro",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso($"Erro ao buscar cidade: {ex.Message}");
                 }
                 finally
                 {

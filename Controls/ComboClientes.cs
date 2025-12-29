@@ -254,8 +254,7 @@ namespace MeuProjeto.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao buscar clientes: {ex.Message}", "Erro",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GVC.Utilitario.Mensagens.Erro($"Erro ao buscar clientes: {ex.Message}");
             }
         }
 

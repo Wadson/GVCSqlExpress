@@ -35,7 +35,7 @@ namespace GVC
 
             if (StatusOperacao != "NOVO" && dgvUsuarios.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um usuário primeiro!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um usuário primeiro!");
                 return;
             }            
             try
@@ -85,7 +85,7 @@ namespace GVC
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro..." + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro..." + ex.Message);
             }
         }
 
@@ -266,7 +266,7 @@ namespace GVC
         {
             if (dgvUsuarios.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um usuário para alterar!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um usuário para alterar!");
                 return;
             }
             StatusOperacao = "ALTERAR";
@@ -277,7 +277,7 @@ namespace GVC
         {
             if (dgvUsuarios.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um usuário para excluir!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um usuário para excluir!");
                 return;
             }
             StatusOperacao = "EXCLUSÃO";

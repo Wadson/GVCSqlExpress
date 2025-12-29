@@ -32,7 +32,7 @@ namespace GVC.View
         {
             if (!decimal.TryParse(txtValorEstornado.Text, out decimal valor) || valor <= 0)
             {
-                MessageBox.Show("Informe um valor válido para estorno.");
+                Utilitario.Mensagens.Aviso("Informe um valor válido para estorno.");
                 return;
             }
 

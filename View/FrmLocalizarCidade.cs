@@ -198,8 +198,7 @@ namespace GVC.View
                 // Valida se há linha selecionada
                 if (dataGridPesquisar.CurrentRow == null || dataGridPesquisar.CurrentRow.Index < 0)
                 {
-                    MessageBox.Show("Nenhuma cidade selecionada.", "Aviso",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Erro("Nenhuma cidade selecionada.");
                     return;
                 }
 
@@ -209,8 +208,7 @@ namespace GVC.View
                 // Valida as células (ajuste os índices conforme sua grid)
                 if (row.Cells["CidadeID"].Value == null || row.Cells["Nome"].Value == null)
                 {
-                    MessageBox.Show("Dados da cidade incompletos.", "Erro",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Erro("Dados da cidade incompletos.");
                     return;
                 }
 
@@ -228,8 +226,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao selecionar cidade: {ex.Message}", "Erro",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Erro($"Erro ao selecionar cidade: {ex.Message}");
             }
         }
         private void dataGridPesquisar_SelectionChanged(object sender, EventArgs e)
@@ -364,15 +361,13 @@ namespace GVC.View
         {
             if (_formChamador == null)
             {
-                MessageBox.Show("Formulário chamador não foi especificado.", "Erro",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Erro("Formulário chamador não foi especificado.");
                 return false;
             }
 
             if (_formChamador.IsDisposed)
             {
-                MessageBox.Show("Formulário chamador não está mais disponível.", "Erro",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Erro("Formulário chamador não está mais disponível.");
                 return false;
             }
 

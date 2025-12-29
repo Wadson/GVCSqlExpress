@@ -29,7 +29,7 @@ namespace GVC.DAL
             (p.Estoque * p.PrecoDeVenda) AS ValorTotalVenda,
             ((p.PrecoDeVenda - p.PrecoCusto) * p.Estoque) AS LucroTotalProduto
         FROM Produtos p
-        WHERE p.Status = 'Ativo'
+        WHERE p.Situacao = 'Ativo'
         ORDER BY p.NomeProduto";
 
             using var da = new SqlDataAdapter(sql, conn);

@@ -43,7 +43,7 @@ namespace GVC.View
             }
             catch
             {
-                MessageBox.Show("Sem permissão para gravar no diretório selecionado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Sem permissão para gravar no diretório selecionado.");
                 return false;
             }
         }
@@ -57,7 +57,7 @@ namespace GVC.View
             {
                 if (string.IsNullOrWhiteSpace(pastaDestino))
                 {
-                    MessageBox.Show("Selecione a pasta de destino do backup.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("Selecione a pasta de destino do backup.");
                     return false;
                 }
 
@@ -78,12 +78,12 @@ namespace GVC.View
                     }
                 }
 
-                MessageBox.Show($"Backup gerado com sucesso:\n{destino}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso($"Backup gerado com sucesso:\n{destino}");
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao gerar backup: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso($"Erro ao gerar backup: {ex.Message}");
                 return false;
             }
         }
@@ -97,12 +97,11 @@ namespace GVC.View
             {
                 if (string.IsNullOrWhiteSpace(arquivoBackup) || !File.Exists(arquivoBackup))
                 {
-                    MessageBox.Show("Arquivo de backup não encontrado ou inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso("Arquivo de backup não encontrado ou inválido.");
                     return false;
                 }
 
-                var resp = MessageBox.Show("A restauração irá substituir o banco atual. Deseja prosseguir?\nRecomenda-se fazer backup antes.",
-                    "Confirmar Restauração", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var resp = MessageBox.Show("A restauração irá substituir o banco atual. Deseja prosseguir?\nRecomenda-se fazer backup antes.");
                 if (resp != DialogResult.Yes) return false;
 
                 using (var con = GVC.Helpers.Conexao.Conex())
@@ -116,12 +115,12 @@ namespace GVC.View
                     }
                 }
 
-                MessageBox.Show("Restauração concluída com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso("Restauração concluída com sucesso!");
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao restaurar backup: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso($"Erro ao restaurar backup: {ex.Message}");
                 return false;
             }
         }
@@ -181,7 +180,7 @@ namespace GVC.View
             {
                 if (string.IsNullOrWhiteSpace(caminho))
                 {
-                    MessageBox.Show("Selecione o destino do backup.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("Selecione o destino do backup.");
                     return;
                 }
 
@@ -191,7 +190,7 @@ namespace GVC.View
             {
                 if (string.IsNullOrWhiteSpace(caminho) || !File.Exists(caminho))
                 {
-                    MessageBox.Show("Selecione um arquivo de backup válido para restaurar.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("Selecione um arquivo de backup válido para restaurar.");
                     return;
                 }
 

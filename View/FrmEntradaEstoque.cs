@@ -67,26 +67,26 @@ namespace GVC.View
             // Validações
             if (string.IsNullOrWhiteSpace(txtNomeProduto.Text))
             {
-                MessageBox.Show("O nome do produto é obrigatório.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("O nome do produto é obrigatório.");
                 txtNomeProduto.Focus();
                 return;
             }
 
             if (!decimal.TryParse(txtPrecoCusto.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out decimal precoCusto))
             {
-                MessageBox.Show("Preço de custo inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Preço de custo inválido.");
                 return;
             }
 
             if (!decimal.TryParse(txtPrecoDeVenda.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out decimal precoVenda))
             {
-                MessageBox.Show("Preço de venda inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Preço de venda inválido.");
                 return;
             }
 
             if (!long.TryParse(txtQuantidade.Text, out long estoque))
             {
-                MessageBox.Show("Estoque inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Estoque inválido.");
                 return;
             }
 
@@ -111,7 +111,7 @@ namespace GVC.View
 
                 if (sucesso)
                 {
-                    MessageBox.Show("Entrada de estoque registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Utilitario.Mensagens.Info("Entrada de estoque registrada com sucesso!");
 
                     // Atualiza a lista principal
                     var frmManut = Application.OpenForms["FrmManutProduto"] as FrmManutProduto;
@@ -123,7 +123,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao salvar: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso("Erro ao salvar: " + ex.Message);
             }
         }
 

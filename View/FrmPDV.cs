@@ -438,7 +438,7 @@ namespace GVC.View
         {
             if (_produtoId <= 0)
             {
-                MessageBox.Show("Ops! Esse produto não existe no cadastro. Deseja tentar outro?");
+                Utilitario.Mensagens.Aviso("Ops! Esse produto não existe no cadastro. Deseja tentar outro?");
                 return;
             }
 
@@ -568,24 +568,19 @@ namespace GVC.View
 
                 if (_clienteId <= 0)
                 {
-                    MessageBox.Show("Selecione um cliente.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("Selecione um cliente.");
                     return;
                 }
 
                 if (_itensBinding.Count == 0)
                 {
-                    MessageBox.Show("Adicione itens à venda.", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("Adicione itens à venda.");
                     return;
                 }
 
                 if (cmbFormaPagamento.SelectedItem == null)
                 {
-                    MessageBox.Show(
-                        "Selecione uma forma de pagamento para concluir a venda.",
-                        "Forma de pagamento obrigatória",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                    );
+                    Utilitario.Mensagens.Aviso( "Selecione uma forma de pagamento para concluir a venda.");
 
                     cmbFormaPagamento.StateCommon.ComboBox.Back.Color1 = Color.MistyRose;
                     cmbFormaPagamento.Focus();
@@ -597,7 +592,7 @@ namespace GVC.View
 
                 if (forma == null || forma.Id <= 0)
                 {
-                    MessageBox.Show("Forma de pagamento inválida.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso("Forma de pagamento inválida.");
                     return;
                 }
 
@@ -628,7 +623,7 @@ namespace GVC.View
                 {
                     if (parcelas.Count == 0)
                     {
-                        MessageBox.Show("Gere as parcelas antes de salvar uma venda no crediário.");
+                        Utilitario.Mensagens.Aviso("Gere as parcelas antes de salvar uma venda no crediário.");
                         return;
                     }
                 }
@@ -685,13 +680,12 @@ namespace GVC.View
             }
             catch (SqlException sqlEx)
             {
-                MessageBox.Show(
-                    $"Erro SQL (Número: {sqlEx.Number}): {sqlEx.Message}", "Erro SQL", MessageBoxButtons.OK, MessageBoxIcon.Error );
+                Utilitario.Mensagens.Erro($"Erro SQL (Número: {sqlEx.Number}): {sqlEx.Message}");
                
             }
             catch (Exception ex)
             {
-                MessageBox.Show( ex.Message,"Erro ao salvar venda", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso( ex.Message);
             }
         }
 
@@ -820,12 +814,12 @@ namespace GVC.View
         {
             if (_itensBinding.Count == 0)
             {
-                MessageBox.Show("Nenhum item na venda.");
+                Utilitario.Mensagens.Aviso("Nenhum item na venda.");
                 return;
             }
 
             // Abre tela de pagamento, resumo, etc
-            MessageBox.Show("Finalizar venda...");
+            Utilitario.Mensagens.Aviso("Finalizar venda...");
         }
         private ProdutoListaItem CriarCabecalhoProduto()
         {
@@ -1169,7 +1163,7 @@ namespace GVC.View
 
             if (!decimal.TryParse(txtTotalGeral.Text, out decimal total) || total <= 0)
             {
-                MessageBox.Show("Total da venda inválido.");
+                Utilitario.Mensagens.Aviso("Total da venda inválido.");
                 return;
             }
 
@@ -1179,7 +1173,7 @@ namespace GVC.View
 
             if (qtdParcelas <= 0)
             {
-                MessageBox.Show("Quantidade de parcelas inválida.");
+                Utilitario.Mensagens.Aviso("Quantidade de parcelas inválida.");
                 return;
             }
 
@@ -1379,7 +1373,7 @@ namespace GVC.View
                 txtDesconto.Enabled = false;
                 cmbFormaPagamento.Enabled = false;
 
-                MessageBox.Show("Atenção!", "Venda possui pagamentos. Alteração bloqueada");
+                Utilitario.Mensagens.Aviso("Venda possui pagamentos. Alteração bloqueada");
             }
         }
 
@@ -1394,7 +1388,7 @@ namespace GVC.View
 
             FrmBaixarParcela.SalvarNomesControles(this, caminho);
 
-            MessageBox.Show("Lista de controles salva em: " + caminho);
+            Utilitario.Mensagens.Aviso("Lista de controles salva em: " + caminho);
         }
 
         private void btnNovaVenda_Click(object sender, EventArgs e)

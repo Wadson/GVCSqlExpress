@@ -153,11 +153,25 @@ LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
         {
             using (var con = new SqlConnection(_connectionString))
             {
-                string sql = @"UPDATE Produtos SET NomeProduto = @NomeProduto, Referencia = @Referencia, PrecoCusto = @Custo, Lucro = @Lucro,
-                    PrecoDeVenda = @Venda, Estoque = @Estoque, 
-                    PrecoDeVenda = @PrecoDeVenda, Estoque = @Estoque, DataDeEntrada = @DataDeEntrada, Status = @Status, Situacao = @Situacao, Unidade = @Unidade, Marca = @Marca,
-                    DataValidade = @Validade, GtinEan = @Gtin, Imagem = @Imagem, FornecedorID = @FornecedorID
-                    WHERE ProdutoID = @Id";
+                string sql = @"
+UPDATE Produtos SET 
+    NomeProduto     = @NomeProduto,
+    Referencia      = @Referencia,
+    PrecoCusto      = @Custo,
+    Lucro           = @Lucro,
+    PrecoDeVenda    = @PrecoDeVenda,
+    Estoque         = @Estoque,
+    DataDeEntrada   = @DataDeEntrada,
+    Status          = @Status,
+    Situacao        = @Situacao,
+    Unidade         = @Unidade,
+    Marca           = @Marca,
+    DataValidade    = @Validade,
+    GtinEan         = @Gtin,
+    Imagem          = @Imagem,
+    FornecedorID    = @FornecedorID
+WHERE ProdutoID = @Id";
+
 
                 using (var cmd = new SqlCommand(sql, con))
                 {
@@ -168,7 +182,28 @@ LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
                 }
             }
         }
+        private void AdicionarParametros(SqlCommand cmd, ProdutosModel p)
+        {
+            cmd.Parameters.AddWithValue("@NomeProduto", p.NomeProduto ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Referencia", p.Referencia ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Custo", p.PrecoCusto);
+            cmd.Parameters.AddWithValue("@Lucro", p.Lucro);
+            cmd.Parameters.AddWithValue("@PrecoDeVenda", p.PrecoDeVenda);
+            cmd.Parameters.AddWithValue("@Estoque", p.Estoque);
+            cmd.Parameters.AddWithValue("@DataDeEntrada", p.DataDeEntrada);
+            cmd.Parameters.AddWithValue("@Status", p.Status ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Situacao", p.Situacao ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Unidade", p.Unidade ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Marca", p.Marca ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Validade", p.DataValidade.HasValue ? (object)p.DataValidade.Value : DBNull.Value);
+            cmd.Parameters.AddWithValue("@Gtin", p.GtinEan ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Imagem", p.Imagem ?? (object)DBNull.Value);
 
+            if (p.FornecedorID > 0)
+                cmd.Parameters.AddWithValue("@FornecedorID", p.FornecedorID);
+            else
+                cmd.Parameters.AddWithValue("@FornecedorID", DBNull.Value);
+        }
         // ==================== EXCLUIR ====================
         public bool Excluir(long id)
         {
@@ -296,28 +331,7 @@ LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
             return dt;
         }
 
-        private void AdicionarParametros(SqlCommand cmd, ProdutosModel p)
-        {
-            cmd.Parameters.AddWithValue("@NomeProduto", p.NomeProduto ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@Referencia", p.Referencia ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@Custo", p.PrecoCusto);
-            cmd.Parameters.AddWithValue("@Lucro", p.Lucro);
-            cmd.Parameters.AddWithValue("@Venda", p.PrecoDeVenda);
-            cmd.Parameters.AddWithValue("@Estoque", p.Estoque);
-            cmd.Parameters.AddWithValue("@Entrada", p.DataDeEntrada);
-            cmd.Parameters.AddWithValue("@Status", p.Status ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@Situacao", p.Situacao ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@Unidade", p.Unidade ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@Marca", p.Marca ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@Validade", p.DataValidade.HasValue ? (object)p.DataValidade.Value : DBNull.Value);
-            cmd.Parameters.AddWithValue("@Gtin", p.GtinEan ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@Imagem", p.Imagem ?? (object)DBNull.Value);
-
-            if (p.FornecedorID > 0)
-                cmd.Parameters.AddWithValue("@FornecedorID", p.FornecedorID);
-            else
-                cmd.Parameters.AddWithValue("@FornecedorID", DBNull.Value);
-        }
+      
 
     }
 

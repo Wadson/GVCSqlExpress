@@ -43,8 +43,7 @@ namespace GVC.UTIL
             }
             else
             {
-                MessageBox.Show("Selecione uma linha no grid para gerar extrato.", "Aviso",
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione uma linha no grid para gerar extrato." );
             }
         }
 
@@ -58,8 +57,7 @@ namespace GVC.UTIL
             }
             else
             {
-                MessageBox.Show("Marque o checkbox das parcelas para gerar recibo.", "Aviso",
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Marque o checkbox das parcelas para gerar recibo.");
             }
         }
 

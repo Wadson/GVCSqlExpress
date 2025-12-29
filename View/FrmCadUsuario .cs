@@ -145,7 +145,7 @@ namespace GVC
                 string.IsNullOrWhiteSpace(txtNovaSenha.Text) ||
                 txtNovaSenha.Text != txtRepitaSenha.Text)
             {
-                MessageBox.Show("Preencha todos os campos obrigatórios e confirme a senha!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Preencha todos os campos obrigatórios e confirme a senha!");
                 return;
             }
 
@@ -165,12 +165,12 @@ namespace GVC
                 };
 
                 new UsuarioBLL().Salvar(obj);
-                MessageBox.Show("Usuário cadastrado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso("Usuário cadastrado com sucesso!");
                 FecharEAtualizarManutencao();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao salvar: " + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro ao salvar: " + ex.Message);
             }
         }
 
@@ -178,14 +178,14 @@ namespace GVC
         {
             if (string.IsNullOrWhiteSpace(txtNomeUsuario.Text) || string.IsNullOrWhiteSpace(cmbTipoUsuario.Text))
             {
-                MessageBox.Show("Preencha os campos obrigatórios!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Preencha os campos obrigatórios!");
                 return;
             }
 
             // Sempre exige senha atual para qualquer alteração
             if (string.IsNullOrEmpty(txtSenhaAtual.Text) || HashSHA256(txtSenhaAtual.Text) != HashSenhaAtualNoBanco)
             {
-                MessageBox.Show("Senha atual incorreta!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Senha atual incorreta!");
                 txtSenhaAtual.Focus();
                 return;
             }
@@ -196,7 +196,7 @@ namespace GVC
             {
                 if (txtNovaSenha.Text != txtRepitaSenha.Text)
                 {
-                    MessageBox.Show("A nova senha e a repetição não coincidem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("A nova senha e a repetição não coincidem!");
                     return;
                 }
                 senhaFinal = HashSHA256(txtNovaSenha.Text);
@@ -218,12 +218,12 @@ namespace GVC
 
                 new UsuarioBLL().Alterar(obj);
 
-                MessageBox.Show("Usuário alterado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso("Usuário alterado com sucesso!");
                 FecharEAtualizarManutencao();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao alterar: " + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro ao alterar: " + ex.Message);
             }
         }
 
@@ -235,12 +235,12 @@ namespace GVC
                 try
                 {
                     new UsuarioBLL().Excluir(new UsuarioMODEL { UsuarioID = UsuarioID });
-                    MessageBox.Show("Usuário excluído com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Utilitario.Mensagens.Aviso("Usuário excluído com sucesso!");
                     FecharEAtualizarManutencao();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao excluir: " + ex.Message);
+                    Utilitario.Mensagens.Aviso("Erro ao excluir: " + ex.Message);
                 }
             }
         }

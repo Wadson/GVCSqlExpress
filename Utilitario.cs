@@ -31,11 +31,55 @@ namespace GVC{
     {
         private static readonly CultureInfo CulturaBR = new CultureInfo("pt-BR");
 
+        //📌 Exemplo de classe utilitária
+        public static class Mensagens
+        {
+            public static void Aviso(string mensagem)
+            {
+                MessageBox.Show(
+                    mensagem,
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
 
-        
-        /// <summary>
-        /// Remove todos os caracteres não numéricos de uma string
-        /// </summary>
+            public static void Erro(string mensagem)
+            {
+                MessageBox.Show(
+                    mensagem,
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+
+            public static void Info(string mensagem)
+            {
+                MessageBox.Show(
+                    mensagem,
+                    "Informação",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+
+            public static DialogResult Pergunta(string mensagem)
+            {
+                return MessageBox.Show(
+                    mensagem,
+                    "Confirmação",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+            }
+        }
+        //📌 Como usar
+        //No seu código, em vez de escrever MessageBox.Show(...) toda vez, você chama:
+        //Mensagens.Aviso("Por favor, marque a caixa de seleção ao lado para escolher ao menos uma parcela.");
+
+
+        // Remove todos os caracteres não numéricos de uma string     
         public static string ApenasNumeros(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto))
@@ -503,7 +547,7 @@ namespace GVC{
             catch (Exception ex)
             {
                 // Opcional: log silencioso ou MessageBox apenas em debug
-                MessageBox.Show("Erro na consulta: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erro na consulta: " + ex.Message);
                 grid.DataSource = null;
             }
         }

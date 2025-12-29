@@ -222,7 +222,7 @@ namespace GVC.View
                 if (LinhaAtual < 0 || LinhaAtual >= dataGridPesquisar.Rows.Count)
                 {
                     // Verifica se a linha obtida é válida
-                    MessageBox.Show("Linha inválida.");
+                    Utilitario.Mensagens.Aviso("Linha inválida.");
                     return;
                 }
                 // Verifica e obtém os valores das células NomeProduto e PrecoDeVenda
@@ -232,7 +232,7 @@ namespace GVC.View
                     !decimal.TryParse(dataGridPesquisar["PrecoDeVenda", LinhaAtual].Value.ToString(), out preco))
                 {
                     // Caso os valores não sejam válidos, exibe uma mensagem de erro
-                    MessageBox.Show("Dados do produto inválidos.");
+                    Utilitario.Mensagens.Aviso("Dados do produto inválidos.");
                     return;
                 }
                 // Se chegou aqui, atribui à propriedade

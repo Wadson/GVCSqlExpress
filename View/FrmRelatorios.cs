@@ -36,7 +36,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao calcular total: " + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro ao calcular total: " + ex.Message);
             }
         }
 
@@ -209,7 +209,7 @@ namespace GVC.View
                 case "PesquisarPorNomeClienteEStatus":
                     if (string.IsNullOrWhiteSpace(txtNomeCliente.Text))
                     {
-                        MessageBox.Show("Digite o nome do cliente.");
+                        Utilitario.Mensagens.Aviso("Digite o nome do cliente.");
                         return;
                     }
                     PesquisarPorNomeClienteEStatus(txtNomeCliente.Text, rbPago.Checked);

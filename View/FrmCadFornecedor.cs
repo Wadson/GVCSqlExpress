@@ -189,8 +189,7 @@ namespace GVC.View
                 var fornecedor = MontarObjetoFornecedor();
                 _fornecedorBll.Salvar(fornecedor);
 
-                MessageBox.Show("Fornecedor cadastrado com sucesso!", "Sucesso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                Utilitario.Mensagens.Aviso("Fornecedor cadastrado com sucesso!");
 
                 var frmManutFornecedor = Application.OpenForms["FrmManutFornecedor"] as FrmManutFornecedor;
                 if (frmManutFornecedor != null)
@@ -203,7 +202,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Erro ao salvar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso(ex.Message);
             }
         }
         public void AlterarRegistro()
@@ -213,8 +212,7 @@ namespace GVC.View
                 var fornecedor = MontarObjetoFornecedor();
                 _fornecedorBll.Alterar(fornecedor);
 
-                MessageBox.Show("Fornecedor alterado com sucesso!", "Sucesso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                Utilitario.Mensagens.Aviso("Fornecedor alterado com sucesso!");
                 toolStripStatusLabelUsuarioAtualizacao.Text = FrmLogin.UsuarioConectado;
                 ToolStripLabelDataUtimaCompra.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                 this.Close();
@@ -228,9 +226,9 @@ namespace GVC.View
             catch (Exception ex)
             {
                 if (ex.Message.Contains("Outro fornecedor já está cadastrado"))
-                    MessageBox.Show(ex.Message, "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso(ex.Message);
                 else
-                    MessageBox.Show("Erro inesperado: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso("Erro inesperado: " + ex.Message);
             }
 
         }
@@ -243,8 +241,7 @@ namespace GVC.View
                 try
                 {
                     _fornecedorBll.Excluir(FornecedorID);
-                    MessageBox.Show("Fornecedor excluído com sucesso!", "Excluído",
-                        MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    Utilitario.Mensagens.Aviso("Fornecedor excluído com sucesso!");
 
                     var frmManutFornecedor = Application.OpenForms["FrmManutFornecedor"] as FrmManutFornecedor;
                     if (frmManutFornecedor != null)
@@ -256,8 +253,7 @@ namespace GVC.View
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao excluir: " + ex.Message, "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Aviso("Erro ao excluir: " + ex.Message);
                 }
             }
         }
@@ -438,7 +434,7 @@ namespace GVC.View
 
             if (numero.Length != 14 || !Utilitario.ValidarCNPJ(numero))
             {
-                MessageBox.Show("CNPJ inválido!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("CNPJ inválido!");
                 txtCnpj.Focus();
                 txtCnpj.StateCommon.Border.Color1 = System.Drawing.Color.Crimson;
                 return;
@@ -529,10 +525,7 @@ namespace GVC.View
             // Validação completa
             if (cepNumeros.Length != 8 || !CepService.ValidarCep(cepNumeros))
             {
-                MessageBox.Show($"CEP '{txtCep.Text}' é inválido.\nDigite 8 dígitos.",
-                               "CEP Inválido",
-                               MessageBoxButtons.OK,
-                               MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso($"CEP '{txtCep.Text}' é inválido.\nDigite 8 dígitos.");
                 txtCep.SelectAll();
                 txtCep.Focus();
                 return false;
@@ -564,10 +557,7 @@ namespace GVC.View
 
             if (endereco == null || !endereco.EhValido)
             {
-                MessageBox.Show($"CEP {txtCep.Text} não encontrado.",
-                               "CEP não encontrado",
-                               MessageBoxButtons.OK,
-                               MessageBoxIcon.Information);
+                Utilitario.Mensagens.Info($"CEP {txtCep.Text} não encontrado.");
                 return null;
             }
 
@@ -613,10 +603,7 @@ namespace GVC.View
         private void TratarErroBusca(Exception ex)
         {
             Debug.WriteLine($"Erro ao buscar CEP: {ex.Message}");
-            MessageBox.Show($"Erro ao buscar CEP: {ex.Message}",
-                           "Erro na Busca",
-                           MessageBoxButtons.OK,
-                           MessageBoxIcon.Error);
+            Utilitario.Mensagens.Aviso($"Erro ao buscar CEP: {ex.Message}");
         }
 
         private void MostrarFeedbackSilencioso(BrasilApiResponse endereco)

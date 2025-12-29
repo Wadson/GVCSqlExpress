@@ -130,7 +130,7 @@ namespace GVC.DALL
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao executar a pesquisa: " + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro ao executar a pesquisa: " + ex.Message);
                 return null;
             }
             finally
@@ -182,7 +182,7 @@ namespace GVC.DALL
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao executar a pesquisa: " + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro ao executar a pesquisa: " + ex.Message);
                 return null;
             }
             finally
@@ -217,7 +217,7 @@ namespace GVC.DALL
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao executar a pesquisa: " + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro ao executar a pesquisa: " + ex.Message);
                 return null;
             }
             finally

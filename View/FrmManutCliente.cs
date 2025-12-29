@@ -152,8 +152,7 @@ namespace GVC.View
 
             if (row == null)
             {
-                MessageBox.Show("Selecione um cliente na lista!", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um cliente na lista!");
                 return;
             }
 
@@ -229,8 +228,7 @@ namespace GVC.View
         {
             if (dgvCliente.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um cliente na lista!", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um cliente na lista!");
                 return;
             }
 
@@ -248,8 +246,7 @@ namespace GVC.View
         {
             if (dgvCliente.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um cliente na lista!", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um cliente na lista!");
                 return;
             }
 

@@ -24,7 +24,7 @@ namespace GVC.View
         {
             if (string.IsNullOrWhiteSpace(txtMotivo.Text))
             {
-                MessageBox.Show("Informe o motivo da operação.");
+                Utilitario.Mensagens.Aviso("Informe o motivo da operação.");
                 return;
             }
 

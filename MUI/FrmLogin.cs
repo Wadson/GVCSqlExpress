@@ -176,8 +176,7 @@ namespace GVC.MUI
 
             if (resultado == "OK")
             {
-                MessageBox.Show("Login realizado com sucesso!", "Sucesso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso("Login realizado com sucesso!");
 
                 this.Hide();
                 FrmTelaPrincipal frm = new FrmTelaPrincipal();
@@ -189,8 +188,7 @@ namespace GVC.MUI
             }
             else
             {
-                MessageBox.Show(resultado, "Erro",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Erro(resultado);
             }
         }
         private void txtRepetPass_Validating(object sender, CancelEventArgs e)

@@ -276,7 +276,7 @@ namespace GVC.View
                 linhaAtual = ObterLinhaAtual();
                 if (linhaAtual < 0 || linhaAtual >= dataGridPesquisar.Rows.Count)
                 {
-                    MessageBox.Show("Linha inválida.");
+                    Utilitario.Mensagens.Aviso("Linha inválida.");
                     return;
                 }
 
@@ -290,7 +290,7 @@ namespace GVC.View
                     dataGridPesquisar["Nome", linhaAtual]?.Value == null)
 
                 {
-                    MessageBox.Show("Dados do cliente inválidos.");
+                    Utilitario.Mensagens.Aviso("Dados do cliente inválidos.");
                     return;
                 }
                 ClienteID = Convert.ToInt32(dataGridPesquisar["ClienteID", linhaAtual].Value);
@@ -342,7 +342,7 @@ namespace GVC.View
                 }
                 else
                 {
-                    MessageBox.Show("O formulário chamador não é reconhecido.");
+                    Utilitario.Mensagens.Aviso("O formulário chamador não é reconhecido.");
                 }
 
                 this.DialogResult = DialogResult.OK; // Confirma que um cliente foi selecionado

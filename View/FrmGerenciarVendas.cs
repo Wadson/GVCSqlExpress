@@ -27,7 +27,7 @@ namespace GVC.View
         {
             if (dgvVendas.CurrentRow == null)
             {
-                MessageBox.Show("Selecione uma venda para visualizar.");
+                Utilitario.Mensagens.Aviso("Selecione uma venda para visualizar.");
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace GVC.View
         {
             if (dgvVendas.CurrentRow == null)
             {
-                MessageBox.Show("Selecione uma venda para alterar.");
+                Utilitario.Mensagens.Aviso("Selecione uma venda para alterar.");
                 return;
             }
 
@@ -81,12 +81,12 @@ namespace GVC.View
                 try
                 {
                     new VendaBLL().CancelarVenda(vendaId, frmMotivo.Motivo);
-                    MessageBox.Show("Venda cancelada com sucesso.");
+                    Utilitario.Mensagens.Aviso("Venda cancelada com sucesso.");
                     CarregarVendas();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    Utilitario.Mensagens.Aviso(ex.Message);
                 }
             }
         }
@@ -115,12 +115,12 @@ namespace GVC.View
             try
             {
                 new VendaBLL().ExcluirVendaFisicamente(vendaId);
-                MessageBox.Show("Venda excluída definitivamente.");
+                Utilitario.Mensagens.Aviso("Venda excluída definitivamente.");
                 CarregarVendas();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Utilitario.Mensagens.Aviso(ex.Message);
             }
         }
 
@@ -260,7 +260,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Utilitario.Mensagens.Aviso(ex.Message);
             }
         }
        

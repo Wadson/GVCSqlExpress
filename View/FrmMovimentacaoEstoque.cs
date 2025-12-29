@@ -28,7 +28,7 @@ namespace GVC.View
 
             FrmBaixarParcela.SalvarNomesControles(this, caminho);
 
-            MessageBox.Show("Lista de controles salva em: " + caminho);
+            Utilitario.Mensagens.Aviso("Lista de controles salva em: " + caminho);
         }
 
         private void FrmMovimentacaoEstoque_Load(object sender, EventArgs e)
@@ -115,18 +115,13 @@ namespace GVC.View
 
                 new EstoqueBLL().MovimentarEstoque(mov);
 
-                MessageBox.Show( "Movimentação realizada com sucesso!","Estoque", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Utilitario.Mensagens.Aviso("Movimentação realizada com sucesso!");
 
                 LimparFormulario();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Erro",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Utilitario.Mensagens.Aviso(ex.Message);
             }
         }
 

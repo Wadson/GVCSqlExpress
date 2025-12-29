@@ -241,7 +241,7 @@ namespace GVC.View
             // Para ALTERAR ou EXCLUSÃO, precisa ter linha selecionada
             if (dgvProdutos.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um registro primeiro.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um registro primeiro.");
                 return;
             }
 
@@ -380,7 +380,7 @@ namespace GVC.View
         {
             if (dgvProdutos.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um usuário para alterar!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um usuário para alterar!");
                 return;
             }
             StatusOperacao = "ALTERAR";
@@ -391,7 +391,7 @@ namespace GVC.View
         {
             if (dgvProdutos.CurrentRow == null)
             {
-                MessageBox.Show("Selecione um usuário para excluir!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione um usuário para excluir!");
                 return;
             }
             StatusOperacao = "EXCLUSÃO";

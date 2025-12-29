@@ -171,13 +171,13 @@ namespace GVC.View
 
             if (!decimal.TryParse(texto, NumberStyles.Any, _br, out decimal valorBaixa) || valorBaixa <= 0)
             {
-                MessageBox.Show("Informe um valor válido maior que zero.");
+                Utilitario.Mensagens.Aviso("Informe um valor válido maior que zero.");
                 return;
             }
 
             if (valorBaixa > _saldoTotal)
             {
-                MessageBox.Show("O valor pago não pode ser maior que o saldo devido.");
+                Utilitario.Mensagens.Aviso("O valor pago não pode ser maior que o saldo devido.");
                 return;
             }
 
@@ -254,7 +254,7 @@ namespace GVC.View
 
             FrmBaixarParcela.SalvarNomesControles(this, caminho);
 
-            MessageBox.Show("Lista de controles salva em: " + caminho);
+            Utilitario.Mensagens.Aviso("Lista de controles salva em: " + caminho);
         }
 
         private void FrmBaixarParcela_Shown(object sender, EventArgs e)

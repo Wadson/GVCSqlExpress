@@ -138,7 +138,7 @@ namespace GVC.View
                 ProdutosBLL produtosbll = new ProdutosBLL();
 
                 produtosbll.Inserir(produto);
-                MessageBox.Show("Produto salvo com sucesso!", "Informação!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                Utilitario.Mensagens.Aviso("Produto salvo com sucesso!");
                 Utilitario.LimparCampos(this);
                 int NovoCodigo = Utilitario.ProximoId(QueryProdutos);
                 string numeroComZeros = Utilitario.ZerosEsquerda(NovoCodigo, 4);
@@ -154,7 +154,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso(ex.Message);
             }
         }
         public void Excluir()
@@ -171,7 +171,7 @@ namespace GVC.View
 
                     if (sucesso)
                     {
-                        MessageBox.Show("Registro excluído com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Utilitario.Mensagens.Aviso("Registro excluído com sucesso!");
 
                         var frmManutProduto = Application.OpenForms["FrmManutProduto"] as FrmManutProduto;
                         frmManutProduto?.HabilitarTimer(true);
@@ -183,7 +183,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao excluir: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso("Erro ao excluir: " + ex.Message);
             }
         }
         private void Alterar()
@@ -214,7 +214,7 @@ namespace GVC.View
                 // Chamar o método AlterarProduto da BLL
                 ProdutosBLL produtosbll = new ProdutosBLL();
                 produtosbll.Alterar(produto);
-                MessageBox.Show("Produto alterado com sucesso!", "Informação!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                Utilitario.Mensagens.Aviso("Produto alterado com sucesso!");
                 Utilitario.LimparCampos(this);
                 this.Close();
                 var frmManutProduto = Application.OpenForms["FrmManutProduto"] as FrmManutProduto;
@@ -225,7 +225,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao Alterar o registro: " + ex.Message);
+                Utilitario.Mensagens.Aviso("Erro ao Alterar o registro: " + ex.Message);
             }
         }
         private void btnSalva_Click(object sender, EventArgs e)
@@ -387,9 +387,7 @@ namespace GVC.View
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Não foi possível carregar/copiar a imagem.\n\nDetalhes: {ex.Message}",
-                                        "Erro ao carregar imagem",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Utilitario.Mensagens.Aviso($"Não foi possível carregar/copiar a imagem.\n\nDetalhes: {ex.Message}");
                     }
                 }
             }
@@ -423,7 +421,7 @@ namespace GVC.View
                 if (!DateTime.TryParseExact(txtDataValidade.Text, "dd/MM/yyyy",
                     CultureInfo.GetCultureInfo("pt-BR"), DateTimeStyles.None, out _))
                 {
-                    MessageBox.Show("Data de validade inválida!", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("Data de validade inválida!");
                     txtDataValidade.Focus();
                     txtDataValidade.SelectAll();
                 }

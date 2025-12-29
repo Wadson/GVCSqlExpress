@@ -391,7 +391,7 @@ namespace GVC.View
 
             if (ProdutoID <= 0)
             {
-                MessageBox.Show("Produto inválido.");
+                Utilitario.Mensagens.Aviso("Produto inválido.");
                 return;
             }
 
@@ -443,7 +443,7 @@ namespace GVC.View
 
             //if (ProdutoID <= 0)
             //{
-            //    MessageBox.Show("Produto inválido.");
+            //    Utilitario.Mensagens.Aviso("Produto inválido.");
             //    return;
             //}
 
@@ -608,7 +608,7 @@ namespace GVC.View
                 {
                     if (parcelas.Count == 0)
                     {
-                        MessageBox.Show("Gere as parcelas antes de salvar uma venda no crediário.");
+                        Utilitario.Mensagens.Aviso("Gere as parcelas antes de salvar uma venda no crediário.");
                         tabControlPagamento.SelectedTab = tabParcelas;
                         return;
                     }
@@ -667,12 +667,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "Erro ao salvar venda",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                Utilitario.Mensagens.Aviso(ex.Message);
             }
         }
 
@@ -750,7 +745,7 @@ namespace GVC.View
         {
             if (Convert.ToDecimal(txtTotalGeral.Text) <= 0)
             {
-                MessageBox.Show( "Total da venda inválido.", "Validação de Venda", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Aviso("Total da venda inválido.");
 
                 return;
             }
@@ -911,7 +906,7 @@ namespace GVC.View
 
             if (!decimal.TryParse(txtTotalGeral.Text, out decimal total) || total <= 0)
             {
-                MessageBox.Show("Total da venda inválido.");
+                Utilitario.Mensagens.Aviso("Total da venda inválido.");
                 return;
             }
 
@@ -921,7 +916,7 @@ namespace GVC.View
 
             if (qtdParcelas <= 0)
             {
-                MessageBox.Show("Quantidade de parcelas inválida.");
+                Utilitario.Mensagens.Aviso("Quantidade de parcelas inválida.");
                 return;
             }
 

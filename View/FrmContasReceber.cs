@@ -821,8 +821,7 @@ namespace GVC.View
             var conta = dgvContasAReceber.CurrentRow?.DataBoundItem as ContaAReceberDTO;
             if (conta == null)
             {
-                MessageBox.Show("Selecione uma venda válida.", "Atenção",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione uma venda válida.");
                 return null;
             }
 
@@ -901,8 +900,7 @@ namespace GVC.View
             {
                 if (dgvContasAReceber.CurrentRow == null)
                 {
-                    MessageBox.Show("Selecione uma linha para gerar o extrato do cliente.", "Atenção",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Utilitario.Mensagens.Aviso("Selecione uma linha para gerar o extrato do cliente.");
                     return;
                 }
 
@@ -910,15 +908,13 @@ namespace GVC.View
 
                 if (extrato == null)
                 {
-                    MessageBox.Show("Não foi possível obter dados do cliente.", "Erro",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Utilitario.Mensagens.Erro("Não foi possível obter dados do cliente.");
                     return;
                 }
 
                 if (extrato.ItensExtrato.Count == 0)
                 {
-                    MessageBox.Show("Não há parcelas para este cliente.", "Informação",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Utilitario.Mensagens.Info("Não há parcelas para este cliente.");
                     return;
                 }
 
@@ -964,8 +960,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao gerar extrato: {ex.Message}",
-                               "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Erro($"Erro ao gerar extrato: {ex.Message}");
             }
         }
 
@@ -1029,8 +1024,7 @@ namespace GVC.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Não foi possível abrir a pasta: {ex.Message}",
-                               "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Erro($"Não foi possível abrir a pasta: {ex.Message}");
             }
         }
         private void GerarReciboParcelas()
@@ -1038,8 +1032,7 @@ namespace GVC.View
             var parcelasSelecionadas = ObterParcelasSelecionadas();
             if (!parcelasSelecionadas.Any())
             {
-                MessageBox.Show("Selecione pelo menos uma parcela marcando o checkbox para gerar o recibo.",
-                    "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione pelo menos uma parcela marcando o checkbox para gerar o recibo.");
                 return;
             }
 
@@ -1112,16 +1105,14 @@ namespace GVC.View
             // 🔴 CORREÇÃO: Verifica se há exatamente UMA parcela selecionada
             if (selecionadas.Count == 0)
             {
-                MessageBox.Show("Selecione uma parcela para estornar.", "Atenção",
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione uma parcela para estornar.");
                 return;
             }
 
             // 🔴 NOVA VERIFICAÇÃO: Bloqueia se mais de uma parcela estiver selecionada
             if (selecionadas.Count > 1)
             {
-                MessageBox.Show("Selecione apenas UMA parcela para estornar.", "Atenção",
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Selecione apenas UMA parcela para estornar.");
                 return;
             }
 
@@ -1131,8 +1122,7 @@ namespace GVC.View
             // Verifica se a parcela tem valor recebido > 0
             if ((decimal)parcela.ValorRecebido <= 0)
             {
-                MessageBox.Show("Esta parcela não possui pagamentos para estornar.", "Atenção",
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utilitario.Mensagens.Aviso("Esta parcela não possui pagamentos para estornar.");
                 return;
             }
 
@@ -1157,14 +1147,12 @@ namespace GVC.View
                             frm.Motivo
                         );
 
-                        MessageBox.Show("Estorno realizado com sucesso!", "Sucesso",
-                                       MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Utilitario.Mensagens.Info("Estorno realizado com sucesso!");
                         CarregarContasAReceber(); // atualiza o grid
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Erro ao estornar: " + ex.Message, "Erro",
-                                       MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Utilitario.Mensagens.Erro("Erro ao estornar: " + ex.Message);
                     }
                 }
             }
@@ -1180,7 +1168,8 @@ namespace GVC.View
             var selecionadas = ObterParcelasSelecionadas();
             if (!selecionadas.Any())
             {
-                MessageBox.Show("Selecione ao menos uma parcela.");
+                Utilitario.Mensagens.Aviso("Por favor, marque a caixa de seleção ao lado para escolher ao menos uma parcela");
+                
                 return;
             }
 
@@ -1228,8 +1217,7 @@ namespace GVC.View
                 // Se não tem nenhum dos dois, mostra mensagem
                 if (!temCheckboxMarcado && !temLinhaSelecionada)
                 {
-                    MessageBox.Show("Para gerar extrato: selecione uma linha.\nPara gerar recibo: marque o checkbox das parcelas.",
-                                   "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Utilitario.Mensagens.Info("Para gerar extrato: selecione uma linha.\nPara gerar recibo: marque o checkbox das parcelas.");
                     return;
                 }
 
@@ -1276,16 +1264,14 @@ namespace GVC.View
                     else if ((resultado == DialogResult.Yes && !temLinhaSelecionada) ||
                              (resultado == DialogResult.No && !temCheckboxMarcado))
                     {
-                        MessageBox.Show("Esta opção não está disponível no momento.", "Aviso",
-                                       MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        Utilitario.Mensagens.Aviso("Esta opção não está disponível no momento.");
                     }
                     // Se for DialogResult.Cancel, não faz nada
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro: {ex.Message}", "Erro",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utilitario.Mensagens.Erro($"Erro: {ex.Message}");
             }
         }
 
