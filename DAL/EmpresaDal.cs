@@ -57,9 +57,54 @@ namespace GVC.DALL
 
         public DataTable ListarEmpresas()
         {
-            const string sql = SqlBase + " ORDER BY e.RazaoSocial";
-            return ExecuteReaderToDataTable(sql);
+            // Consulta SQL completa
+            const string sql = @"
+        SELECT
+            EmpresaID,
+            RazaoSocial,
+            NomeFantasia,
+            CNPJ,
+            InscricaoEstadual,
+            InscricaoMunicipal,
+            CNAE,
+            Logradouro,
+            Numero,
+            Bairro,
+            Cep,
+            Cidade,
+            UF,
+            Telefone,
+            Email,
+            Site,
+            Responsavel,
+            CertificadoDigital,
+            DataCriacao,
+            DataAtualizacao,
+            UsuarioCriacao,
+            UsuarioAtualizacao
+        FROM Empresa
+        ORDER BY RazaoSocial";
+
+            // Cria o DataTable que será retornado
+            DataTable dt = new DataTable();
+
+            // Exemplo de uso com SqlConnection (SQL Server)
+            using (SqlConnection conn = Helpers.Conexao.Conex())
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        dt.Load(reader);
+                    }
+                }
+            }
+
+            return dt;
         }
+
 
         public bool EmpresaExiste(string? razaoSocial, string? cnpj)
         {

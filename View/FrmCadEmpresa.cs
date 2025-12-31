@@ -180,76 +180,76 @@ namespace GVC.View
             if (row == null) return;
 
             CarregandoDados = true;
+
             try
             {
-                txtEmpresaID.Text = row.Cells["EmpresaID"].Value?.ToString() ?? "";
-                EmpresaID = Convert.ToInt32(row.Cells["EmpresaID"].Value);
+                /* =========================
+                 * IDENTIFICAÇÃO
+                 * ========================= */
+                EmpresaID = Convert.ToInt32(row.Cells["EmpresaID"].Value ?? 0);
+                txtEmpresaID.Text = EmpresaID.ToString();
 
+
+                /* =========================
+                 * DADOS PRINCIPAIS
+                 * ========================= */
                 txtRazaoSocial.Text = row.Cells["RazaoSocial"].Value?.ToString() ?? "";
                 txtNomeFantasia.Text = row.Cells["NomeFantasia"].Value?.ToString() ?? "";
 
                 string cnpj = row.Cells["CNPJ"].Value?.ToString() ?? "";
-                txtCnpj.Text = !string.IsNullOrWhiteSpace(cnpj) && cnpj.Length >= 14
-                    ? new string(cnpj.Take(14).Where(char.IsDigit).ToArray()) // Pega apenas 14 primeiros dígitos
-                    : cnpj;
+                txtCnpj.Text = !string.IsNullOrWhiteSpace(cnpj)
+                    ? new string(cnpj.Where(char.IsDigit).Take(14).ToArray())
+                    : "";
 
+
+                /* =========================
+                 * INSCRIÇÕES / CNAE
+                 * ========================= */
                 txtInscricaoEstadual.Text = row.Cells["InscricaoEstadual"].Value?.ToString() ?? "";
                 txtInscricaoMunicipal.Text = row.Cells["InscricaoMunicipal"].Value?.ToString() ?? "";
                 txtCnae.Text = row.Cells["CNAE"].Value?.ToString() ?? "";
 
+
+                /* =========================
+                 * ENDEREÇO
+                 * ========================= */
                 txtLogradouro.Text = row.Cells["Logradouro"].Value?.ToString() ?? "";
                 txtNumero.Text = row.Cells["Numero"].Value?.ToString() ?? "";
                 txtBairro.Text = row.Cells["Bairro"].Value?.ToString() ?? "";
 
                 string cep = row.Cells["Cep"].Value?.ToString() ?? "";
-                txtCep.Text = !string.IsNullOrWhiteSpace(cep) && cep.Length >= 8
-                    ? $"{new string(cep.Take(8).Where(char.IsDigit).ToArray()).Insert(5, "-")}"
-                    : cep;
+                txtCep.Text = !string.IsNullOrWhiteSpace(cep)
+                    ? $"{new string(cep.Where(char.IsDigit).Take(8).ToArray()).Insert(5, "-")}"
+                    : "";
 
                 txtNomeCidade.Text = row.Cells["Cidade"].Value?.ToString() ?? "";
                 txtUF.Text = row.Cells["UF"].Value?.ToString() ?? "";
 
+
+                /* =========================
+                 * CONTATO
+                 * ========================= */
                 string telefone = row.Cells["Telefone"].Value?.ToString() ?? "";
-                txtTelefone.Text = !string.IsNullOrWhiteSpace(telefone) && telefone.Length >= 10
+                txtTelefone.Text = !string.IsNullOrWhiteSpace(telefone)
                     ? FormatTelefone(telefone)
-                    : telefone;
+                    : "";
 
                 txtEmail.Text = row.Cells["Email"].Value?.ToString() ?? "";
                 txtSite.Text = row.Cells["Site"].Value?.ToString() ?? "";
+
+
+                /* =========================
+                 * RESPONSÁVEL / CERTIFICADO
+                 * ========================= */
                 txtResponsavel.Text = row.Cells["Responsavel"].Value?.ToString() ?? "";
                 txtCertificadoDigital.Text = row.Cells["CertificadoDigital"].Value?.ToString() ?? "";
-
-                // Logo
-                if (row.Cells["Logo"].Value != DBNull.Value && row.Cells["Logo"].Value is byte[] bytes && bytes.Length > 0)
-                {
-                    try
-                    {
-                        using (var ms = new MemoryStream(bytes))
-                        {
-                            ptbLogo.Image = Image.FromStream(ms);
-                        }
-                        txtImagem.Text = "Logo carregada";
-                    }
-                    catch
-                    {
-                        ptbLogo.Image = null;
-                        txtImagem.Text = "Erro ao carregar imagem";
-                    }
-                }
-                else
-                {
-                    ptbLogo.Image = null;
-                    txtImagem.Text = "Nenhuma imagem";
-                }
-
-                // Status (se você tiver um combo)
-                // cmbStatus.SelectedItem = row.Cells["Status"].Value?.ToString() == "1" ? "Ativo" : "Inativo";
             }
             finally
             {
                 CarregandoDados = false;
             }
         }
+
 
         private string FormatTelefone(string telefone)
         {
@@ -323,7 +323,7 @@ namespace GVC.View
                 Utilitario.Mensagens.Info("Empresa cadastrada com sucesso!");
 
                 // Atualiza o formulário de manutenção se existir
-                AtualizarManutencao();
+                //AtualizarManutencao();
 
                 // Opção 1: Fechar formulário
                 // this.Close();
@@ -360,8 +360,7 @@ namespace GVC.View
                 empresa.UsuarioAtualizacao = FrmLogin.UsuarioConectado;
                 _empresaBll.Atualizar(empresa);
                 Utilitario.Mensagens.Info("Empresa alterada com sucesso!");
-
-                AtualizarManutencao();
+               
                 this.Close();
             }
             catch (Exception ex)
@@ -385,8 +384,7 @@ namespace GVC.View
                 try
                 {
                     _empresaBll.Excluir(EmpresaID);
-                    Utilitario.Mensagens.Aviso("Empresa excluída com sucesso!");
-                    AtualizarManutencao();
+                    Utilitario.Mensagens.Aviso("Empresa excluída com sucesso!");                   
                     LimparCampos();
                 }
                 catch (Exception ex)
@@ -444,21 +442,6 @@ namespace GVC.View
                 return ms.ToArray();
             }
         }
-
-        private void AtualizarManutencao()
-        {
-            try
-            {
-                var frmManutEmpresa = Application.OpenForms.OfType<FrmManutEmpresa>().FirstOrDefault();
-                frmManutEmpresa?.HabilitarTimer(true);
-            }
-            catch
-            {
-                // Ignora
-            }
-        }
-
-
 
         private void txtCep_Leave(object sender, EventArgs e)
         {
@@ -523,28 +506,6 @@ namespace GVC.View
                 AlterarRegistro();
             else if (StatusOperacao == "EXCLUSAO")
                 ExcluirRegistro(); btnSalvar.Enabled = true;
-        }
-
-        private void FrmCadEmpresa_Load(object sender, EventArgs e)
-        {
-            // ================================
-            // 👍 SE MODO NOVO → Gerar código
-            // ================================
-            if (StatusOperacao == "NOVO")
-            {
-                GerarNovoCodigo();   // <-- AQUI FUNCIONA!
-
-                var frmManutEmpresa = Application.OpenForms["FrmManutEmpresa"] as FrmManutEmpresa;
-                frmManutEmpresa?.HabilitarTimer(true);
-
-                toolStripStatusLabelUsuarioCriacao.Text = FrmLogin.UsuarioConectado;
-                ToolStripLabelDataCriacao.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-
-                // Como é novo, não existe atualização ainda:
-                toolStripStatusLabelUsuarioAtualizacao.Text = "-";
-                ToolStripLabelDataUtimaCompra.Text = "-";
-            }
-            CarregandoDados = false;
         }
 
         private void FrmCadEmpresa_FormClosing(object sender, FormClosingEventArgs e)

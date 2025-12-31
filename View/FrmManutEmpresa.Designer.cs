@@ -45,6 +45,7 @@
             kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
             kryptonPanel3 = new Krypton.Toolkit.KryptonPanel();
             kryptonPanel4 = new Krypton.Toolkit.KryptonPanel();
+            timer2 = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)dgvEmpresa).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)kryptonPanel2).BeginInit();
@@ -75,7 +76,7 @@
             dgvEmpresa.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvEmpresa.Size = new Size(901, 327);
             dgvEmpresa.TabIndex = 597;
-            dgvEmpresa.CellFormatting += dataGridPesquisar_CellFormatting;
+            dgvEmpresa.CellFormatting += dgvEmpresa_CellFormatting;
             // 
             // lblTotalRegistros
             // 
@@ -463,13 +464,17 @@
             kryptonPanel4.Size = new Size(903, 34);
             kryptonPanel4.TabIndex = 2;
             // 
+            // timer2
+            // 
+            timer2.Interval = 1000;
+            // 
             // FrmManutEmpresa
             // 
             BackColor = Color.FromArgb(252, 252, 250);
             ClientSize = new Size(909, 443);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(lblTotalRegistros);
-            FormBorderStyle = FormBorderStyle.None;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             KeyPreview = true;
             Margin = new Padding(5, 3, 5, 3);
             MaximizeBox = false;
@@ -482,7 +487,8 @@
             ShowInTaskbar = false;
             StateCommon.Back.Color1 = Color.White;
             StateCommon.Back.Color2 = Color.White;
-            Text = "Manutenção e Clientes";           
+            Text = "Manutenção e Empresa";
+            Load += FrmManutEmpresa_Load;
             ((System.ComponentModel.ISupportInitialize)dgvEmpresa).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)kryptonPanel2).EndInit();
@@ -516,5 +522,6 @@
         private Krypton.Toolkit.KryptonLabel kryptonLabel1;
         private Krypton.Toolkit.KryptonPanel kryptonPanel3;
         private Krypton.Toolkit.KryptonPanel kryptonPanel4;
+        private System.Windows.Forms.Timer timer2;
     }
 }

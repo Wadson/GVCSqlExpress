@@ -1096,8 +1096,7 @@
             StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
             StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
             Text = "Cadastro da Empresa";
-            FormClosing += FrmCadEmpresa_FormClosing;
-            Load += FrmCadEmpresa_Load;
+            FormClosing += FrmCadEmpresa_FormClosing;            
             Shown += FrmCadEmpresa_Shown;
             KeyDown += FrmCadEmpresa_KeyDown;
             ((System.ComponentModel.ISupportInitialize)ptbLogo).EndInit();

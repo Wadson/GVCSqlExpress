@@ -15,110 +15,111 @@ namespace GVC.View
 {
     public partial class FrmManutEmpresa : KryptonForm
     {
+        private bool _gridConfigurado = false; //Faz parte da configuração do grid
+
         private string StatusOperacao;
 
         public FrmManutEmpresa(string statusOperacao)
         {
             this.StatusOperacao = statusOperacao;
             InitializeComponent();
+            dgvEmpresa.CellFormatting += dgvEmpresa_CellFormatting;
 
             // Personalização do título
-            this.Text = "Manutenção de Empresas";            
+            this.Text = "Manutenção de Empresas";
             this.StateCommon.Header.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254);
             this.StateCommon.Header.Content.ShortText.Color2 = Color.White;
             this.StateCommon.Header.Content.ShortText.Font = new Font("Segoe UI", 12);
         }
         public void ListarEmpresa()
         {
-            EmpresaBll objetoBll = new EmpresaBll();
-            dgvEmpresa.DataSource = objetoBll.Listar();
-            PersonalizarDataGridView();
-            Utilitario.AtualizarTotal(lblTotalRegistros, dgvEmpresa);
-        }
-        public void HabilitarTimer(bool habilitar)
-        {
-            timer1.Enabled = habilitar;
-        }
-        public void PersonalizarDataGridView()
-        {
-            dgvEmpresa.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            EmpresaBll bll = new EmpresaBll();
 
-            // Cabeçalhos bonitos conforme EmpresaModel
-            if (dgvEmpresa.Columns["EmpresaID"] != null) dgvEmpresa.Columns["EmpresaID"].HeaderText = "Código";
-            if (dgvEmpresa.Columns["RazaoSocial"] != null) dgvEmpresa.Columns["RazaoSocial"].HeaderText = "Razão Social";
-            if (dgvEmpresa.Columns["NomeFantasia"] != null) dgvEmpresa.Columns["NomeFantasia"].HeaderText = "Nome Fantasia";
-            if (dgvEmpresa.Columns["CNPJ"] != null) dgvEmpresa.Columns["CNPJ"].HeaderText = "CNPJ";
-            if (dgvEmpresa.Columns["InscricaoEstadual"] != null) dgvEmpresa.Columns["InscricaoEstadual"].HeaderText = "Inscrição Estadual";
-            if (dgvEmpresa.Columns["InscricaoMunicipal"] != null) dgvEmpresa.Columns["InscricaoMunicipal"].HeaderText = "Inscrição Municipal";
-            if (dgvEmpresa.Columns["CNAE"] != null) dgvEmpresa.Columns["CNAE"].HeaderText = "CNAE";           
-            if (dgvEmpresa.Columns["Logradouro"] != null) dgvEmpresa.Columns["Logradouro"].HeaderText = "Endereço";
-            if (dgvEmpresa.Columns["Numero"] != null) dgvEmpresa.Columns["Numero"].HeaderText = "Número";
-            if (dgvEmpresa.Columns["Bairro"] != null) dgvEmpresa.Columns["Bairro"].HeaderText = "Bairro";
-            if (dgvEmpresa.Columns["Cep"] != null) dgvEmpresa.Columns["Cep"].HeaderText = "CEP";
-            if (dgvEmpresa.Columns["Cidade"] != null) dgvEmpresa.Columns["Cidade"].HeaderText = "Cidade";
-            if (dgvEmpresa.Columns["UF"] != null) dgvEmpresa.Columns["UF"].HeaderText = "UF";
-            if (dgvEmpresa.Columns["Telefone"] != null) dgvEmpresa.Columns["Telefone"].HeaderText = "Telefone";
-            if (dgvEmpresa.Columns["Email"] != null) dgvEmpresa.Columns["Email"].HeaderText = "E-mail";
-            if (dgvEmpresa.Columns["Site"] != null) dgvEmpresa.Columns["Site"].HeaderText = "Site";
-            if (dgvEmpresa.Columns["Responsavel"] != null) dgvEmpresa.Columns["Responsavel"].HeaderText = "Responsável";
-            if (dgvEmpresa.Columns["CertificadoDigital"] != null) dgvEmpresa.Columns["CertificadoDigital"].HeaderText = "Certificado Digital";
-            if (dgvEmpresa.Columns["DataCriacao"] != null) dgvEmpresa.Columns["DataCriacao"].HeaderText = "Criação";
-            if (dgvEmpresa.Columns["DataAtualizacao"] != null) dgvEmpresa.Columns["DataAtualizacao"].HeaderText = "Atualização";
-            if (dgvEmpresa.Columns["UsuarioCriacao"] != null) dgvEmpresa.Columns["UsuarioCriacao"].HeaderText = "Usuário Criação";
-            if (dgvEmpresa.Columns["UsuarioAtualizacao"] != null) dgvEmpresa.Columns["UsuarioAtualizacao"].HeaderText = "Usuário Atualização";
-            if (dgvEmpresa.Columns["Logo"] != null) dgvEmpresa.Columns["Logo"].HeaderText = "Logo";
+            dgvEmpresa.SuspendLayout();
+            dgvEmpresa.DataSource = bll.Listar();
+            dgvEmpresa.ResumeLayout();
 
-            // Larguras fixas
-            var largurasFixas = new (string nome, int largura)[]
+            if (!_gridConfigurado)
             {
-        ("EmpresaID",        80),
-        ("RazaoSocial",     250),
-        ("NomeFantasia",    200),
-        ("CNPJ",            160),
-        ("InscricaoEstadual",140),
-        ("InscricaoMunicipal",140),
-        ("CNAE",            120),       
-        ("Logradouro",      250),
-        ("Numero",           80),
-        ("Bairro",          180),
-        ("Cep",              90),
-        ("Cidade",          200),
-        ("UF",               60),
-        ("Telefone",        140),
-        ("Email",           240),
-        ("Site",            200),
-        ("Responsavel",     200),
-        ("CertificadoDigital",200),
-        ("DataCriacao",     130),
-        ("DataAtualizacao", 130),
-        ("UsuarioCriacao",  150),
-        ("UsuarioAtualizacao",150),
-        ("Logo",            100)
-            };
-
-            foreach (var (nome, largura) in largurasFixas)
-            {
-                if (dgvEmpresa.Columns[nome] != null)
-                {
-                    dgvEmpresa.Columns[nome].Width = largura;
-                    dgvEmpresa.Columns[nome].Resizable = DataGridViewTriState.False;
-                }
+                PersonalizarDataGridView();
+                _gridConfigurado = true;
             }
 
-            // Colunas fixas
-            if (dgvEmpresa.Columns["EmpresaID"] != null) dgvEmpresa.Columns["EmpresaID"].Frozen = true;
-            if (dgvEmpresa.Columns["RazaoSocial"] != null) dgvEmpresa.Columns["RazaoSocial"].Frozen = true;
-            if (dgvEmpresa.Columns["CNPJ"] != null) dgvEmpresa.Columns["CNPJ"].Frozen = true;
+            Utilitario.AtualizarTotal(lblTotalRegistros, dgvEmpresa);
+        }
+        private void ConfigurarColunaFill(string coluna, int larguraMinima, int peso)
+        {
+            var col = dgvEmpresa.Columns[coluna];
+            if (col == null) return;
 
-            // Estilo do cabeçalho
+            col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            col.MinimumWidth = larguraMinima;
+            col.FillWeight = peso;
+        }
+
+        private void PersonalizarDataGridView()
+        {
+            // Campos que EXPANDEM
+            ConfigurarColunaFill("RazaoSocial", 250, 3);
+            ConfigurarColunaFill("NomeFantasia", 220, 2);
+
+            // Cabeçalhos
+            dgvEmpresa.Columns["EmpresaID"].HeaderText = "Código";
+            dgvEmpresa.Columns["RazaoSocial"].HeaderText = "Razão Social";
+            dgvEmpresa.Columns["NomeFantasia"].HeaderText = "Nome Fantasia";
+            dgvEmpresa.Columns["CNPJ"].HeaderText = "CNPJ";
+            dgvEmpresa.Columns["InscricaoEstadual"].HeaderText = "Inscrição Estadual";
+            dgvEmpresa.Columns["InscricaoMunicipal"].HeaderText = "Inscrição Municipal";
+            dgvEmpresa.Columns["CNAE"].HeaderText = "CNAE";
+            dgvEmpresa.Columns["Logradouro"].HeaderText = "Endereço";
+            dgvEmpresa.Columns["Numero"].HeaderText = "Número";
+            dgvEmpresa.Columns["Bairro"].HeaderText = "Bairro";
+            dgvEmpresa.Columns["Cep"].HeaderText = "CEP";
+            dgvEmpresa.Columns["Cidade"].HeaderText = "Cidade";
+            dgvEmpresa.Columns["UF"].HeaderText = "UF";
+            dgvEmpresa.Columns["Telefone"].HeaderText = "Telefone";
+            dgvEmpresa.Columns["Email"].HeaderText = "E-mail";
+            dgvEmpresa.Columns["Site"].HeaderText = "Site";
+            dgvEmpresa.Columns["Responsavel"].HeaderText = "Responsável";
+            dgvEmpresa.Columns["CertificadoDigital"].HeaderText = "Certificado Digital";
+            dgvEmpresa.Columns["DataCriacao"].HeaderText = "Criação";
+            dgvEmpresa.Columns["DataAtualizacao"].HeaderText = "Atualização";
+            dgvEmpresa.Columns["UsuarioCriacao"].HeaderText = "Usuário Criação";
+            dgvEmpresa.Columns["UsuarioAtualizacao"].HeaderText = "Usuário Atualização";
+
+            // Larguras FIXAS
+            dgvEmpresa.Columns["EmpresaID"].Width = 70;
+            dgvEmpresa.Columns["CNPJ"].Width = 160;
+            dgvEmpresa.Columns["InscricaoEstadual"].Width = 140;
+            dgvEmpresa.Columns["InscricaoMunicipal"].Width = 140;
+            dgvEmpresa.Columns["CNAE"].Width = 120;
+            dgvEmpresa.Columns["Numero"].Width = 80;
+            dgvEmpresa.Columns["Cep"].Width = 90;
+            dgvEmpresa.Columns["UF"].Width = 60;
+            dgvEmpresa.Columns["Telefone"].Width = 140;
+            dgvEmpresa.Columns["Email"].Width = 240;
+            dgvEmpresa.Columns["Site"].Width = 200;
+            dgvEmpresa.Columns["Responsavel"].Width = 200;
+            dgvEmpresa.Columns["CertificadoDigital"].Width = 200;
+            dgvEmpresa.Columns["DataCriacao"].Width = 130;
+            dgvEmpresa.Columns["DataAtualizacao"].Width = 130;
+            dgvEmpresa.Columns["UsuarioCriacao"].Width = 150;
+            dgvEmpresa.Columns["UsuarioAtualizacao"].Width = 150;
+
+            // Campos que EXPANDEM
+            dgvEmpresa.Columns["RazaoSocial"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvEmpresa.Columns["NomeFantasia"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvEmpresa.Columns["Logradouro"].Width = 250;
+            dgvEmpresa.Columns["Bairro"].Width = 180;
+            dgvEmpresa.Columns["Cidade"].Width = 200;
+
+            // Estilo
             dgvEmpresa.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvEmpresa.ColumnHeadersHeight = 35;
-            dgvEmpresa.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            dgvEmpresa.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dgvEmpresa.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10);
             dgvEmpresa.RowHeadersWidth = 28;
-
-            dgvEmpresa.PerformLayout();
         }
+
 
 
         private void CarregaDados(FrmCadEmpresa frmcadEmpresa)
@@ -133,11 +134,11 @@ namespace GVC.View
             if (StatusOperacao == "NOVO")
             {
 
-               frmcadEmpresa.Text = "Novo Empresa";
-               frmcadEmpresa.StateCommon.Header.Content.ShortText.Color1 = Color.Green;
-               frmcadEmpresa.StateCommon.Header.Content.ShortText.Color2 = Color.White;
-               frmcadEmpresa.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
-                
+                frmcadEmpresa.Text = "Novo Empresa";
+                frmcadEmpresa.StateCommon.Header.Content.ShortText.Color1 = Color.Green;
+                frmcadEmpresa.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+                frmcadEmpresa.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
+
                 frmcadEmpresa.ShowDialog();
                 return;
             }
@@ -170,7 +171,7 @@ namespace GVC.View
                 frmcadEmpresa.StateCommon.Header.Content.ShortText.Color2 = Color.White;
                 frmcadEmpresa.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
                 frmcadEmpresa.btnSalvar.Text = "Excluir";
-                frmcadEmpresa.btnNovo.Enabled = false;                
+                frmcadEmpresa.btnNovo.Enabled = false;
 
                 // 🔒 BLOQUEIO ESPECÍFICO DOS TEXTBOX
                 foreach (Control ctrl in frmcadEmpresa.Controls)
@@ -212,7 +213,7 @@ namespace GVC.View
             cad.Text = "Nova Empresa";
             cad.ForeColor = Color.FromArgb(8, 142, 254);
 
-            cad.ShowDialog();          
+            cad.ShowDialog();
         }
         private void btnAlterar_Click(object sender, EventArgs e)
         {
@@ -229,8 +230,8 @@ namespace GVC.View
                 dgvEmpresa.CurrentRow.Cells["EmpresaID"].Value);
 
             cadEmpresa.StatusOperacao = StatusOperacao;
-            CarregaDados(cadEmpresa);           
-            
+            CarregaDados(cadEmpresa);
+
         }
         private void btnExcluir_Click(object sender, EventArgs e)
         {
@@ -261,50 +262,6 @@ namespace GVC.View
             CarregaDados(cadEmpresa);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            ListarEmpresa();
-            timer1.Enabled = false;
-        }
-        private void txtPesquisa_TextChanged(object sender, EventArgs e)
-        {
-            string texto = txtPesquisa.Text.Trim();
-
-            if (string.IsNullOrEmpty(texto) && !rbtCodigo.Checked)
-            {
-                ListarEmpresa();
-                return;
-            }
-
-            var dao = new EmpresaDal();
-            DataTable dt = null;
-
-            //if (rbtCodigo.Checked && int.TryParse(texto, out int id))
-            //{
-            //    dt = dao.PesquisarPorCodigo(id);
-            //}
-            //else if (rbtDescricao.Checked)
-            //{
-            //    dt = dao.PesquisarPorNome(texto);
-            //}           
-            //else
-            //{
-            //    ListarEmpresa();
-            //    return;
-            //}
-
-            dgvEmpresa.DataSource = dt ?? new DataTable();
-            PersonalizarDataGridView();
-            Utilitario.AtualizarTotal(lblTotalRegistros, dgvEmpresa);
-        }
-
-        private void FrmManutEmpresa_Load(object sender, EventArgs e)
-        {
-            timer1.Enabled = false; // 🔴 IMPORTANTE
-            ListarEmpresa();           
-            dgvEmpresa.CellFormatting += dataGridPesquisar_CellFormatting;
-        }
-
         private void rbtCodigo_CheckedChanged(object sender, EventArgs e)
         {
             txtPesquisa.Text = "";
@@ -314,132 +271,78 @@ namespace GVC.View
         {
             txtPesquisa.Text = "";
             txtPesquisa.Focus();
-        }      
+        }
         private void btnSair_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-        private void dataGridPesquisar_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            string texto = txtPesquisa.Text.Trim();
+
+            EmpresaDal dao = new EmpresaDal();
+            DataTable dt;
+
+            if (string.IsNullOrEmpty(texto))
+            {
+                dt = dao.ListarEmpresas();
+            }
+            else if (rbtCodigo.Checked && int.TryParse(texto, out int id))
+            {
+                dt = dao.PesquisarPorCodigo(id);
+            }
+            else if (rbtDescricao.Checked)
+            {
+                dt = dao.PesquisarPorNome(texto);
+            }
+            else
+            {
+                return;
+            }
+
+            dgvEmpresa.DataSource = dt;
+            Utilitario.AtualizarTotal(lblTotalRegistros, dgvEmpresa);
+        }
+
+        private void FrmManutEmpresa_Load(object sender, EventArgs e)
+        {
+            ListarEmpresa();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            ListarEmpresa();
+            timer1.Enabled = false;
+        }
+
+        private void dgvEmpresa_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.Value == null) return;
 
-            string columnName = dgvEmpresa.Columns[e.ColumnIndex].Name;
-            string raw = e.Value.ToString();
+            string coluna = dgvEmpresa.Columns[e.ColumnIndex].Name;
+            string valor = new string(e.Value.ToString().Where(char.IsDigit).ToArray());
 
-            // Função auxiliar: extrai apenas dígitos
-            string Digitos(string s) => new string(s.Where(char.IsDigit).ToArray());
-
-            // Formatar CPF
-            if (columnName == "Cpf")
+            // CNPJ → 00.000.000/0001-00
+            if (coluna == "CNPJ" && valor.Length == 14)
             {
-                string cpf = Digitos(raw);
-                if (cpf.Length == 11 && ulong.TryParse(cpf, out ulong n11))
-                {
-                    e.Value = n11.ToString(@"000\.000\.000\-00");
-                    e.FormattingApplied = true;
-                    return;
-                }              
-                // Se não tem tamanho padrão, apenas mostra os dígitos
-                if (!string.IsNullOrEmpty(cpf))
-                {
-                    e.Value = cpf;
-                    e.FormattingApplied = true;
-                    return;
-                }
-            }
-            // Formatar CPF
-            if (columnName == "Cnpj")
-            {
-                string cnpj = Digitos(raw);               
-                if (cnpj.Length == 14 && ulong.TryParse(cnpj, out ulong n14))
-                {
-                    e.Value = n14.ToString(@"00\.000\.000\/0000\-00");
-                    e.FormattingApplied = true;
-                    return;
-                }
-                // Se não tem tamanho padrão, apenas mostra os dígitos
-                if (!string.IsNullOrEmpty(cnpj))
-                {
-                    e.Value = cnpj;
-                    e.FormattingApplied = true;
-                    return;
-                }
+                e.Value = Convert.ToUInt64(valor).ToString(@"00\.000\.000\/0000\-00");
+                e.FormattingApplied = true;
             }
 
-            // Formatar Telefone
-            if (columnName == "Telefone")
+            // CEP → 68.000-560
+            else if (coluna == "Cep" && valor.Length == 8)
             {
-                string tel = Digitos(raw);
-                if (tel.Length == 11 && ulong.TryParse(tel, out ulong t11))
-                {
-                    // (00) 00000-0000
-                    string s = t11.ToString("00000000000");
-                    e.Value = $"({s.Substring(0, 2)}) {s.Substring(2, 5)}-{s.Substring(7, 4)}";
-                    e.FormattingApplied = true;
-                    return;
-                }
-                if (tel.Length == 10 && ulong.TryParse(tel, out ulong t10))
-                {
-                    // (00) 0000-0000
-                    string s = t10.ToString("0000000000");
-                    e.Value = $"({s.Substring(0, 2)}) {s.Substring(2, 4)}-{s.Substring(6, 4)}";
-                    e.FormattingApplied = true;
-                    return;
-                }
-                if (!string.IsNullOrEmpty(tel))
-                {
-                    e.Value = tel;
-                    e.FormattingApplied = true;
-                    return;
-                }
+                e.Value = Convert.ToUInt64(valor).ToString(@"00\.000\-000");
+                e.FormattingApplied = true;
             }
 
-            // Formatar CEP
-            if (columnName == "Cep")
+            // Telefone → (00) 0 0000-0000
+            else if (coluna == "Telefone" && valor.Length == 11)
             {
-                string cep = Digitos(raw);
-                if (cep.Length == 8 && ulong.TryParse(cep, out ulong c))
-                {
-                    e.Value = c.ToString(@"00000\-000");
-                    e.FormattingApplied = true;
-                    return;
-                }
-                if (!string.IsNullOrEmpty(cep))
-                {
-                    e.Value = cep;
-                    e.FormattingApplied = true;
-                    return;
-                }
+                e.Value = $"({valor.Substring(0, 2)}) {valor.Substring(2, 1)} {valor.Substring(3, 4)}-{valor.Substring(7, 4)}";
+                e.FormattingApplied = true;
             }
-
-            // Formatar Datas (ex.: DataNascimento, DataCriacao, DataUltimaCompra)
-            if ((columnName == "DataNascimento" || columnName == "DataCriacao" || columnName == "DataAtualizacao" || columnName == "DataUltimaCompra") && !string.IsNullOrWhiteSpace(raw))
-            {
-                if (DateTime.TryParse(raw, out DateTime dt))
-                {
-                    if (columnName == "DataCriacao")
-                        e.Value = dt.ToString("dd/MM/yyyy HH:mm"); // data + hora
-                    else
-                        e.Value = dt.ToString("dd/MM/yyyy"); // só data
-                    e.FormattingApplied = true;
-                    return;
-                }
-            }
-
-            // Formatar Moeda (ex.: ValorTotal, Saldo, LimiteCredito)
-            if ((columnName == "ValorTotal" || columnName == "Saldo" || columnName == "LimiteCredito" ||
-                 columnName == "Valor" || columnName == "Preco" || columnName == "Total") && !string.IsNullOrWhiteSpace(raw))
-            {
-                if (e.Value is decimal dec)
-                {
-                    e.Value = dec.ToString("N2", CultureInfo.CurrentCulture);
-                    e.FormattingApplied = true;
-                    return;
-                }
-
-            }           
-
         }
-
     }
 }
