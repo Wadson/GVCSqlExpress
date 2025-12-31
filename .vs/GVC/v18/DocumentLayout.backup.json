@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\GVCSqlExpress\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvcsqlexpress\\view\\frmcadempresa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcadempresa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvcsqlexpress\\view\\frmcadempresa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcadempresa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvcsqlexpress\\utilitario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:utilitario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvcsqlexpress\\view\\frmcadcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcadcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|c:\\gvcsqlexpress\\view\\frmcadcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{DBDB5375-4381-46B4-AD77-796E102800CD}|GVC.csproj|solutionrelative:view\\frmcadcliente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 70,
-          "SelectedChildIndex": 21,
+          "SelectedChildIndex": 24,
           "Children": [
             {
               "$type": "Bookmark",
@@ -102,14 +118,65 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Utilitario.cs",
+              "DocumentMoniker": "C:\\GVCSqlExpress\\Utilitario.cs",
+              "RelativeDocumentMoniker": "Utilitario.cs",
+              "ToolTip": "C:\\GVCSqlExpress\\Utilitario.cs",
+              "RelativeToolTip": "Utilitario.cs",
+              "ViewState": "AgIAAP8DAAAAAAAAAAAvwBMEAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-31T13:26:44.555Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FrmCadCliente.cs",
+              "DocumentMoniker": "C:\\GVCSqlExpress\\View\\FrmCadCliente.cs",
+              "RelativeDocumentMoniker": "View\\FrmCadCliente.cs",
+              "ToolTip": "C:\\GVCSqlExpress\\View\\FrmCadCliente.cs",
+              "RelativeToolTip": "View\\FrmCadCliente.cs",
+              "ViewState": "AgIAAEYBAAAAAAAAAAAEwFMBAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-31T13:20:53.738Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FrmCadCliente.cs [Projeto]",
+              "DocumentMoniker": "C:\\GVCSqlExpress\\View\\FrmCadCliente.cs",
+              "RelativeDocumentMoniker": "View\\FrmCadCliente.cs",
+              "ToolTip": "C:\\GVCSqlExpress\\View\\FrmCadCliente.cs [Projeto]",
+              "RelativeToolTip": "View\\FrmCadCliente.cs [Projeto]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-31T13:20:43.903Z",
+              "EditorCaption": " [Projeto]"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "FrmCadEmpresa.cs",
+              "DocumentMoniker": "C:\\GVCSqlExpress\\View\\FrmCadEmpresa.cs",
+              "RelativeDocumentMoniker": "View\\FrmCadEmpresa.cs",
+              "ToolTip": "C:\\GVCSqlExpress\\View\\FrmCadEmpresa.cs",
+              "RelativeToolTip": "View\\FrmCadEmpresa.cs",
+              "ViewState": "AgIAAPQBAAAAAAAAAIA8wAYCAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-31T13:11:19.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "FrmCadEmpresa.cs [Projeto]",
               "DocumentMoniker": "C:\\GVCSqlExpress\\View\\FrmCadEmpresa.cs",
               "RelativeDocumentMoniker": "View\\FrmCadEmpresa.cs",
               "ToolTip": "C:\\GVCSqlExpress\\View\\FrmCadEmpresa.cs [Projeto]",
               "RelativeToolTip": "View\\FrmCadEmpresa.cs [Projeto]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-31T01:27:57.467Z",
+              "WhenOpened": "2025-12-31T13:07:19.822Z",
               "EditorCaption": " [Projeto]"
             }
           ]

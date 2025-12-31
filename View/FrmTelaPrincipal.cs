@@ -66,7 +66,7 @@ namespace GVC.View
         }
 
         private void btnContaReceber_Click(object sender, EventArgs e)
-        {           
+        {
             FrmContasReceber frm = new FrmContasReceber();
             AbrirFormEnPanel(frm);
         }
@@ -264,6 +264,12 @@ namespace GVC.View
         private void dashbordToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmDashboard frm = new FrmDashboard();
+            AbrirFormEnPanel(frm);
+        }
+
+        private void empresaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmManutEmpresa frm = new FrmManutEmpresa(StatusOperacao);
             AbrirFormEnPanel(frm);
         }
     }

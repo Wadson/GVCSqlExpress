@@ -23,7 +23,7 @@ namespace GVC.View
             InitializeComponent();
 
             // Personalização do título
-            this.Text = "Manutenção de Clientes";            
+            this.Text = "Manutenção de Clientes";
             this.StateCommon.Header.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254);
             this.StateCommon.Header.Content.ShortText.Color2 = Color.White;
             this.StateCommon.Header.Content.ShortText.Font = new Font("Segoe UI", 12);
@@ -57,7 +57,7 @@ namespace GVC.View
             if (dgvCliente.Columns["Numero"] != null) dgvCliente.Columns["Numero"].HeaderText = "Número";
             if (dgvCliente.Columns["Bairro"] != null) dgvCliente.Columns["Bairro"].HeaderText = "Bairro";
             if (dgvCliente.Columns["Cep"] != null) dgvCliente.Columns["Cep"].HeaderText = "CEP";
-            if (dgvCliente.Columns["DataNascimento"] != null) dgvCliente.Columns["DataNascimento"].HeaderText = "Dt. Nasc.";            
+            if (dgvCliente.Columns["DataNascimento"] != null) dgvCliente.Columns["DataNascimento"].HeaderText = "Dt. Nasc.";
             if (dgvCliente.Columns["TipoCliente"] != null) dgvCliente.Columns["TipoCliente"].HeaderText = "Tipo";
             if (dgvCliente.Columns["Status"] != null) dgvCliente.Columns["Status"].HeaderText = "Status";
             if (dgvCliente.Columns["Observacoes"] != null) dgvCliente.Columns["Observacoes"].HeaderText = "Obs.";
@@ -69,7 +69,7 @@ namespace GVC.View
             if (dgvCliente.Columns["UsuarioAtualizacao"] != null) dgvCliente.Columns["UsuarioAtualizacao"].HeaderText = "Usuário Atualização";
             if (dgvCliente.Columns["NomeCidade"] != null) dgvCliente.Columns["NomeCidade"].HeaderText = "Cidade";
             if (dgvCliente.Columns["Estado"] != null) dgvCliente.Columns["Estado"].HeaderText = "UF";
-            
+
             if (dgvCliente.Columns["IsVendedor"] != null) dgvCliente.Columns["IsVendedor"].HeaderText = "Vendedor";
 
             // Larguras fixas
@@ -139,11 +139,11 @@ namespace GVC.View
             if (StatusOperacao == "NOVO")
             {
 
-               frmcadCliente.Text = "Novo Cliente";
-               frmcadCliente.StateCommon.Header.Content.ShortText.Color1 = Color.Green;
-               frmcadCliente.StateCommon.Header.Content.ShortText.Color2 = Color.White;
-               frmcadCliente.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
-                
+                frmcadCliente.Text = "Novo Cliente";
+                frmcadCliente.StateCommon.Header.Content.ShortText.Color1 = Color.Green;
+                frmcadCliente.StateCommon.Header.Content.ShortText.Color2 = Color.White;
+                frmcadCliente.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
+
                 frmcadCliente.ShowDialog();
                 return;
             }
@@ -167,7 +167,7 @@ namespace GVC.View
                 frmcadCliente.StateCommon.Header.Content.ShortText.Color2 = Color.White;
                 frmcadCliente.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
                 frmcadCliente.btnSalvar.Text = "Alterar";
-                frmcadCliente.btnNovo.Enabled = false;                
+                frmcadCliente.btnNovo.Enabled = false;
             }
             else if (StatusOperacao == "EXCLUSAO")
             {
@@ -176,7 +176,7 @@ namespace GVC.View
                 frmcadCliente.StateCommon.Header.Content.ShortText.Color2 = Color.White;
                 frmcadCliente.StateCommon.Header.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 12);
                 frmcadCliente.btnSalvar.Text = "Excluir";
-                frmcadCliente.btnNovo.Enabled = false;                
+                frmcadCliente.btnNovo.Enabled = false;
 
                 // 🔒 BLOQUEIO ESPECÍFICO DOS TEXTBOX
                 foreach (Control ctrl in frmcadCliente.Controls)
@@ -222,7 +222,7 @@ namespace GVC.View
             cad.Text = "Novo Cliente";
             cad.ForeColor = Color.FromArgb(8, 142, 254);
 
-            cad.ShowDialog();          
+            cad.ShowDialog();
         }
         private void btnAlterar_Click(object sender, EventArgs e)
         {
@@ -239,8 +239,8 @@ namespace GVC.View
                 dgvCliente.CurrentRow.Cells["ClienteID"].Value);
 
             cadCliente.StatusOperacao = StatusOperacao;
-            CarregaDados(cadCliente);           
-            
+            CarregaDados(cadCliente);
+
         }
         private void btnExcluir_Click(object sender, EventArgs e)
         {
@@ -296,7 +296,7 @@ namespace GVC.View
             else if (rbtDescricao.Checked)
             {
                 dt = dao.PesquisarPorNome(texto);
-            }           
+            }
             else
             {
                 ListarCliente();
@@ -311,7 +311,7 @@ namespace GVC.View
         private void FrmManutCliente_Load(object sender, EventArgs e)
         {
             timer1.Enabled = false; // 🔴 IMPORTANTE
-            ListarCliente();           
+            ListarCliente();
             dgvCliente.CellFormatting += dataGridPesquisar_CellFormatting;
         }
 
@@ -324,7 +324,7 @@ namespace GVC.View
         {
             txtPesquisa.Text = "";
             txtPesquisa.Focus();
-        }      
+        }
         private void btnSair_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -348,7 +348,7 @@ namespace GVC.View
                     e.Value = n11.ToString(@"000\.000\.000\-00");
                     e.FormattingApplied = true;
                     return;
-                }              
+                }
                 // Se não tem tamanho padrão, apenas mostra os dígitos
                 if (!string.IsNullOrEmpty(cpf))
                 {
@@ -360,7 +360,7 @@ namespace GVC.View
             // Formatar CPF
             if (columnName == "Cnpj")
             {
-                string cnpj = Digitos(raw);               
+                string cnpj = Digitos(raw);
                 if (cnpj.Length == 14 && ulong.TryParse(cnpj, out ulong n14))
                 {
                     e.Value = n14.ToString(@"00\.000\.000\/0000\-00");

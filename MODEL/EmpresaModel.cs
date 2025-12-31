@@ -14,8 +14,7 @@ namespace GVC.MODEL
         public string CNPJ { get; set; }
         public string InscricaoEstadual { get; set; }
         public string InscricaoMunicipal { get; set; }
-        public string CNAE { get; set; }
-        public int Status { get; set; } // ✅ novo campo
+        public string CNAE { get; set; }    
         public string Logradouro { get; set; }
         public string Numero { get; set; }
         public string Bairro { get; set; }

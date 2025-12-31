@@ -1030,7 +1030,12 @@ namespace GVC{
             if (resto == 10 || resto == 11) resto = 0;
             return resto == (cpf[10] - '0');
         }
-
+        // WRAPPER para CNPJ ------------------------------------------
+        public static void MascaraCNPJ(object sender, KeyPressEventArgs e)
+        {
+            if (sender is KryptonTextBox txt)
+                AplicarMascaraCNPJ(e, txt); // chama sua função original
+        }
         public static string FormatarCNPJ(string cnpj)
         {
             cnpj = ApenasNumeros(cnpj);
@@ -1151,12 +1156,7 @@ namespace GVC{
                 AplicarMascaraCPF(e, txt); // chama sua função original
         }
 
-        // WRAPPER para CNPJ ------------------------------------------
-        public static void MascaraCNPJ(object sender, KeyPressEventArgs e)
-        {
-            if (sender is KryptonTextBox txt)
-                AplicarMascaraCNPJ(e, txt); // chama sua função original
-        }
+       
         public static bool ValidarEFormatarCEPnoTextbox(KryptonTextBox txt)
         {
             var original = txt.Text.Trim();

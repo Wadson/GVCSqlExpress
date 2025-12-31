@@ -87,6 +87,7 @@
             relatórioEstoqueToolStripMenuItem = new ToolStripMenuItem();
             dashbordToolStripMenuItem = new ToolStripMenuItem();
             kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(components);
+            empresaToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)kryptonPanel2).BeginInit();
             kryptonPanel2.SuspendLayout();
             kryptonStatusStrip1.SuspendLayout();
@@ -508,7 +509,7 @@
             // 
             // cadastrosToolStripMenuItem1
             // 
-            cadastrosToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { cidadeToolStripMenuItem1, clientesToolStripMenuItem1, estadoToolStripMenuItem, fornecedoresToolStripMenuItem1, produtosToolStripMenuItem1, usuáriosToolStripMenuItem1 });
+            cadastrosToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { cidadeToolStripMenuItem1, clientesToolStripMenuItem1, estadoToolStripMenuItem, fornecedoresToolStripMenuItem1, produtosToolStripMenuItem1, usuáriosToolStripMenuItem1, empresaToolStripMenuItem });
             cadastrosToolStripMenuItem1.ForeColor = Color.White;
             cadastrosToolStripMenuItem1.Name = "cadastrosToolStripMenuItem1";
             cadastrosToolStripMenuItem1.Size = new Size(71, 20);
@@ -517,42 +518,42 @@
             // cidadeToolStripMenuItem1
             // 
             cidadeToolStripMenuItem1.Name = "cidadeToolStripMenuItem1";
-            cidadeToolStripMenuItem1.Size = new Size(145, 22);
+            cidadeToolStripMenuItem1.Size = new Size(180, 22);
             cidadeToolStripMenuItem1.Text = "&Cidade";
             cidadeToolStripMenuItem1.Click += cidadeToolStripMenuItem1_Click;
             // 
             // clientesToolStripMenuItem1
             // 
             clientesToolStripMenuItem1.Name = "clientesToolStripMenuItem1";
-            clientesToolStripMenuItem1.Size = new Size(145, 22);
+            clientesToolStripMenuItem1.Size = new Size(180, 22);
             clientesToolStripMenuItem1.Text = "&Clientes";
             clientesToolStripMenuItem1.Click += clientesToolStripMenuItem1_Click;
             // 
             // estadoToolStripMenuItem
             // 
             estadoToolStripMenuItem.Name = "estadoToolStripMenuItem";
-            estadoToolStripMenuItem.Size = new Size(145, 22);
+            estadoToolStripMenuItem.Size = new Size(180, 22);
             estadoToolStripMenuItem.Text = "&Estado";
             estadoToolStripMenuItem.Click += estadoToolStripMenuItem_Click;
             // 
             // fornecedoresToolStripMenuItem1
             // 
             fornecedoresToolStripMenuItem1.Name = "fornecedoresToolStripMenuItem1";
-            fornecedoresToolStripMenuItem1.Size = new Size(145, 22);
+            fornecedoresToolStripMenuItem1.Size = new Size(180, 22);
             fornecedoresToolStripMenuItem1.Text = "&Fornecedores";
             fornecedoresToolStripMenuItem1.Click += fornecedoresToolStripMenuItem1_Click;
             // 
             // produtosToolStripMenuItem1
             // 
             produtosToolStripMenuItem1.Name = "produtosToolStripMenuItem1";
-            produtosToolStripMenuItem1.Size = new Size(145, 22);
+            produtosToolStripMenuItem1.Size = new Size(180, 22);
             produtosToolStripMenuItem1.Text = "&Produtos";
             produtosToolStripMenuItem1.Click += produtosToolStripMenuItem1_Click;
             // 
             // usuáriosToolStripMenuItem1
             // 
             usuáriosToolStripMenuItem1.Name = "usuáriosToolStripMenuItem1";
-            usuáriosToolStripMenuItem1.Size = new Size(145, 22);
+            usuáriosToolStripMenuItem1.Size = new Size(180, 22);
             usuáriosToolStripMenuItem1.Text = "&Usuários";
             // 
             // ferramentasToolStripMenuItem
@@ -642,6 +643,13 @@
             kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.ButtonEdgeInset = 10;
             kryptonPalette1.HeaderStyles.HeaderForm.StateCommon.Content.Padding = new Padding(10, -1, -1, -1);
             // 
+            // empresaToolStripMenuItem
+            // 
+            empresaToolStripMenuItem.Name = "empresaToolStripMenuItem";
+            empresaToolStripMenuItem.Size = new Size(180, 22);
+            empresaToolStripMenuItem.Text = "Empresa";
+            empresaToolStripMenuItem.Click += empresaToolStripMenuItem_Click;
+            // 
             // FrmTelaPrincipal
             // 
             ClientSize = new Size(1008, 729);
@@ -729,5 +737,6 @@
         private ToolStripMenuItem consultaMovimentaçãoDeEstoqueToolStripMenuItem;
         private ToolStripMenuItem relatórioEstoqueToolStripMenuItem;
         private ToolStripMenuItem dashbordToolStripMenuItem;
+        private ToolStripMenuItem empresaToolStripMenuItem;
     }
 }

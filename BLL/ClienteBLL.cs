@@ -2,12 +2,16 @@
 using GVC.MODEL;
 using GVC.MUI;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace GVC.BLL
 {
-    internal class  ClienteBLL
+    internal class ClienteBLL
     {
         private readonly ClienteDal _dal = new ClienteDal();
 
