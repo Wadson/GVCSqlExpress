@@ -9,13 +9,13 @@ namespace GVC.MODEL
 {
     internal class PagamentoParcialModel
     {
-        public long PagamentoID { get; set; } // ID do pagamento parcial, chave primária
-        public long ParcelaID { get; set; } // ID da parcela associada
+        public int PagamentoID { get; set; } // ID do pagamento parcial, chave primária
+        public int ParcelaID { get; set; } // ID da parcela associada
         public decimal ValorPago { get; set; } // Valor pago na parcela
         public DateTime DataPagamento { get; set; } = DateTime.Now;
 
         public string FormaPagamento { get; set; }
-        public long FormaPagamentoID { get; set; }
+        public int FormaPagamentoID { get; set; }
         public string Observacao { get; set; }
         // Propriedade de navegação opcional para a Parcela
         public static implicit operator PagamentoParcialModel(PagamentoParcialDal v)

@@ -45,6 +45,8 @@
             lblRotuloSaldo = new Label();
             kryptonStatusStrip1 = new Krypton.Toolkit.KryptonStatusStrip();
             lblInfo = new ToolStripStatusLabel();
+            txtObservacao = new Krypton.Toolkit.KryptonTextBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)cmbFormaPagamento).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvParcelasBaixa).BeginInit();
             kryptonStatusStrip1.SuspendLayout();
@@ -102,7 +104,7 @@
             // 
             btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnCancelar.CornerRoundingRadius = 6F;
-            btnCancelar.Location = new Point(325, 268);
+            btnCancelar.Location = new Point(406, 346);
             btnCancelar.Margin = new Padding(4, 3, 4, 3);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
@@ -158,7 +160,7 @@
             // 
             btnConfirmarBaixa.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnConfirmarBaixa.CornerRoundingRadius = 6F;
-            btnConfirmarBaixa.Location = new Point(406, 268);
+            btnConfirmarBaixa.Location = new Point(319, 346);
             btnConfirmarBaixa.Name = "btnConfirmarBaixa";
             btnConfirmarBaixa.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnConfirmarBaixa.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -207,7 +209,7 @@
             btnConfirmarBaixa.StateTracking.Border.Width = 1;
             btnConfirmarBaixa.StateTracking.Content.ShortText.Color1 = Color.Black;
             btnConfirmarBaixa.StateTracking.Content.ShortText.Color2 = Color.Black;
-            btnConfirmarBaixa.TabIndex = 2;
+            btnConfirmarBaixa.TabIndex = 3;
             btnConfirmarBaixa.Values.Text = "Confirmar";
             btnConfirmarBaixa.Click += btnConfirmarBaixa_Click;
             // 
@@ -229,7 +231,6 @@
             cmbFormaPagamento.CornerRoundingRadius = 6F;
             cmbFormaPagamento.DropDownWidth = 171;
             cmbFormaPagamento.IntegralHeight = false;
-            cmbFormaPagamento.Items.AddRange(new object[] { "Dinheiro", "Cartão de Crédito", "Cartão de Débito", "PIX", "Boleto Bancário", "Transferência Bancária", "Cheque", "Vale Alimentação", "Vale Refeição", "Crediário", "Financiamento", "Carteira Digital", "Outros" });
             cmbFormaPagamento.Location = new Point(0, 181);
             cmbFormaPagamento.Name = "cmbFormaPagamento";
             cmbFormaPagamento.Size = new Size(491, 25);
@@ -237,8 +238,8 @@
             cmbFormaPagamento.StateCommon.ComboBox.Border.Rounding = 6F;
             cmbFormaPagamento.StateCommon.ComboBox.Border.Width = 1;
             cmbFormaPagamento.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
-            cmbFormaPagamento.TabIndex = 1049;
-            cmbFormaPagamento.TabStop = false;
+            cmbFormaPagamento.TabIndex = 0;
+            cmbFormaPagamento.SelectedIndexChanged += cmbFormaPagamento_SelectedIndexChanged;
             // 
             // txtSaldo
             // 
@@ -288,7 +289,7 @@
             txtValorRecebido.StateNormal.Back.Color1 = Color.FromArgb(192, 255, 255);
             txtValorRecebido.StateNormal.Content.Color1 = Color.FromArgb(192, 255, 255);
             txtValorRecebido.StateNormal.Content.Font = new Font("Segoe UI", 9.75F);
-            txtValorRecebido.TabIndex = 0;
+            txtValorRecebido.TabIndex = 1;
             txtValorRecebido.TextChanged += txtValorRecebido_TextChanged;
             txtValorRecebido.Leave += txtValorRecebido_Leave;
             // 
@@ -396,7 +397,7 @@
             // 
             kryptonStatusStrip1.Font = new Font("Segoe UI", 9F);
             kryptonStatusStrip1.Items.AddRange(new ToolStripItem[] { lblInfo });
-            kryptonStatusStrip1.Location = new Point(0, 301);
+            kryptonStatusStrip1.Location = new Point(0, 376);
             kryptonStatusStrip1.Name = "kryptonStatusStrip1";
             kryptonStatusStrip1.ProgressBars = null;
             kryptonStatusStrip1.RenderMode = ToolStripRenderMode.Professional;
@@ -410,12 +411,52 @@
             lblInfo.Size = new Size(28, 17);
             lblInfo.Text = "Info";
             // 
+            // txtObservacao
+            // 
+            txtObservacao.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtObservacao.InputControlStyle = Krypton.Toolkit.InputControlStyle.Custom1;
+            txtObservacao.Location = new Point(0, 283);
+            txtObservacao.Multiline = true;
+            txtObservacao.Name = "txtObservacao";
+            txtObservacao.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010BlueLightMode;
+            txtObservacao.Size = new Size(486, 47);
+            txtObservacao.StateCommon.Back.Color1 = Color.White;
+            txtObservacao.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
+            txtObservacao.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
+            txtObservacao.StateCommon.Border.ColorAngle = 1F;
+            txtObservacao.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            txtObservacao.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            txtObservacao.StateCommon.Border.Rounding = 6F;
+            txtObservacao.StateCommon.Border.Width = 1;
+            txtObservacao.StateCommon.Content.Color1 = Color.Gray;
+            txtObservacao.StateCommon.Content.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtObservacao.StateCommon.Content.Padding = new Padding(10, 0, 10, 0);
+            txtObservacao.StateDisabled.Content.Font = new Font("Segoe UI", 9.75F);
+            txtObservacao.StateNormal.Back.Color1 = Color.FromArgb(192, 255, 255);
+            txtObservacao.StateNormal.Content.Color1 = Color.FromArgb(192, 255, 255);
+            txtObservacao.StateNormal.Content.Font = new Font("Segoe UI", 9.75F);
+            txtObservacao.TabIndex = 2;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            label1.Font = new Font("Segoe UI", 9.75F);
+            label1.ForeColor = Color.FromArgb(0, 76, 172);
+            label1.Location = new Point(0, 262);
+            label1.Name = "label1";
+            label1.Size = new Size(78, 17);
+            label1.TabIndex = 1063;
+            label1.Text = "Observação";
+            // 
             // FrmBaixarParcela
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(252, 252, 250);
-            ClientSize = new Size(492, 323);
+            ClientSize = new Size(492, 398);
+            Controls.Add(label1);
+            Controls.Add(txtObservacao);
             Controls.Add(kryptonStatusStrip1);
             Controls.Add(lblRotuloSaldo);
             Controls.Add(dgvParcelasBaixa);
@@ -440,6 +481,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Baixar Parcela";
+            Load += FrmBaixarParcela_Load;
             Shown += FrmBaixarParcela_Shown;
             KeyDown += FrmBaixarParcela_KeyDown;
             ((System.ComponentModel.ISupportInitialize)cmbFormaPagamento).EndInit();
@@ -468,5 +510,7 @@
         private Label lblRotuloSaldo;
         private Krypton.Toolkit.KryptonStatusStrip kryptonStatusStrip1;
         public ToolStripStatusLabel lblInfo;
+        public Krypton.Toolkit.KryptonTextBox txtObservacao;
+        private Label label1;
     }
 }

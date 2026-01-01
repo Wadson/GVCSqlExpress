@@ -92,18 +92,6 @@ namespace GVC.View
             if (dgvFornecedor.Columns["DataCriacao"] != null) dgvFornecedor.Columns["DataCriacao"].Visible = false;
             if (dgvFornecedor.Columns["CidadeID"] != null) dgvFornecedor.Columns["CidadeID"].Visible = false;
 
-            // Congelar colunas (garantindo ordem correta)
-            if (dgvFornecedor.Columns["Nome"] != null)
-            {
-                dgvFornecedor.Columns["Nome"].DisplayIndex = 0;
-                dgvFornecedor.Columns["Nome"].Frozen = true;
-            }
-            if (dgvFornecedor.Columns["Cnpj"] != null)
-            {
-                dgvFornecedor.Columns["Cnpj"].DisplayIndex = 1;
-                dgvFornecedor.Columns["Cnpj"].Frozen = true;
-            }
-
             // Estilo do cabeçalho
             dgvFornecedor.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvFornecedor.ColumnHeadersHeight = 30; // altura ajustada

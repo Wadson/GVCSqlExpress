@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GVC.BLL;
+using GVC.DAL;
 using GVC.DALL;
 using GVC.MODEL;
 using GVC.UTIL;
@@ -25,6 +26,14 @@ namespace GVC.View
         private decimal _saldoTotal;
         private IFormatProvider? _br;
         private readonly ParcelaBLL parcelaBLL = new ParcelaBLL();
+
+        private int? FormaPgtoIDSelecionada => cmbFormaPagamento.SelectedValue == null
+        ? (int?)null : Convert.ToInt32(cmbFormaPagamento.SelectedValue);
+
+        //private long? _formaPgtoIdSelecionada;
+
+
+
         public FrmBaixarParcela()
         {
             InitializeComponent();
@@ -100,7 +109,7 @@ namespace GVC.View
             {
                 DataPropertyName = "ValorParcela",
                 HeaderText = "Valor",
-                Width =95,
+                Width = 95,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "C2",
@@ -168,9 +177,16 @@ namespace GVC.View
 
         private void btnConfirmarBaixa_Click(object sender, EventArgs e)
         {
-            string texto = txtValorRecebido.Text.Replace("R$", "").Replace(" ", "").Trim();
+            string _valorRecebido = txtValorRecebido.Text.Replace("R$", "").Replace(" ", "").Trim();
 
-            if (!decimal.TryParse(texto, NumberStyles.Any, _br, out decimal valorBaixa) || valorBaixa <= 0)
+            if (FormaPgtoIDSelecionada == null)
+            {
+                Utilitario.Mensagens.Aviso("Selecione a forma de pagamento.");
+                cmbFormaPagamento.Focus();
+                return;
+            }
+
+            if (!decimal.TryParse(_valorRecebido, NumberStyles.Any, _br, out decimal valorBaixa) || valorBaixa <= 0)
             {
                 Utilitario.Mensagens.Aviso("Informe um valor válido maior que zero.");
                 return;
@@ -184,13 +200,20 @@ namespace GVC.View
 
             if (_parcelasIds.Count == 1)
             {
-                parcelaBLL.BaixarParcelaParcial(_parcelasIds[0], valorBaixa);
+                parcelaBLL.BaixarParcelaParcial(_parcelasIds[0],valorBaixa,
+                    FormaPgtoIDSelecionada.Value
+                );
             }
             else
             {
-                parcelaBLL.BaixarParcelasEmLote(_parcelasIds);
-            }
+                var parcelasLong = _parcelasIds.Select(id => (long)id).ToList();
 
+                parcelaBLL.BaixarParcelasEmLote(
+                    parcelasLong,
+                    DateTime.Now,
+                    FormaPgtoIDSelecionada.Value
+                );
+            }
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -298,33 +321,7 @@ namespace GVC.View
                 txtValorRecebido.Text = "0,00";
             }
         }
-        public void BaixarParcelaParcial(int parcelaId, decimal valorPago)
-        {
-            ParcelaDal _dal = new ParcelaDal();
-            if (valorPago <= 0)
-                throw new Exception("O valor pago deve ser maior que zero.");
 
-            var parcela = _dal.BuscarPorId(parcelaId)
-                ?? throw new Exception("Parcela não encontrada.");
-
-            // Converter tudo para decimal primeiro para evitar problemas de precisão
-            decimal valorParcelaDecimal = parcela.ValorParcela;
-            decimal jurosDecimal = parcela.Juros;
-            decimal multaDecimal = parcela.Multa;
-            decimal valorRecebidoDecimal = parcela.ValorRecebido;
-
-            // Calcular saldo em decimal
-            decimal valorTotalParcela = valorParcelaDecimal + jurosDecimal + multaDecimal;
-            decimal saldoAtual = valorTotalParcela - valorRecebidoDecimal;
-
-            // Arredondar para 2 casas decimais para evitar problemas de precisão
-            valorPago = Math.Round(valorPago, 2, MidpointRounding.AwayFromZero);
-
-            if (valorPago > saldoAtual)
-                throw new Exception($"Valor pago ({valorPago:C2}) maior que o saldo devido ({saldoAtual:C2}).");
-
-            _dal.BaixarParcela(parcelaId, valorPago, DateTime.Now);
-        }
         private void dgvParcelasBaixa_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             // Proteger índices inválidos
@@ -350,6 +347,36 @@ namespace GVC.View
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private void CarregarFormasPagamento()
+        {
+            var dal = new FormaPgtoDal();
+            var formas = dal.Listar(); // deve retornar ID + Nome
+
+            
+            cmbFormaPagamento.DisplayMember = "FormaPgto";
+            cmbFormaPagamento.ValueMember = "FormaPgtoID";
+            cmbFormaPagamento.DataSource = formas;
+
+            cmbFormaPagamento.SelectedIndex = -1; // força seleção manual
+        }
+
+        private void cmbFormaPagamento_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        //    if (cmbFormaPagamento.SelectedValue != null &&
+        //long.TryParse(cmbFormaPagamento.SelectedValue.ToString(), out long id))
+        //    {
+        //        _formaPgtoIdSelecionada = id; // guarda o ID para uso posterior                                              
+        //    }
+        //    else
+        //    {
+        //        _formaPgtoIdSelecionada = null; // nada selecionado
+        //    }
+        }
+
+        private void FrmBaixarParcela_Load(object sender, EventArgs e)
+        {
+            CarregarFormasPagamento();
         }
     }
 }

@@ -133,14 +133,6 @@ namespace GVC.View
                 }
             }
 
-            // 🔹 5. Congela algumas colunas (APÓS garantir a ordem)
-            // Primeiro defina DisplayIndex para garantir a ordem
-            if (dgvProdutos.Columns["NomeProduto"] != null)
-            {
-                dgvProdutos.Columns["NomeProduto"].DisplayIndex = 0; // Primeira coluna visível
-                dgvProdutos.Columns["NomeProduto"].Frozen = true;    // Agora pode congelar
-            }
-
             // 6. Estilo do cabeçalho
             dgvProdutos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvProdutos.ColumnHeadersHeight = 35;

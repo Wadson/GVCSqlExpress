@@ -911,7 +911,7 @@ namespace GVC.View
 
                         // 🔴 AGORA ESTORNA APENAS A PARCELA ÚNICA
                         bll.EstornarPagamento(
-                            (long)parcela.ParcelaID,
+                            (int)parcela.ParcelaID,
                             frm.ValorEstorno,
                             frm.Motivo
                         );
@@ -954,8 +954,7 @@ namespace GVC.View
             using var frm = new FrmBaixarParcela();
             frm.txtClienteNome.Text = nomeCliente;
             frm.lblInfo.Text = selecionadas.Count == 1
-                ? nomeCliente
-                : "Múltiplas parcelas selecionadas";
+                ? nomeCliente : "Múltiplas parcelas selecionadas";
 
             // Passa a versão dynamic
             frm.CarregarDados(selecionadasDto, nomeCliente, totalParcelas, totalRecebido, saldoTotal);

@@ -66,10 +66,13 @@ namespace GVC.View
             dgvFormaPgto.Columns["FormaPgto"].HeaderText = "Forma de Pagamento";
 
             // Larguras FIXAS
-            dgvFormaPgto.Columns["FormaPgtoID"].Width = 100;
+            dgvFormaPgto.Columns["FormaPgtoID"].Width = 60;
 
             // Campos que EXPANDEM
-            dgvFormaPgto.Columns["FormaPgto"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;           
+            dgvFormaPgto.Columns["FormaPgto"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+
+            dgvFormaPgto.Columns["FormaPgtoID"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             // Estilo
             dgvFormaPgto.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;

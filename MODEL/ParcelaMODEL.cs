@@ -8,9 +8,9 @@ namespace GVC.MODEL
 {
     public class ParcelaModel
     {
-        public long ParcelaID { get; set; }
-        public long VendaID { get; set; }
-        public long NumeroParcela { get; set; }
+        public int ParcelaID { get; set; }
+        public int VendaID { get; set; }
+        public int NumeroParcela { get; set; }
 
         public DateTime DataVencimento { get; set; }
 

@@ -177,30 +177,31 @@ namespace GVC.DALL
             conn.Execute(sql, new { Id = parcela.ParcelaID });
         }
 
-        public void EstornarPagamento(long parcelaId, decimal valorEstorno, DateTime dataEstorno, string motivo = null)
+        public void EstornarPagamento(int parcelaId, decimal valorEstorno, DateTime dataEstorno, string motivo = null)
         {
-            if (valorEstorno <= 0m) throw new ArgumentException("Valor do estorno deve ser maior que zero.");
-            if (string.IsNullOrWhiteSpace(motivo)) motivo = "Estorno sem motivo informado";
+            if (valorEstorno <= 0m)
+                throw new ArgumentException("Valor do estorno deve ser maior que zero.");
 
-            string linhaHistorico = $"[{dataEstorno:dd/MM/yyyy HH:mm}] Estorno de {valorEstorno:C2} - Motivo: {motivo}";
+            if (string.IsNullOrWhiteSpace(motivo))
+                motivo = "Estorno sem motivo informado";
 
-            const string sql = @"
-UPDATE Parcela
-SET ValorRecebido = ValorRecebido - @ValorEstorno,
-    Observacao = CASE
-        WHEN Observacao IS NULL OR Observacao = '' THEN @LinhaHistorico
-        ELSE Observacao + CHAR(13) + CHAR(10) + @LinhaHistorico
-    END
-WHERE ParcelaID = @ParcelaID;";   // ✅ Ajuste para SQL Server
+            // Observação que será gravada junto ao estorno
+            string observacao = $"[{dataEstorno:dd/MM/yyyy HH:mm}] Estorno de {valorEstorno:C2} - Motivo: {motivo}";
+
+            const string sql = @"INSERT INTO PagamentosParciais 
+            (ParcelaID, ValorPago, DataPagamento, FormaPgtoID, Observacao)
+            VALUES (@ParcelaID, -@ValorEstorno, @DataEstorno, NULL, @Observacao);";
 
             using var conn = Conexao.Conex();
             conn.Execute(sql, new
             {
                 ParcelaID = parcelaId,
                 ValorEstorno = valorEstorno,
-                LinhaHistorico = linhaHistorico
+                DataEstorno = dataEstorno,
+                Observacao = observacao
             });
         }
+
 
         public void AtualizarParcelasAtrasadas()
         {

@@ -446,7 +446,7 @@
             dgvContasAReceber.Location = new Point(3, 116);
             dgvContasAReceber.Name = "dgvContasAReceber";
             dgvContasAReceber.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010BlueDarkMode;
-            dgvContasAReceber.Size = new Size(911, 124);
+            dgvContasAReceber.Size = new Size(911, 198);
             dgvContasAReceber.TabIndex = 1039;
             dgvContasAReceber.TabStop = false;
             dgvContasAReceber.CellFormatting += dgvContasAReceber_CellFormatting;
@@ -695,16 +695,16 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 31F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 55F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 130F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 204F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 23F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 130F));
-            tableLayoutPanel1.Size = new Size(917, 372);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 56F));
+            tableLayoutPanel1.Size = new Size(917, 505);
             tableLayoutPanel1.TabIndex = 1069;
             // 
             // kryptonLabel2
             // 
             kryptonLabel2.Dock = DockStyle.Fill;
-            kryptonLabel2.Location = new Point(3, 246);
+            kryptonLabel2.Location = new Point(3, 320);
             kryptonLabel2.Name = "kryptonLabel2";
             kryptonLabel2.Size = new Size(911, 17);
             kryptonLabel2.StateCommon.ShortText.Color1 = Color.FromArgb(44, 62, 80);
@@ -741,9 +741,9 @@
             // dgvPagamentos
             // 
             dgvPagamentos.Dock = DockStyle.Fill;
-            dgvPagamentos.Location = new Point(3, 269);
+            dgvPagamentos.Location = new Point(3, 343);
             dgvPagamentos.Name = "dgvPagamentos";
-            dgvPagamentos.Size = new Size(911, 124);
+            dgvPagamentos.Size = new Size(911, 159);
             dgvPagamentos.TabIndex = 1053;
             // 
             // flowLayoutPanel3
@@ -999,7 +999,7 @@
             Controls.Add(flowLayoutPanel4);
             Controls.Add(kryptonStatusStrip1);
             Controls.Add(tableLayoutPanel1);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.None;
             KeyPreview = true;
             MaximizeBox = false;
             MinimizeBox = false;

@@ -113,11 +113,6 @@ namespace GVC.View
                 }
             }
 
-            // Colunas fixas
-            if (dgvCliente.Columns["ClienteID"] != null) dgvCliente.Columns["ClienteID"].Frozen = true;
-            if (dgvCliente.Columns["Nome"] != null) dgvCliente.Columns["Nome"].Frozen = true;
-            if (dgvCliente.Columns["Cpf"] != null) dgvCliente.Columns["Cpf"].Frozen = true;
-
             // Estilo do cabeçalho
             dgvCliente.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvCliente.ColumnHeadersHeight = 35;

@@ -1204,7 +1204,7 @@ namespace GVC.View
 
                         // 🔴 AGORA ESTORNA APENAS A PARCELA ÚNICA
                         bll.EstornarPagamento(
-                            (long)parcela.ParcelaID,
+                            (int)parcela.ParcelaID,
                             frm.ValorEstorno,
                             frm.Motivo
                         );

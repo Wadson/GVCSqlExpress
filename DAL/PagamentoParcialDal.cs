@@ -86,41 +86,29 @@ namespace GVC.DALL
         }
 
         // 7. REGISTRAR PAGAMENTO PARCIAL + ATUALIZAR PARCELA AUTOMATICAMENTE       
-        public void RegistrarPagamentoParcial(long parcelaId, decimal valorPago, DateTime? dataPagamento = null)
+        public void RegistrarPagamentoParcial(
+                int parcelaId,
+                decimal valorPago,
+                DateTime dataPagamento,
+                int? formaPgtoId = null,              
+                string? observacao = null)
         {
-            if (valorPago <= 0) return;
-            dataPagamento ??= DateTime.Now;
-            using var conn = Conexao.Conex(); conn.Open();
-            using var trans = conn.BeginTransaction();
+            const string sql = @"INSERT INTO PagamentosParciais
+        (ParcelaID, ValorPago, DataPagamento, FormaPgtoID, Observacao)
+        VALUES(@ParcelaID, @ValorPago, @DataPagamento, @FormaPgtoID, @Observacao)";
 
-            try
+            using var conn = Conexao.Conex();
+            conn.Execute(sql, new
             {
-                // 1. Insere o pagamento parcial
-                const string sqlInsert = @" INSERT INTO PagamentosParciais (ParcelaID, ValorPago, DataPagamento) 
-                    VALUES (@ParcelaID, @ValorPago, @DataPagamento)";
-
-                conn.Execute(sqlInsert, new
-                {
-                    ParcelaID = parcelaId,
-                    ValorPago = valorPago,
-                    DataPagamento = dataPagamento
-                }, trans);
-
-                // 2. Atualiza a parcela
-                const string sqlUpdate = @" UPDATE Parcela SET ValorRecebido = ValorRecebido + @ValorPago,
-                        SaldoRestante = ValorParcela - (ValorRecebido + @ValorPago),
-                        Pago = CASE WHEN (ValorParcela - (ValorRecebido + @ValorPago)) <= 0.005 THEN 1 ELSE 0 END
-                        WHERE ParcelaID = @ParcelaID";   // ✅ Ajuste: expressão booleana convertida em CASE para SQL Server
-
-                conn.Execute(sqlUpdate, new { ParcelaID = parcelaId, ValorPago = valorPago }, trans);
-                trans.Commit();
-            }
-            catch
-            {
-                trans.Rollback();
-                throw;
-            }
+                ParcelaID = parcelaId,
+                ValorPago = valorPago,
+                DataPagamento = dataPagamento,
+                FormaPgtoID = formaPgtoId,               
+                Observacao = observacao
+            });
         }
+
+
         public List<PagamentoExtratoModel> ListarPagamentosPorParcela(long parcelaId)
         {
             const string sql = @"

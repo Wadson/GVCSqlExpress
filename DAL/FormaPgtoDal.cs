@@ -168,6 +168,35 @@ namespace GVC.DAL
                 conn.Dispose();
             }
         }
+        public DataTable Listar()
+        {
+            var conn = Conexao.Conex();
+            try
+            {
+                var sql = "SELECT FormaPgtoID, FormaPgto FROM FormaPgto";
+                var cmd = new SqlCommand(sql, conn);
+
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                var dt = new DataTable();
+                dt.Load(reader);
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao listar formas de pagamento: " + ex.Message);
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+
+
         // Método auxiliar para mapear EmpresaModel a partir de SqlDataReader
         private FormaPgtoModel MapFormaPgto(SqlDataReader reader)
         {
