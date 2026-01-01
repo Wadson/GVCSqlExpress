@@ -99,7 +99,7 @@ namespace GVC.DALL
                 }
 
                 const string sqlHistorico = @"
-            INSERT INTO PagamentosParciais (ParcelaID, DataPagamento, ValorPago, Observacao)
+            INSERT INTO PagamentosParciais (ParcelaID, DataPagamento,FormaPgtoID, ValorPago, Observacao)
             SELECT 
                 ParcelaID,
                 @DataPagamento,
@@ -135,10 +135,7 @@ namespace GVC.DALL
 
         public List<ParcelaModel> GetParcelas(int vendaId)
         {
-            const string sql = @"SELECT *
-                FROM Parcela
-                WHERE VendaID = @VendaID
-                ORDER BY NumeroParcela";
+            const string sql = @"SELECT * FROM Parcela WHERE VendaID = @VendaID ORDER BY NumeroParcela";
 
             using var conn = Conexao.Conex();
             return conn.Query<ParcelaModel>(sql, new { VendaID = vendaId }).AsList();

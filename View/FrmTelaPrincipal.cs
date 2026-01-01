@@ -288,5 +288,11 @@ namespace GVC.View
             FrmManutEmpresa frm = new FrmManutEmpresa(StatusOperacao);
             AbrirFormEnPanel(frm);
         }
+
+        private void formaDePagamentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmManutFormaPgto frm = new FrmManutFormaPgto(StatusOperacao);
+            AbrirFormEnPanel(frm);
+        }
     }
 }

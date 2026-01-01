@@ -29,9 +29,9 @@ namespace GVC.View
         public bool CarregandoDados { get; set; }
         private readonly EmpresaBll _empresaBll = new EmpresaBll();
         private EmpresaDal _empresaDal = new EmpresaDal();
-
-        public string StatusOperacao { get; set; } // "NOVO", "ALTERAR", "EXCLUSAO"
         public int EmpresaID { get; set; }
+        public string StatusOperacao { get; set; } // "NOVO", "ALTERAR", "EXCLUSAO"
+       
         public int CidadeID { get; set; } // usado internamente na busca de cidade
         private bool bloqueiaPesquisa = false;
         private readonly string QueryMaxId = "SELECT MAX(EmpresaID) FROM Empresa";
@@ -128,6 +128,7 @@ namespace GVC.View
             var empresa = _empresaBll.BuscarPorId(empresaId);
             if (empresa == null)
                 return;
+
             txtEmpresaID.Text = Utilitario.ZerosEsquerda(empresa.EmpresaID, 4);
             txtRazaoSocial.Text = empresa.RazaoSocial;
             txtNomeFantasia.Text = empresa.NomeFantasia;

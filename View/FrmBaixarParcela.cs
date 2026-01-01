@@ -56,7 +56,7 @@ namespace GVC.View
             {
                 DataPropertyName = "ParcelaID",
                 HeaderText = "ID",
-                Width = 60,
+                Width = 50,
                 Visible = false
             };
             dgvParcelasBaixa.Columns.Add(colId);
@@ -76,7 +76,7 @@ namespace GVC.View
             {
                 DataPropertyName = "NumeroParcela",
                 HeaderText = "Nº Parc.",
-                Width = 100,
+                Width = 60,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -89,7 +89,7 @@ namespace GVC.View
             {
                 DataPropertyName = "DataVencimento",
                 HeaderText = "Vencimento",
-                Width = 100,
+                Width = 80,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "dd/MM/yyyy",
@@ -100,7 +100,7 @@ namespace GVC.View
             {
                 DataPropertyName = "ValorParcela",
                 HeaderText = "Valor",
-                Width = 130,
+                Width =95,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "C2",
@@ -111,7 +111,7 @@ namespace GVC.View
             {
                 DataPropertyName = "ValorRecebido",
                 HeaderText = "Recebido",
-                Width = 130,
+                Width = 95,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "C2",
@@ -122,7 +122,7 @@ namespace GVC.View
             {
                 DataPropertyName = "Saldo",
                 HeaderText = "Saldo",
-                Width = 130,
+                Width = 95,
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "C2",
@@ -350,10 +350,6 @@ namespace GVC.View
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void FrmBaixarParcela_Load(object sender, EventArgs e)
-        {
         }
     }
 }

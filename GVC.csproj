@@ -45,6 +45,9 @@
 	  <Compile Update="UTIL\FrmConfiguracoes.cs">
 	    <SubType>Form</SubType>
 	  </Compile>
+	  <Compile Update="View\FrmCadFormaPgto.cs">
+	    <SubType>Form</SubType>
+	  </Compile>
 	  <Compile Update="View\FrmItensVenda.cs">
 	    <SubType>Form</SubType>
 	  </Compile>
@@ -58,6 +61,9 @@
 	    <SubType>Form</SubType>
 	  </Compile>
 	  <Compile Update="View\FrmContasReceber.cs">
+	    <SubType>Form</SubType>
+	  </Compile>
+	  <Compile Update="View\FrmManutFormaPgto.cs">
 	    <SubType>Form</SubType>
 	  </Compile>
 	  <Compile Update="View\FrmManutEmpresa.cs">

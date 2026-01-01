@@ -4,9 +4,9 @@ using System.Text;
 
 namespace GVC.MODEL
 {
-    internal class FormaPgtoMODEL
+    internal class FormaPgtoModel
     {
-        public int FormaPgtoID { get; set; }
+        public long FormaPgtoID { get; set; }
         public string NomeFormaPgto { get; set; }
     }
 }
