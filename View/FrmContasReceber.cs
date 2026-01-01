@@ -1190,7 +1190,8 @@ namespace GVC.View
 
             // 🔹 1. Buscar extrato do cliente
             var extratoBLL = new ExtratoBLL();
-            var extrato = extratoBLL.ObterExtratoCliente(parcela.ClienteID, false);
+            //var extrato = extratoBLL.ObterExtratoCliente(parcela.ClienteID, false);
+            var extrato = extratoBLL.ObterExtratoPorParcela(parcela.ParcelaID);
 
             // 🔹 2. Buscar pagamentos da parcela
             var pagamentoBLL = new PagamentoBLL();
