@@ -15,6 +15,11 @@ namespace GVC.BLL
         {
             return _pagamentoParcialDal.ListarPagamentosPorParcelaCompleto(parcelaId);
         }
+        public PagamentoExtratoModel ObterPagamentoPorId(long pagamentoId)
+        {
+            return _pagamentoParcialDal.ObterPagamentoPorId(pagamentoId);
+        }
+
 
     }
 }

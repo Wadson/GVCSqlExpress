@@ -45,6 +45,22 @@ namespace GVC.DALL
             using var conn = Conexao.Conex();
             return conn.Query<PagamentoParcialModel>(sql, new { ParcelaID = parcelaId }).AsList();
         }
+        public PagamentoExtratoModel ObterPagamentoPorId(long pagamentoId)
+        {
+            const string sql = @"
+        SELECT
+            pp.DataPagamento,
+            pp.ValorPago,
+            fp.FormaPgto AS FormaPagamento,
+            pp.Observacao
+        FROM PagamentosParciais pp
+        LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = pp.FormaPgtoID
+        WHERE pp.PagamentoID = @PagamentoID";
+
+            using var conn = Conexao.Conex();
+            return conn.QueryFirstOrDefault<PagamentoExtratoModel>(
+                sql, new { PagamentoID = pagamentoId });
+        }
 
         // 4. EXCLUIR TODOS OS PAGAMENTOS PARCIAIS DE UMA PARCELA        
         public void ExcluirPagamentosParciaisPorParcelaID(long parcelaId)

@@ -23,11 +23,63 @@ namespace GVC.BLL
             _vendaDal = new VendaDal();
             _vendaBLL = new VendaBLL();
         }
+        public void GerarReciboAutomatico(int parcelaId)
+        {
+            // 🔹 1. Buscar extrato da parcela
+            var extratoBLL = new ExtratoBLL();
+            ExtratoCliente extrato = extratoBLL.ObterExtratoPorParcela(parcelaId);
+
+            // 🔹 2. Buscar pagamentos da parcela
+            var pagamentoBLL = new PagamentoBLL();
+            var pagamentos = pagamentoBLL.ListarPagamentosPorParcela(parcelaId);
+
+            if (pagamentos == null || pagamentos.Count == 0)
+                return; // segurança
+
+            // 🔹 3. Buscar dados da empresa
+            var empresaBLL = new EmpresaBll();
+            var empresa = empresaBLL.ObterDadosParaPdf();
+
+            // 🔹 4. Definir pasta padrão
+            string pasta = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "GVC",
+                "Recibos"
+            );
+
+            if (!Directory.Exists(pasta))
+                Directory.CreateDirectory(pasta);
+
+            // 🔹 5. Nome do arquivo
+            string caminhoPdf = Path.Combine(
+                pasta,
+                $"Recibo_Parcela_{parcelaId}_{DateTime.Now:yyyyMMddHHmmss}.pdf"
+            );
+
+            // 🔹 6. Gerar PDF
+            PDFGenerator.GerarReciboPagamentos(
+                extrato,
+                pagamentos,
+                empresa,
+                caminhoPdf
+            );
+
+            // 🔹 7. Perguntar se deseja abrir
+            if (Utilitario.Mensagens.Confirmacao(
+                "Recibo gerado automaticamente.\nDeseja abrir agora?"))
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = caminhoPdf,
+                    UseShellExecute = true
+                });
+            }
+        }
 
         // ==========================================================
         // 1. BAIXA TOTAL DE UMA PARCELA (força pagamento completo)
         // ==========================================================
-        public void BaixarParcelaTotal(long parcelaId)
+        public void BaixarParcelaTotal(int parcelaId)
         {
             var parcela = _parcelaDal.BuscarPorId(parcelaId)
                 ?? throw new Exception("Parcela não encontrada.");
@@ -45,6 +97,10 @@ namespace GVC.BLL
 
             // Inserir pagamento do saldo restante
             _parcelaDal.BaixarParcela(parcelaId, saldoRestante, DateTime.Now);
+
+            // 🧾 RECIBO AUTOMÁTICO
+            GerarReciboAutomatico(parcelaId);
+
         }
 
         // ==========================================================
@@ -83,11 +139,14 @@ namespace GVC.BLL
                 formaPgtoId,
                 obsFinal
             );
+            // 🧾 RECIBO AUTOMÁTICO
+               GerarReciboAutomatico(parcelaId);
 
             // 🔥 Trigger cuida de:
             // - ValorRecebido
             // - Status
             // - DataPagamento
+
         }
 
 
@@ -96,7 +155,7 @@ namespace GVC.BLL
         // ==========================================================
 
         public void BaixarParcelasEmLote(
-     List<long> parcelasIds,
+     List<int> parcelasIds,
      DateTime dataPagamento,
      long formaPgtoId,
      string? observacao = null)
@@ -155,6 +214,11 @@ WHERE ParcelaID = @ParcelaID";
             {
                 transaction.Rollback();
                 throw;
+            }
+            // 🔥 GERAR RECIBOS (fora da transação)
+            foreach (var parcelaId in parcelasIds)
+            {
+                GerarReciboAutomatico(parcelaId);
             }
         }
 
@@ -264,5 +328,6 @@ WHERE ParcelaID = @ParcelaID";
 
             _vendaDal.AtualizarStatusVenda(vendaId, statusVenda);
         }
+
     }
 }

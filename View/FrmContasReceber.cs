@@ -33,6 +33,7 @@ namespace GVC.View
         public FrmContasReceber()
         {
             InitializeComponent();
+            dgvPagamentos.CurrentCellDirtyStateChanged += dgvPagamentos_CurrentCellDirtyStateChanged;
         }
         private void ConfigurarGridContasAReceber()
         {
@@ -346,9 +347,9 @@ namespace GVC.View
 
         private void FrmContasAReceber_Load(object sender, EventArgs e)
         {
-            
-            cmbTipoPesquisa.SelectedIndex = 0;            
-            
+
+            cmbTipoPesquisa.SelectedIndex = 0;
+
             ConfigurarGridContasAReceber();
             ConfigurarGridPagamentos(); // 🔴 ESSENCIAL
             AtualizarParcelasAtrasadasNoBanco(); // ← Atualiza ao abrir  
@@ -582,6 +583,7 @@ namespace GVC.View
         }
         private void dgvContasAReceber_SelectionChanged(object sender, EventArgs e)
         {
+
             dgvPagamentos.DataSource = null;
 
             if (dgvContasAReceber.CurrentRow?.DataBoundItem is not ContaAReceberDTO parcela)
@@ -1001,6 +1003,20 @@ namespace GVC.View
             dgvPagamentos.AutoGenerateColumns = false;
             dgvPagamentos.Columns.Clear();
 
+            // ======================================================
+            // 🔹 COLUNA CHECKBOX (SELEÇÃO)
+            // ======================================================
+            var chk = new DataGridViewCheckBoxColumn
+            {
+                Name = "Selecionar",
+                HeaderText = "",
+                Width = 30
+            };
+            dgvPagamentos.Columns.Add(chk);
+
+            // ======================================================
+            // 🔹 COLUNAS DE DADOS
+            // ======================================================
             dgvPagamentos.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "PagamentoID",
@@ -1013,6 +1029,7 @@ namespace GVC.View
                 DataPropertyName = "DataPagamento",
                 HeaderText = "Data",
                 Width = 90,
+                ValueType = typeof(DateTime),
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "dd/MM/yyyy"
@@ -1031,6 +1048,7 @@ namespace GVC.View
                 DataPropertyName = "ValorPago",
                 HeaderText = "Valor Pago",
                 Width = 100,
+                ValueType = typeof(decimal),
                 DefaultCellStyle = new DataGridViewCellStyle
                 {
                     Format = "C2",
@@ -1045,10 +1063,24 @@ namespace GVC.View
                 Width = 250
             });
 
-            dgvPagamentos.ReadOnly = true;
+            // ======================================================
+            // 🔹 CONFIGURAÇÕES GERAIS
+            // ======================================================
             dgvPagamentos.AllowUserToAddRows = false;
+            dgvPagamentos.AllowUserToDeleteRows = false;
+            dgvPagamentos.MultiSelect = false;
             dgvPagamentos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            dgvPagamentos.ReadOnly = false; // 🔥 libera edição do checkbox
+
+            // 🔒 Bloqueia todas as colunas EXCETO o checkbox
+            foreach (DataGridViewColumn col in dgvPagamentos.Columns)
+            {
+                if (col.Name != "Selecionar")
+                    col.ReadOnly = true;
+            }
         }
+
 
         private void btnExtratoRecibo_Click(object sender, EventArgs e)
         {
@@ -1139,7 +1171,7 @@ namespace GVC.View
                 Utilitario.Mensagens.Erro($"Erro: {ex.Message}");
             }
         }
-      
+
         private void btnLimparFiltro_Click(object sender, EventArgs e)
         {
             cmbTipoPesquisa.SelectedIndex = 0;
@@ -1174,6 +1206,9 @@ namespace GVC.View
 
         private void btnRecibo_Click(object sender, EventArgs e)
         {
+            // ======================================================
+            // 🔹 VALIDA PARCELA
+            // ======================================================
             if (dgvContasAReceber.CurrentRow == null)
             {
                 Utilitario.Mensagens.Aviso("Selecione uma parcela.");
@@ -1188,54 +1223,99 @@ namespace GVC.View
                 return;
             }
 
-            // 🔹 1. Buscar extrato do cliente
             var extratoBLL = new ExtratoBLL();
-            //var extrato = extratoBLL.ObterExtratoCliente(parcela.ClienteID, false);
+            var pagamentoBLL = new PagamentoBLL();
+
+            // 🔹 Extrato sempre vem da parcela
             var extrato = extratoBLL.ObterExtratoPorParcela(parcela.ParcelaID);
 
-            // 🔹 2. Buscar pagamentos da parcela
-            var pagamentoBLL = new PagamentoBLL();
-            var pagamentos = pagamentoBLL.ListarPagamentosPorParcela(parcela.ParcelaID);
+            // ======================================================
+            // 🔥 BUSCA PAGAMENTOS SELECIONADOS NO GRID
+            // ======================================================
+            var pagamentosSelecionados = new List<PagamentoExtratoModel>();
 
-            if (pagamentos == null || pagamentos.Count == 0)
+            foreach (DataGridViewRow row in dgvPagamentos.Rows)
             {
-                Utilitario.Mensagens.Aviso("Nenhum pagamento encontrado para esta parcela.");
-                return;
+                bool marcado = row.Cells["Selecionar"]?.Value is bool b && b;
+
+                if (!marcado)
+                    continue;
+
+                if (row.DataBoundItem is PagamentoExtratoModel pagamento)
+                    pagamentosSelecionados.Add(pagamento);
             }
 
-            // 🔹 3. Escolher caminho do PDF
+            List<PagamentoExtratoModel> pagamentosParaRecibo;
+            string nomeArquivo;
+
+            // ======================================================
+            // 🔥 DECISÃO AUTOMÁTICA
+            // ======================================================
+            if (pagamentosSelecionados.Count > 0)
+            {
+                // 👉 Recibo SOMENTE dos pagamentos marcados
+                pagamentosParaRecibo = pagamentosSelecionados;
+
+                nomeArquivo = pagamentosSelecionados.Count == 1
+                    ? $"Recibo_Pagamento_{pagamentosSelecionados[0].PagamentoID}.pdf"
+                    : $"Recibo_Pagamentos_{parcela.ParcelaID}.pdf";
+            }
+            else
+            {
+                // 👉 Recibo da PARCELA INTEIRA
+                pagamentosParaRecibo =
+                    pagamentoBLL.ListarPagamentosPorParcela(parcela.ParcelaID);
+
+                if (pagamentosParaRecibo == null || pagamentosParaRecibo.Count == 0)
+                {
+                    Utilitario.Mensagens.Aviso("Nenhum pagamento encontrado para esta parcela.");
+                    return;
+                }
+
+                nomeArquivo = $"Recibo_Parcela_{parcela.ParcelaID}.pdf";
+            }
+
+            // ======================================================
+            // 🔹 EMPRESA
+            // ======================================================
+            var empresa = new EmpresaBll().ObterDadosParaPdf();
+
             using SaveFileDialog sfd = new SaveFileDialog
             {
                 Filter = "Arquivo PDF (*.pdf)|*.pdf",
-                FileName = $"Recibo_Parcela_{parcela.ParcelaID}.pdf"
+                FileName = nomeArquivo
             };
 
             if (sfd.ShowDialog() != DialogResult.OK)
                 return;
 
-            // 🔹 4. Gerar PDF            
-            // 🔹 Buscar empresa
-            var empresaBLL = new EmpresaBll();
-            var empresa = empresaBLL.ObterDadosParaPdf();
-
-            // 🔹 Gerar PDF
+            // ======================================================
+            // 🔹 GERAR PDF
+            // ======================================================
             PDFGenerator.GerarReciboPagamentos(
                 extrato,
-                pagamentos,
+                pagamentosParaRecibo,
                 empresa,
                 sfd.FileName
             );
 
-
-
-            // 🔹 5. Confirmar abertura
+            // ======================================================
+            // 🔹 CONFIRMAR ABERTURA
+            // ======================================================
             if (Utilitario.Mensagens.Confirmacao("Recibo gerado com sucesso. Deseja abrir agora?"))
-                System.Diagnostics.Process.Start(
-                    new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = sfd.FileName,
-                        UseShellExecute = true
-                    });
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = sfd.FileName,
+                    UseShellExecute = true
+                });
+            }
+        }
+
+        private void dgvPagamentos_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgvPagamentos.IsCurrentCellDirty)
+                dgvPagamentos.CommitEdit(DataGridViewDataErrorContexts.Commit);
         }
     }
 }

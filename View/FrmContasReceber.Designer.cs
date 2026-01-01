@@ -745,6 +745,7 @@
             dgvPagamentos.Name = "dgvPagamentos";
             dgvPagamentos.Size = new Size(911, 159);
             dgvPagamentos.TabIndex = 1053;
+            dgvPagamentos.CurrentCellDirtyStateChanged += dgvPagamentos_CurrentCellDirtyStateChanged;
             // 
             // flowLayoutPanel3
             // 
