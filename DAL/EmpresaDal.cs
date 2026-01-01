@@ -9,20 +9,98 @@ namespace GVC.DALL
 {
     internal class EmpresaDal
     {
+        public static List<EmpresaSimples> ListarEmpresasSimples()
+        {
+            var lista = new List<EmpresaSimples>();
+
+            using var conn = Helpers.Conexao.Conex();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT EmpresaID, NomeFantasia, RazaoSocial FROM Empresa ORDER BY NomeFantasia";
+
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string nomeExibido = reader.GetStringOrNull("NomeFantasia") ?? reader.GetString("RazaoSocial");
+
+                lista.Add(new EmpresaSimples
+                {
+                    EmpresaID = reader.GetInt32("EmpresaID"),
+                    NomeFantasia = nomeExibido
+                });
+            }
+
+            return lista;
+        }
+
+        // Classe auxiliar simples
+        public class EmpresaSimples
+        {
+            public int EmpresaID { get; set; }
+            public string NomeFantasia { get; set; }
+        }
+
+      
         public static byte[] ObterImagem(int empresaId)
         {
             using var conn = Helpers.Conexao.Conex();
             using var cmd = conn.CreateCommand();
 
             cmd.CommandText = @"
-        SELECT Logo 
-        FROM Empresa 
-        WHERE EmpresaID = @id";
-
+                SELECT Logo 
+                FROM Empresa 
+                WHERE EmpresaID = @id";
             cmd.Parameters.AddWithValue("@id", empresaId);
 
             conn.Open();
             return cmd.ExecuteScalar() as byte[];
+        }
+
+        public static void AtualizarLogo(int empresaId, byte[] logo)
+        {
+            if (empresaId <= 0)
+                throw new ArgumentException("ID da empresa inválido.");
+            if (logo == null || logo.Length == 0)
+                throw new ArgumentException("Logo não pode ser nula ou vazia.");
+
+            using var conn = Helpers.Conexao.Conex();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+        UPDATE Empresa
+        SET Logo = @Logo,
+            DataAtualizacao = GETDATE()
+        WHERE EmpresaID = @EmpresaID";
+
+            cmd.Parameters.AddWithValue("@EmpresaID", empresaId);
+
+            var logoParam = cmd.Parameters.Add("@Logo", SqlDbType.VarBinary, -1);
+            logoParam.Value = logo;  // Não precisa do (object) ?? DBNull, pois já validamos que não é null
+
+            conn.Open();
+            int afetadas = cmd.ExecuteNonQuery();
+
+            if (afetadas == 0)
+                Utilitario.Mensagens.Aviso("Nenhuma empresa encontrada com esse ID. Logo não foi atualizada.");
+        }
+
+        public static void AtualizarCertificado(int empresaId, string caminho)
+        {
+            if (empresaId <= 0)
+                throw new ArgumentException("ID da empresa inválido.");
+
+            using var conn = Helpers.Conexao.Conex();
+            using var cmd = conn.CreateCommand();
+
+            cmd.CommandText = @"
+                UPDATE Empresa
+                SET CertificadoDigital = @Certificado,
+                    DataAtualizacao = GETDATE()
+                WHERE EmpresaID = @EmpresaID";
+            cmd.Parameters.AddWithValue("@EmpresaID", empresaId);
+            cmd.Parameters.AddWithValue("@Certificado", (object)caminho ?? DBNull.Value);
+
+            conn.Open();
+            cmd.ExecuteNonQuery();
         }
 
         private const string SqlBase = @"
@@ -373,6 +451,37 @@ namespace GVC.DALL
                 UsuarioCriacao = reader["UsuarioCriacao"]?.ToString() ?? "",
                 UsuarioAtualizacao = reader["UsuarioAtualizacao"]?.ToString() ?? "",               
             };
+        }
+        public static string ObterCaminhoCertificado(int empresaId)
+        {
+            const string sql = "SELECT CertificadoDigital FROM Empresa WHERE EmpresaID = @EmpresaID";
+
+            using var conn = Helpers.Conexao.Conex();
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@EmpresaID", empresaId);
+
+            conn.Open();
+            var result = cmd.ExecuteScalar();
+
+            if (result != null && result != DBNull.Value)
+                return result.ToString()!;
+
+            return string.Empty; // Nenhum certificado configurado
+        }       
+    }
+    public static class SqlDataReaderExtensions
+    {
+        public static string GetStringOrNull(this SqlDataReader reader, string columnName)
+        {
+            int ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
+        }
+
+        // Opcional: outros métodos úteis no futuro
+        public static int? GetInt32OrNull(this SqlDataReader reader, string columnName)
+        {
+            int ordinal = reader.GetOrdinal(columnName);
+            return reader.IsDBNull(ordinal) ? (int?)null : reader.GetInt32(ordinal);
         }
     }
 }

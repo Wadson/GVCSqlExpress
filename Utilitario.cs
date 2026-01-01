@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -78,34 +79,28 @@ namespace GVC{
         //📌 Como usar
         //No seu código, em vez de escrever MessageBox.Show(...) toda vez, você chama:
         //Mensagens.Aviso("Por favor, marque a caixa de seleção ao lado para escolher ao menos uma parcela.");
-
-        public static string SalvarCertificado(string caminhoOrigem, int empresaId)
+        public static string SalvarCertificado(string origem, int empresaId)
         {
-            if (!File.Exists(caminhoOrigem))
-                throw new FileNotFoundException("Certificado não encontrado");
+            string pasta = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory, "Certificados");
 
-            string pasta = @"C:\ERP\Certificados";
             Directory.CreateDirectory(pasta);
 
-            string destino = Path.Combine(pasta, $"empresa_{empresaId}.pfx");
-            File.Copy(caminhoOrigem, destino, true);
+            string destino = Path.Combine(pasta, $"Empresa_{empresaId}.pfx");
+            File.Copy(origem, destino, true);
 
             return destino;
         }
-        public static byte[] ImagemParaBytes(Image imagem)
-        {
-            if (imagem == null) return null;
 
+        public static byte[] ImagemParaBytes(Image img)
+        {
             using var ms = new MemoryStream();
-            imagem.Save(ms, imagem.RawFormat);
+            img.Save(ms, ImageFormat.Png);
             return ms.ToArray();
         }
 
         public static Image BytesParaImagem(byte[] bytes)
         {
-            if (bytes == null || bytes.Length == 0)
-                return null;
-
             using var ms = new MemoryStream(bytes);
             return Image.FromStream(ms);
         }
