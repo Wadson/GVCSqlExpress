@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GVC.View;
+using GVC.UTIL;
 
 namespace GVC
 {

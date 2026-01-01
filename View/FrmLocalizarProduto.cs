@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using GVC.DAL;
+using GVC.UTIL;
 
 namespace GVC.View
 {

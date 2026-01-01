@@ -1,4 +1,5 @@
 ﻿using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace GVC.DALL
                     @VendaID, @ProdutoID, @Quantidade, @PrecoUnitario, @Subtotal, @DescontoItem
                 )";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", itemVenda.VendaID);
@@ -44,7 +45,7 @@ namespace GVC.DALL
                     DescontoItem = @DescontoItem
                 WHERE ItemVendaID = @ItemVendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@ItemVendaID", itemVenda.ItemVendaID);
@@ -61,7 +62,7 @@ namespace GVC.DALL
         {
             string sql = "DELETE FROM ItemVenda WHERE ItemVendaID = @ItemVendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@ItemVendaID", itemVendaId);
@@ -87,7 +88,7 @@ namespace GVC.DALL
 
             var lista = new List<ItemVendaModel>();
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -114,7 +115,7 @@ namespace GVC.DALL
         {
             string sql = "DELETE FROM ItemVenda WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaID);
@@ -126,7 +127,7 @@ namespace GVC.DALL
         {
             string sql = "SELECT * FROM ItemVenda ORDER BY VendaID, ItemVendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             var dt = new DataTable();
@@ -140,7 +141,7 @@ namespace GVC.DALL
         {
             string sql = "SELECT * FROM ItemVenda WHERE ItemVendaID = @Id";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@Id", itemVendaId);
@@ -170,7 +171,7 @@ namespace GVC.DALL
                 FROM ItemVenda
                 WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -197,7 +198,7 @@ namespace GVC.DALL
                 WHERE iv.VendaID = @VendaID
                 ORDER BY iv.ItemVendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -228,7 +229,7 @@ namespace GVC.DALL
 
             var itens = new List<ItemVendaModel>();
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -258,7 +259,7 @@ namespace GVC.DALL
         {
             string sql = "DELETE FROM ItemVenda WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);

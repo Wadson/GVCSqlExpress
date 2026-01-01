@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace GVC.DALL
         {
             const string sql = @"INSERT INTO PagamentosParciais (ParcelaID, ValorPago, DataPagamento) 
                 VALUES (@ParcelaID, @ValorPago, @DataPagamento)";
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, pagamentoParcial);
         }
 
@@ -23,7 +24,7 @@ namespace GVC.DALL
         public void ExcluirPagamentoParcial(long pagamentoParcialId)
         {
             const string sql = "DELETE FROM PagamentosParciais WHERE PagamentoParcialID = @Id";
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, new { Id = pagamentoParcialId });
         }
 
@@ -41,7 +42,7 @@ namespace GVC.DALL
                 WHERE ParcelaID = @ParcelaID 
                 ORDER BY DataPagamento DESC";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             return conn.Query<PagamentoParcialModel>(sql, new { ParcelaID = parcelaId }).AsList();
         }
 
@@ -49,7 +50,7 @@ namespace GVC.DALL
         public void ExcluirPagamentosParciaisPorParcelaID(long parcelaId)
         {
             const string sql = "DELETE FROM PagamentosParciais WHERE ParcelaID = @ParcelaID";
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, new { ParcelaID = parcelaId });
         }
 
@@ -68,7 +69,7 @@ namespace GVC.DALL
                 INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
                 ORDER BY pp.DataPagamento DESC";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             var dt = new DataTable();
             dt.Load(conn.ExecuteReader(sql));
             return dt;
@@ -80,7 +81,7 @@ namespace GVC.DALL
             const string sql = @" SELECT ISNULL(SUM(ValorPago), 0) 
                 FROM PagamentosParciais WHERE ParcelaID = @ParcelaID";  // ✅ Ajuste para SQL Server
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             return conn.QuerySingle<decimal>(sql, new { ParcelaID = parcelaId });
         }
 
@@ -89,7 +90,7 @@ namespace GVC.DALL
         {
             if (valorPago <= 0) return;
             dataPagamento ??= DateTime.Now;
-            using var conn = GVC.Helpers.Conexao.Conex(); conn.Open();
+            using var conn = Conexao.Conex(); conn.Open();
             using var trans = conn.BeginTransaction();
 
             try
@@ -135,7 +136,7 @@ namespace GVC.DALL
                 WHERE pp.ParcelaID = @ParcelaID
                 ORDER BY pp.DataPagamento";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             return conn.Query<PagamentoExtratoModel>(sql, new { ParcelaID = parcelaId }).ToList();
         }
         public List<PagamentoExtratoModel> ListarPagamentosPorParcelaCompleto(long parcelaId)
@@ -176,7 +177,7 @@ namespace GVC.DALL
 
         ORDER BY DataPagamento";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             return conn.Query<PagamentoExtratoModel>(sql, new { ParcelaID = parcelaId }).ToList();
         }
 
@@ -186,7 +187,7 @@ namespace GVC.DALL
         public PagamentoParcialModel? BuscarPorId(long pagamentoId)
         {
             const string sql = "SELECT * FROM PagamentosParciais WHERE PagamentoID = @Id";
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             return conn.QueryFirstOrDefault<PagamentoParcialModel>(sql, new { Id = pagamentoId });
         }
         public void ExcluirPorVenda(long vendaId)
@@ -199,7 +200,7 @@ namespace GVC.DALL
                     WHERE VendaID = @VendaID
                 )";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);

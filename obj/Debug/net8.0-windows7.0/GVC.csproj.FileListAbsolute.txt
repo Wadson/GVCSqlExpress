@@ -320,7 +320,6 @@ C:\GVCSqlExpress\bin\Debug\net8.0-windows7.0\runtimes\win\lib\net8.0\System.Diag
 C:\GVCSqlExpress\bin\Debug\net8.0-windows7.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\GVCSqlExpress\obj\Debug\net8.0-windows7.0\GVC.csproj.AssemblyReference.cache
 C:\GVCSqlExpress\obj\Debug\net8.0-windows7.0\MeuProjeto.Controls.ComboClientes.resources
-C:\GVCSqlExpress\obj\Debug\net8.0-windows7.0\GVC.FrmModelo.resources
 C:\GVCSqlExpress\obj\Debug\net8.0-windows7.0\GVC.MUI.FrmLogin.resources
 C:\GVCSqlExpress\obj\Debug\net8.0-windows7.0\GVC.MUI.FrmRecuperarSenhaOffline.resources
 C:\GVCSqlExpress\obj\Debug\net8.0-windows7.0\GVC.Properties.Resources.resources

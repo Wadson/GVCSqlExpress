@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Data.SqlClient;
+using GVC.UTIL;
 
 namespace GVC.View
 {
@@ -67,7 +68,7 @@ namespace GVC.View
                 string nomeArquivo = $"Backup_{DateTime.Now:yyyyMMdd_HHmmss}.bak";
                 string destino = Path.Combine(pastaDestino, nomeArquivo);
 
-                using (var con = GVC.Helpers.Conexao.Conex())
+                using (var con = Conexao.Conex())
                 {
                     string sql = $"BACKUP DATABASE [{NomeBanco}] TO DISK = @Destino";
                     using (var cmd = new SqlCommand(sql, con))
@@ -104,7 +105,7 @@ namespace GVC.View
                 var resp = MessageBox.Show("A restauração irá substituir o banco atual. Deseja prosseguir?\nRecomenda-se fazer backup antes.");
                 if (resp != DialogResult.Yes) return false;
 
-                using (var con = GVC.Helpers.Conexao.Conex())
+                using (var con = Conexao.Conex())
                 {
                     string sql = $"RESTORE DATABASE [{NomeBanco}] FROM DISK = @Arquivo WITH REPLACE";
                     using (var cmd = new SqlCommand(sql, con))

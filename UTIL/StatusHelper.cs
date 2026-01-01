@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using static GVC.View.FrmVendas;
 using static GVC.View.FrmPDV;
 
-namespace GVC
+namespace GVC.UTIL
 {
     public static class StatusHelper
     {

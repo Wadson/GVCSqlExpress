@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using GVC.DAL;
 using GVC.MODEL;
+using GVC.UTIL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace GVC.BLL
 
         public ExtratoCliente ObterExtratoClientePorVenda(long vendaId, bool detalhado)
         {
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
 
             // 🔹 BUSCA O CLIENTE DA VENDA
             long clienteId = conn.ExecuteScalar<long>(

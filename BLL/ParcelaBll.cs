@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using GVC.DALL;
 using GVC.MODEL;
+using GVC.UTIL;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using GVC.Helpers;
 using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient; // Alterado para SQL Server
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace GVC.DAL
 FROM Produtos p
 LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
 
-        private readonly string _connectionString = GVC.Helpers.Conexao.Conex().ConnectionString;
+        private readonly string _connectionString = Conexao.Conex().ConnectionString;
 
         // ==================== LISTAR TODOS ====================
         public List<ProdutosModel> ListarTodos()
@@ -69,7 +69,7 @@ LEFT JOIN Fornecedor f ON p.FornecedorID = f.FornecedorID";
         {
             var lista = new List<ProdutosModel>();
 
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = conn.CreateCommand())
             {
                 cmd.CommandText = @"

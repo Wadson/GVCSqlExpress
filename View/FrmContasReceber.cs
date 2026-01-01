@@ -547,7 +547,7 @@ namespace GVC.View
                 const string sql = @" UPDATE Parcela SET Status = 'Atrasada' WHERE DataVencimento < CAST(GETDATE() AS DATE)
                                       AND Status NOT IN ('Paga', 'Parcialmente Paga', 'Cancelada', 'Atrasada')";
 
-                using (var conn = Helpers.Conexao.Conex())
+                using (var conn = Conexao.Conex())
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     conn.Open();
@@ -816,7 +816,7 @@ namespace GVC.View
             var parcelas = ObterParcelasSelecionadas();
             if (!parcelas.Any()) return new List<PagamentoExtratoModel>();
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
 
             var ids = parcelas.Select(p => p.ParcelaID).ToArray();
 

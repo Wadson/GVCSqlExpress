@@ -1,5 +1,6 @@
 ﻿using GVC.MODEL;
 using GVC.Services;
+using GVC.UTIL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -96,7 +97,7 @@ namespace MeuProjeto.Controls
         private void SetupComponents()
         {
             // Inicializa serviço usando o helper
-            using (var conn = GVC.Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             {
                
             }
@@ -254,7 +255,7 @@ namespace MeuProjeto.Controls
             }
             catch (Exception ex)
             {
-                GVC.Utilitario.Mensagens.Erro($"Erro ao buscar clientes: {ex.Message}");
+                Utilitario.Mensagens.Erro($"Erro ao buscar clientes: {ex.Message}");
             }
         }
 

@@ -9,6 +9,7 @@ using System.Text;
 
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GVC.UTIL;
 
 namespace GVC.BLL
 {
@@ -20,7 +21,7 @@ namespace GVC.BLL
         {
             string sql = "SELECT Senha FROM Usuarios WHERE UsuarioID = @id";
 
-            using (var conn = GVC.Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@id", usuarioId);
@@ -99,7 +100,7 @@ namespace GVC.BLL
       
         public UsuarioMODEL PesquisarNo(DataGridView DataGridPesquisa, string pesquisa)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 SqlCommand sql = new SqlCommand("SELECT * FROM Usuarios WHERE NomeUsuario like '" + pesquisa + "%'", conn);
@@ -126,7 +127,7 @@ namespace GVC.BLL
         }
         public UsuarioMODEL PesquisarCodigo(string pesquisa)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 SqlCommand sql = new SqlCommand("SELECT * FROM Usuarios WHERE UsuarioID like '" + pesquisa + "%'", conn);

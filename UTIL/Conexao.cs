@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient; // biblioteca para SQL Server
 using System;
 
-namespace GVC.Helpers
+namespace GVC.UTIL
 {
     internal class Conexao
     {

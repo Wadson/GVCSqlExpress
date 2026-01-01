@@ -12,6 +12,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Text;
+using GVC.UTIL;
 
 namespace GVC
 {

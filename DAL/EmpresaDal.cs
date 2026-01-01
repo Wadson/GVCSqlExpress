@@ -1,4 +1,5 @@
 ﻿using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace GVC.DALL
         {
             var lista = new List<EmpresaSimples>();
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             using var cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT EmpresaID, NomeFantasia, RazaoSocial FROM Empresa ORDER BY NomeFantasia";
 
@@ -34,7 +35,7 @@ namespace GVC.DALL
         }
         public static byte[] ObterImagem(int empresaId)
         {
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             using var cmd = conn.CreateCommand();
 
             cmd.CommandText = @"
@@ -54,7 +55,7 @@ namespace GVC.DALL
             if (logo == null || logo.Length == 0)
                 throw new ArgumentException("Logo não pode ser nula ou vazia.");
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             using var cmd = conn.CreateCommand();
             cmd.CommandText = @"
         UPDATE Empresa
@@ -79,7 +80,7 @@ namespace GVC.DALL
             if (empresaId <= 0)
                 throw new ArgumentException("ID da empresa inválido.");
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             using var cmd = conn.CreateCommand();
 
             cmd.CommandText = @"
@@ -126,7 +127,7 @@ namespace GVC.DALL
         private DataTable ExecuteReaderToDataTable(string sql, params SqlParameter[] parameters)
         {
             var dt = new DataTable();
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql, conn))
             {
                 if (parameters != null && parameters.Length > 0)
@@ -173,7 +174,7 @@ namespace GVC.DALL
             DataTable dt = new DataTable();
 
             // Exemplo de uso com SqlConnection (SQL Server)
-            using (SqlConnection conn = Helpers.Conexao.Conex())
+            using (SqlConnection conn = Conexao.Conex())
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
@@ -194,7 +195,7 @@ namespace GVC.DALL
                 FROM Empresa
                 WHERE (RazaoSocial = @RazaoSocial OR CNPJ = @CNPJ)";
 
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@RazaoSocial", string.IsNullOrWhiteSpace(razaoSocial) ? (object)DBNull.Value : razaoSocial);
@@ -229,7 +230,7 @@ namespace GVC.DALL
                 );
                 SELECT SCOPE_IDENTITY();";
 
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@RazaoSocial", empresa.RazaoSocial ?? (object)DBNull.Value);
@@ -297,7 +298,7 @@ namespace GVC.DALL
 
             sql.Append(" WHERE EmpresaID = @EmpresaID");
 
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql.ToString(), conn))
             {
                 cmd.Parameters.AddWithValue("@EmpresaID", empresa.EmpresaID);
@@ -328,7 +329,7 @@ namespace GVC.DALL
         public void ExcluirEmpresa(int empresaID)
         {
             const string sql = "DELETE FROM Empresa WHERE EmpresaID = @EmpresaID";
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@EmpresaID", empresaID);
@@ -379,7 +380,7 @@ namespace GVC.DALL
                 FROM Empresa
                 WHERE CNPJ = @CNPJ";
 
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@CNPJ", string.IsNullOrWhiteSpace(cnpj) ? (object)DBNull.Value : cnpj);
@@ -398,7 +399,7 @@ namespace GVC.DALL
         public EmpresaModel? BuscarPorId(int empresaID)
         {
             string sql = SqlBase + " WHERE e.EmpresaID = @Id";
-            using (var conn = Helpers.Conexao.Conex())
+            using (var conn = Conexao.Conex())
             using (var cmd = new SqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@Id", empresaID);
@@ -447,7 +448,7 @@ namespace GVC.DALL
         {
             const string sql = "SELECT CertificadoDigital FROM Empresa WHERE EmpresaID = @EmpresaID";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@EmpresaID", empresaId);
 

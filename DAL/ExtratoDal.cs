@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GVC.MODEL;
+using GVC.UTIL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,7 @@ namespace GVC.DAL
         // 🔹 ESTE MÉTODO SÓ BUSCA DADOS
         public List<ParcelaExtrato> ObterExtratoPorCliente(long clienteId)
         {
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
 
             return conn.Query<ParcelaExtrato>(
                 SQL_EXTRATO_CTE,

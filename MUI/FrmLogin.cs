@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Microsoft.Data.SqlClient;
 using System.Security.Cryptography;
 using Krypton.Toolkit;
+using GVC.UTIL;
 
 namespace GVC.MUI
 {
@@ -76,7 +77,7 @@ namespace GVC.MUI
         {
             string query = "SELECT NomeUsuario, TipoUsuario FROM Usuarios WHERE NomeUsuario = @Usuario AND Senha = @Senha";
 
-            using (var con = GVC.Helpers.Conexao.Conex())
+            using (var con = Conexao.Conex())
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -98,7 +99,7 @@ namespace GVC.MUI
         {
             string senhaHash = GerarHashSHA256(password);
 
-            using (var con = GVC.Helpers.Conexao.Conex())
+            using (var con = Conexao.Conex())
             {
                 // Primeiro: verificar se o usuário existe
                 string queryUsuario = "SELECT Senha, TipoUsuario FROM Usuarios WHERE NomeUsuario = @Usuario";

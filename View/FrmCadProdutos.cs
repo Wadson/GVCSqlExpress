@@ -16,6 +16,7 @@ using Krypton.Toolkit;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using GVC.UTIL;
 namespace GVC.View
 {
     public partial class FrmCadProdutos : KryptonForm

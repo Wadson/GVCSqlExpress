@@ -1,5 +1,6 @@
 ﻿using GVC.BLL;
 using GVC.DALL;
+using GVC.UTIL;
 using Krypton.Toolkit;
 using Microsoft.Data.SqlClient;
 using System;
@@ -153,7 +154,7 @@ namespace GVC.View
 
             sql += " AND v.DataVenda >= @DataInicio AND v.DataVenda < @DataFim\r\n";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
 
             using var cmd = new SqlCommand(sql, conn);

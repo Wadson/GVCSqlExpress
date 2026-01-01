@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using GVC.Helpers;
+using GVC.UTIL;
 
 namespace GVC.BLL
 {

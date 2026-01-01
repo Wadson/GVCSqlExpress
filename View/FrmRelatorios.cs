@@ -11,6 +11,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using Dapper;
+using GVC.UTIL;
 
 namespace GVC.View
 {

@@ -1,5 +1,6 @@
 ﻿using GVC.DALL;
 using GVC.MODEL;
+using GVC.UTIL;
 using iText.Kernel.Colors;
 using iText.StyledXmlParser.Jsoup.Nodes;
 using Krypton.Toolkit;
@@ -16,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Azure.Core.HttpHeader;
-using static GVC.Utilitario;
+using static GVC.UTIL.Utilitario;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GVC.View

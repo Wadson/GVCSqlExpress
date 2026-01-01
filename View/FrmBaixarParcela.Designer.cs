@@ -38,16 +38,12 @@
             txtSaldo = new Krypton.Toolkit.KryptonTextBox();
             txtValorRecebido = new Krypton.Toolkit.KryptonTextBox();
             lblRotuloValorRecebido = new Label();
-            kryptonStatusStrip1 = new Krypton.Toolkit.KryptonStatusStrip();
-            lblInfo = new ToolStripStatusLabel();
-            btnListarControlesDoForm = new Krypton.Toolkit.KryptonButton();
             dgvParcelasBaixa = new Krypton.Toolkit.KryptonDataGridView();
             txtValorParcela = new Krypton.Toolkit.KryptonTextBox();
             lblRotuloCliente = new Label();
             txtClienteNome = new Krypton.Toolkit.KryptonTextBox();
             lblRotuloSaldo = new Label();
             ((System.ComponentModel.ISupportInitialize)cmbFormaPagamento).BeginInit();
-            kryptonStatusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvParcelasBaixa).BeginInit();
             SuspendLayout();
             // 
@@ -102,7 +98,7 @@
             // btnCancelar
             // 
             btnCancelar.CornerRoundingRadius = 6F;
-            btnCancelar.Location = new Point(396, 233);
+            btnCancelar.Location = new Point(421, 233);
             btnCancelar.Margin = new Padding(4, 3, 4, 3);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
@@ -116,7 +112,7 @@
             btnCancelar.OverrideDefault.Border.Rounding = 20F;
             btnCancelar.OverrideDefault.Border.Width = 1;
             btnCancelar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnCancelar.Size = new Size(120, 30);
+            btnCancelar.Size = new Size(100, 27);
             btnCancelar.StateCommon.Back.Color1 = Color.FromArgb(250, 252, 252);
             btnCancelar.StateCommon.Back.Color2 = Color.FromArgb(250, 252, 252);
             btnCancelar.StateCommon.Back.ColorAngle = 45F;
@@ -170,7 +166,7 @@
             btnConfirmarBaixa.OverrideDefault.Border.Rounding = 20F;
             btnConfirmarBaixa.OverrideDefault.Border.Width = 1;
             btnConfirmarBaixa.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnConfirmarBaixa.Size = new Size(120, 30);
+            btnConfirmarBaixa.Size = new Size(100, 27);
             btnConfirmarBaixa.StateCommon.Back.Color1 = Color.FromArgb(8, 142, 254);
             btnConfirmarBaixa.StateCommon.Back.Color2 = Color.FromArgb(6, 180, 240);
             btnConfirmarBaixa.StateCommon.Back.ColorAngle = 45F;
@@ -301,80 +297,6 @@
             lblRotuloValorRecebido.TabIndex = 1055;
             lblRotuloValorRecebido.Text = "Valor Baixa:";
             // 
-            // kryptonStatusStrip1
-            // 
-            kryptonStatusStrip1.Font = new Font("Segoe UI", 9F);
-            kryptonStatusStrip1.Items.AddRange(new ToolStripItem[] { lblInfo });
-            kryptonStatusStrip1.Location = new Point(0, 286);
-            kryptonStatusStrip1.Name = "kryptonStatusStrip1";
-            kryptonStatusStrip1.ProgressBars = null;
-            kryptonStatusStrip1.RenderMode = ToolStripRenderMode.ManagerRenderMode;
-            kryptonStatusStrip1.Size = new Size(644, 22);
-            kryptonStatusStrip1.TabIndex = 1057;
-            kryptonStatusStrip1.Text = "kryptonStatusStrip1";
-            // 
-            // lblInfo
-            // 
-            lblInfo.ForeColor = Color.FromArgb(0, 192, 0);
-            lblInfo.Name = "lblInfo";
-            lblInfo.Size = new Size(41, 17);
-            lblInfo.Text = "lblInfo";
-            // 
-            // btnListarControlesDoForm
-            // 
-            btnListarControlesDoForm.CornerRoundingRadius = 6F;
-            btnListarControlesDoForm.Location = new Point(3, 233);
-            btnListarControlesDoForm.Margin = new Padding(4, 3, 4, 3);
-            btnListarControlesDoForm.Name = "btnListarControlesDoForm";
-            btnListarControlesDoForm.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
-            btnListarControlesDoForm.OverrideDefault.Back.Color2 = Color.FromArgb(250, 252, 252);
-            btnListarControlesDoForm.OverrideDefault.Back.ColorAngle = 45F;
-            btnListarControlesDoForm.OverrideDefault.Border.Color1 = Color.FromArgb(8, 142, 254);
-            btnListarControlesDoForm.OverrideDefault.Border.Color2 = Color.FromArgb(8, 142, 254);
-            btnListarControlesDoForm.OverrideDefault.Border.ColorAngle = 45F;
-            btnListarControlesDoForm.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnListarControlesDoForm.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnListarControlesDoForm.OverrideDefault.Border.Rounding = 20F;
-            btnListarControlesDoForm.OverrideDefault.Border.Width = 1;
-            btnListarControlesDoForm.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnListarControlesDoForm.Size = new Size(120, 30);
-            btnListarControlesDoForm.StateCommon.Back.Color1 = Color.FromArgb(250, 252, 252);
-            btnListarControlesDoForm.StateCommon.Back.Color2 = Color.FromArgb(250, 252, 252);
-            btnListarControlesDoForm.StateCommon.Back.ColorAngle = 45F;
-            btnListarControlesDoForm.StateCommon.Border.Color1 = Color.FromArgb(6, 174, 244);
-            btnListarControlesDoForm.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
-            btnListarControlesDoForm.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnListarControlesDoForm.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnListarControlesDoForm.StateCommon.Border.Rounding = 6F;
-            btnListarControlesDoForm.StateCommon.Border.Width = 1;
-            btnListarControlesDoForm.StateCommon.Content.ShortText.Color1 = Color.FromArgb(8, 142, 254);
-            btnListarControlesDoForm.StateCommon.Content.ShortText.Color2 = Color.White;
-            btnListarControlesDoForm.StateCommon.Content.ShortText.Font = new Font("Segoe UI Semilight", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnListarControlesDoForm.StatePressed.Back.Color1 = Color.Red;
-            btnListarControlesDoForm.StatePressed.Back.Color2 = Color.Red;
-            btnListarControlesDoForm.StatePressed.Back.ColorAngle = 135F;
-            btnListarControlesDoForm.StatePressed.Border.Color1 = Color.FromArgb(20, 145, 198);
-            btnListarControlesDoForm.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
-            btnListarControlesDoForm.StatePressed.Border.ColorAngle = 135F;
-            btnListarControlesDoForm.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnListarControlesDoForm.StatePressed.Border.Rounding = 20F;
-            btnListarControlesDoForm.StatePressed.Border.Width = 1;
-            btnListarControlesDoForm.StateTracking.Back.Color1 = Color.Red;
-            btnListarControlesDoForm.StateTracking.Back.Color2 = Color.Red;
-            btnListarControlesDoForm.StateTracking.Back.ColorAngle = 45F;
-            btnListarControlesDoForm.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
-            btnListarControlesDoForm.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
-            btnListarControlesDoForm.StateTracking.Border.ColorAngle = 45F;
-            btnListarControlesDoForm.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnListarControlesDoForm.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnListarControlesDoForm.StateTracking.Border.Rounding = 20F;
-            btnListarControlesDoForm.StateTracking.Border.Width = 1;
-            btnListarControlesDoForm.StateTracking.Content.ShortText.Color1 = Color.White;
-            btnListarControlesDoForm.TabIndex = 1058;
-            btnListarControlesDoForm.TabStop = false;
-            btnListarControlesDoForm.Values.Text = "Listar Controles";
-            btnListarControlesDoForm.Click += btnListarControlesDoForm_Click;
-            // 
             // dgvParcelasBaixa
             // 
             dgvParcelasBaixa.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -468,11 +390,9 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(252, 252, 250);
-            ClientSize = new Size(644, 308);
+            ClientSize = new Size(644, 268);
             Controls.Add(lblRotuloSaldo);
             Controls.Add(dgvParcelasBaixa);
-            Controls.Add(btnListarControlesDoForm);
-            Controls.Add(kryptonStatusStrip1);
             Controls.Add(txtValorRecebido);
             Controls.Add(lblRotuloValorRecebido);
             Controls.Add(txtSaldo);
@@ -497,8 +417,6 @@
             Shown += FrmBaixarParcela_Shown;
             KeyDown += FrmBaixarParcela_KeyDown;
             ((System.ComponentModel.ISupportInitialize)cmbFormaPagamento).EndInit();
-            kryptonStatusStrip1.ResumeLayout(false);
-            kryptonStatusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvParcelasBaixa).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -515,13 +433,10 @@
         public Krypton.Toolkit.KryptonTextBox txtSaldo;
         public Krypton.Toolkit.KryptonTextBox txtValorRecebido;
         private Label lblRotuloValorRecebido;
-        private Krypton.Toolkit.KryptonStatusStrip kryptonStatusStrip1;
-        private Krypton.Toolkit.KryptonButton btnListarControlesDoForm;
         private Krypton.Toolkit.KryptonDataGridView dgvParcelasBaixa;
         public Krypton.Toolkit.KryptonTextBox txtValorParcela;
         private Label lblRotuloCliente;
         public Krypton.Toolkit.KryptonTextBox txtClienteNome;
         private Label lblRotuloSaldo;
-        public ToolStripStatusLabel lblInfo;
     }
 }

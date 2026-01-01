@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GVC.DALL;
+using GVC.UTIL;
 
 namespace GVC.BLL
 {
@@ -66,7 +67,7 @@ namespace GVC.BLL
 
         public ItemVendaModel PesquisaItemVenda(string pesquisa)
         {
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             try
             {
                 SqlCommand sql = new SqlCommand("SELECT * FROM ItemVenda WHERE ItemVendaID like @Pesquisa + '%'", conn);

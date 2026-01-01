@@ -1,7 +1,7 @@
 ﻿using GVC.DAL;
 using GVC.DALL;
-using GVC.Helpers;
 using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -179,7 +179,7 @@ namespace GVC.BLL
             var parcelaDal = new ParcelaDal();
             var parcelaBll = new ParcelaBLL();
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var tran = conn.BeginTransaction();
 

@@ -2,6 +2,7 @@
 using GVC.BLL;
 using GVC.DALL;
 using GVC.MODEL;
+using GVC.UTIL;
 using Krypton.Toolkit;
 using System;
 using System.Collections.Generic;
@@ -167,7 +168,7 @@ namespace GVC.View
 
         private void btnConfirmarBaixa_Click(object sender, EventArgs e)
         {
-            string texto = txtValorRecebido.Text.Replace("R$", "") .Replace(" ", "").Trim();
+            string texto = txtValorRecebido.Text.Replace("R$", "").Replace(" ", "").Trim();
 
             if (!decimal.TryParse(texto, NumberStyles.Any, _br, out decimal valorBaixa) || valorBaixa <= 0)
             {
@@ -349,6 +350,10 @@ namespace GVC.View
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void FrmBaixarParcela_Load(object sender, EventArgs e)
+        {
         }
     }
 }

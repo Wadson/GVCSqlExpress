@@ -1,5 +1,5 @@
-﻿using GVC.Helpers;
-using GVC.MODEL;
+﻿using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Data;

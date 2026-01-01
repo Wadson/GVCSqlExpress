@@ -1,5 +1,5 @@
-﻿using GVC.Helpers;
-using GVC.MODEL;
+﻿using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace GVC.DALL
                                          WHERE ProdutoID = @ProdutoID AND Estoque >= @Quantidade";
 
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var transaction = conn.BeginTransaction();
 
@@ -170,7 +170,7 @@ namespace GVC.DALL
                     VendedorID = @VendedorID
                 WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", venda.VendaID);
@@ -187,7 +187,7 @@ namespace GVC.DALL
 
         public void DeleteVenda(long vendaId)
         {
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var trans = conn.BeginTransaction();
             try
@@ -218,7 +218,7 @@ namespace GVC.DALL
         public VendaModel? GetVenda(int vendaId)
         {
             string sql = "SELECT * FROM Venda WHERE VendaID = @VendaID";
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -259,7 +259,7 @@ namespace GVC.DALL
     LEFT JOIN FormaPgto f ON v.FormaPgtoID = f.FormaPgtoID
     ORDER BY v.DataVenda DESC";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             var dt = new DataTable();
@@ -285,7 +285,7 @@ namespace GVC.DALL
             WHERE v.ClienteID = @ClienteID
             ORDER BY v.DataVenda DESC";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@ClienteID", clienteId);
@@ -313,7 +313,7 @@ namespace GVC.DALL
             WHERE v.DataVenda BETWEEN @Inicio AND @Fim
             ORDER BY v.DataVenda DESC";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@Inicio", inicio.Date);
@@ -330,7 +330,7 @@ namespace GVC.DALL
                             FROM Venda 
                             WHERE CAST(DataVenda AS DATE) = CAST(GETDATE() AS DATE)";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             return (decimal)cmd.ExecuteScalar();
@@ -339,7 +339,7 @@ namespace GVC.DALL
         public int UltimaVendaId()
         {
             string sql = "SELECT ISNULL(MAX(VendaID), 0) FROM Venda";
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             return (int)cmd.ExecuteScalar();
@@ -348,7 +348,7 @@ namespace GVC.DALL
         {
             string sql = @"UPDATE Venda SET StatusVenda = @Status WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -369,7 +369,7 @@ namespace GVC.DALL
                 END
         WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -395,7 +395,7 @@ FROM Venda v
 LEFT JOIN Clientes c ON c.ClienteID = v.ClienteID
 WHERE v.VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -425,7 +425,7 @@ WHERE v.VendaID = @VendaID";
         }
         public void Excluir(int vendaID)
         {
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             var cmd = conn.CreateCommand();
             cmd.CommandText = "DELETE FROM Venda WHERE VendaID = @id";
             cmd.Parameters.AddWithValue("@id", vendaID);
@@ -435,7 +435,7 @@ WHERE v.VendaID = @VendaID";
         {
             string sql = "DELETE FROM Venda WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);

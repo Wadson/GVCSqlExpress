@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using GVC.Helpers;
 using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace GVC.DALL
                     Status, DataPagamento, Juros, Multa, Observacao)
                 VALUES ( @VendaID, @NumeroParcela, @DataVencimento, @ValorParcela, @ValorRecebido,
                     @Status, @DataPagamento, @Juros, @Multa, @Observacao )";
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, parcela);
         }
 
@@ -35,7 +35,7 @@ namespace GVC.DALL
                     @Status, @DataPagamento, @Juros, @Multa, @Observacao
                 )";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, parcelas);
         }
 
@@ -52,7 +52,7 @@ namespace GVC.DALL
                     Observacao     = @Observacao
                 WHERE ParcelaID = @ParcelaID";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, parcela);
         }
 
@@ -63,7 +63,7 @@ namespace GVC.DALL
                DataPagamento = @DataPagamento
          WHERE ParcelaID = @ParcelaID";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, new
             {
                 ParcelaID = parcelaId,
@@ -77,7 +77,7 @@ namespace GVC.DALL
             if (parcelasIds == null || parcelasIds.Count == 0)
                 return;
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var transaction = conn.BeginTransaction();
 
@@ -129,7 +129,7 @@ namespace GVC.DALL
         public ParcelaModel? BuscarPorId(decimal parcelaId)
         {
             const string sql = "SELECT * FROM Parcela WHERE ParcelaID = @Id";
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             return conn.QueryFirstOrDefault<ParcelaModel>(sql, new { Id = parcelaId });
         }
 
@@ -140,7 +140,7 @@ namespace GVC.DALL
                 WHERE VendaID = @VendaID
                 ORDER BY NumeroParcela";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             return conn.Query<ParcelaModel>(sql, new { VendaID = vendaId }).AsList();
         }
 
@@ -149,7 +149,7 @@ namespace GVC.DALL
             AtualizarParcelasAtrasadas();
             const string sql = "SELECT * FROM Parcela ORDER BY DataVencimento";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             var dt = new DataTable();
             dt.Load(conn.ExecuteReader(sql));
             return dt;
@@ -167,7 +167,7 @@ namespace GVC.DALL
                   AND p.Status = 'Pendente'
                 ORDER BY p.DataVencimento";
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             var dt = new DataTable();
             dt.Load(conn.ExecuteReader(sql, new { ClienteID = clienteId }));
             return dt;
@@ -176,7 +176,7 @@ namespace GVC.DALL
         public void Excluir(ParcelaModel parcela)
         {
             const string sql = "DELETE FROM Parcela WHERE ParcelaID = @Id";
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, new { Id = parcela.ParcelaID });
         }
 
@@ -196,7 +196,7 @@ SET ValorRecebido = ValorRecebido - @ValorEstorno,
     END
 WHERE ParcelaID = @ParcelaID;";   // ✅ Ajuste para SQL Server
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql, new
             {
                 ParcelaID = parcelaId,
@@ -213,7 +213,7 @@ WHERE ParcelaID = @ParcelaID;";   // ✅ Ajuste para SQL Server
                 WHERE Status IN ('Pendente', 'Parcialmente Paga')
                   AND DataVencimento < GETDATE()";   // ✅ Ajuste para SQL Server
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Execute(sql);
         }
 
@@ -226,7 +226,7 @@ WHERE ParcelaID = @ParcelaID;";   // ✅ Ajuste para SQL Server
             DataPagamento = NULL
         WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -240,7 +240,7 @@ WHERE ParcelaID = @ParcelaID;";   // ✅ Ajuste para SQL Server
         WHERE p.VendaID = @VendaID
           AND ( p.ValorRecebido > 0 OR pp.PagamentoID IS NOT NULL )";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);
@@ -251,7 +251,7 @@ WHERE ParcelaID = @ParcelaID;";   // ✅ Ajuste para SQL Server
         {
             string sql = "DELETE FROM Parcela WHERE VendaID = @VendaID";
 
-            using var conn = GVC.Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
             conn.Open();
             using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@VendaID", vendaId);

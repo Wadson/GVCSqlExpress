@@ -49,7 +49,7 @@
             // 
             lblRotulo.AutoSize = true;
             lblRotulo.ForeColor = Color.FromArgb(0, 76, 172);
-            lblRotulo.Location = new Point(12, 73);
+            lblRotulo.Location = new Point(3, 49);
             lblRotulo.Name = "lblRotulo";
             lblRotulo.Size = new Size(56, 15);
             lblRotulo.TabIndex = 1013;
@@ -57,9 +57,9 @@
             // 
             // txtCaminhoBackup
             // 
-            txtCaminhoBackup.Location = new Point(12, 91);
+            txtCaminhoBackup.Location = new Point(3, 67);
             txtCaminhoBackup.Name = "txtCaminhoBackup";
-            txtCaminhoBackup.Size = new Size(316, 22);
+            txtCaminhoBackup.Size = new Size(425, 22);
             txtCaminhoBackup.StateCommon.Back.Color1 = Color.White;
             txtCaminhoBackup.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
             txtCaminhoBackup.StateCommon.Border.Color2 = Color.FromArgb(8, 142, 254);
@@ -75,7 +75,7 @@
             // btnSair
             // 
             btnSair.CornerRoundingRadius = 10F;
-            btnSair.Location = new Point(275, 125);
+            btnSair.Location = new Point(360, 111);
             btnSair.Name = "btnSair";
             btnSair.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
             btnSair.OverrideDefault.Back.Color2 = Color.FromArgb(250, 252, 252);
@@ -88,7 +88,7 @@
             btnSair.OverrideDefault.Border.Rounding = 20F;
             btnSair.OverrideDefault.Border.Width = 1;
             btnSair.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnSair.Size = new Size(83, 30);
+            btnSair.Size = new Size(100, 27);
             btnSair.StateCommon.Back.Color1 = Color.FromArgb(250, 252, 252);
             btnSair.StateCommon.Back.Color2 = Color.FromArgb(250, 252, 252);
             btnSair.StateCommon.Back.ColorAngle = 45F;
@@ -128,7 +128,7 @@
             // btnLocalBackup
             // 
             btnLocalBackup.CornerRoundingRadius = 6F;
-            btnLocalBackup.Location = new Point(332, 89);
+            btnLocalBackup.Location = new Point(434, 63);
             btnLocalBackup.Name = "btnLocalBackup";
             btnLocalBackup.OverrideDefault.Back.Color1 = Color.FromArgb(250, 252, 252);
             btnLocalBackup.OverrideDefault.Back.Color2 = Color.FromArgb(250, 252, 252);
@@ -182,7 +182,7 @@
             // btnExecutar
             // 
             btnExecutar.CornerRoundingRadius = 10F;
-            btnExecutar.Location = new Point(119, 125);
+            btnExecutar.Location = new Point(254, 111);
             btnExecutar.Name = "btnExecutar";
             btnExecutar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnExecutar.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -195,7 +195,7 @@
             btnExecutar.OverrideDefault.Border.Rounding = 20F;
             btnExecutar.OverrideDefault.Border.Width = 1;
             btnExecutar.PaletteMode = Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            btnExecutar.Size = new Size(150, 30);
+            btnExecutar.Size = new Size(100, 27);
             btnExecutar.StateCommon.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnExecutar.StateCommon.Back.Color2 = Color.FromArgb(8, 142, 254);
             btnExecutar.StateCommon.Back.ColorAngle = 45F;
@@ -235,7 +235,7 @@
             // 
             kryptonGroupBox1.GroupBackStyle = Krypton.Toolkit.PaletteBackStyle.InputControlStandalone;
             kryptonGroupBox1.GroupBorderStyle = Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
-            kryptonGroupBox1.Location = new Point(12, 10);
+            kryptonGroupBox1.Location = new Point(3, 1);
             kryptonGroupBox1.Name = "kryptonGroupBox1";
             kryptonGroupBox1.Size = new Size(145, 47);
             kryptonGroupBox1.TabIndex = 1022;
@@ -243,7 +243,7 @@
             // 
             // rbtGerarBackup
             // 
-            rbtGerarBackup.Location = new Point(21, 29);
+            rbtGerarBackup.Location = new Point(12, 20);
             rbtGerarBackup.Name = "rbtGerarBackup";
             rbtGerarBackup.Size = new Size(52, 20);
             rbtGerarBackup.TabIndex = 1028;
@@ -252,7 +252,7 @@
             // 
             // rbtRestaurarBackup
             // 
-            rbtRestaurarBackup.Location = new Point(77, 29);
+            rbtRestaurarBackup.Location = new Point(68, 20);
             rbtRestaurarBackup.Name = "rbtRestaurarBackup";
             rbtRestaurarBackup.Size = new Size(74, 20);
             rbtRestaurarBackup.TabIndex = 1029;
@@ -263,11 +263,11 @@
             // 
             kryptonStatusStrip1.Font = new Font("Segoe UI", 9F);
             kryptonStatusStrip1.Items.AddRange(new ToolStripItem[] { lblMensagem });
-            kryptonStatusStrip1.Location = new Point(0, 179);
+            kryptonStatusStrip1.Location = new Point(0, 157);
             kryptonStatusStrip1.Name = "kryptonStatusStrip1";
             kryptonStatusStrip1.ProgressBars = null;
             kryptonStatusStrip1.RenderMode = ToolStripRenderMode.ManagerRenderMode;
-            kryptonStatusStrip1.Size = new Size(375, 22);
+            kryptonStatusStrip1.Size = new Size(467, 22);
             kryptonStatusStrip1.TabIndex = 1030;
             kryptonStatusStrip1.Text = "kryptonStatusStrip1";
             // 
@@ -316,7 +316,7 @@
             // FrmBackup
             // 
             BackColor = Color.FromArgb(250, 252, 252);
-            ClientSize = new Size(375, 201);
+            ClientSize = new Size(467, 179);
             Controls.Add(kryptonStatusStrip1);
             Controls.Add(rbtRestaurarBackup);
             Controls.Add(rbtGerarBackup);

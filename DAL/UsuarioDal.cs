@@ -1,5 +1,5 @@
-﻿using GVC.Helpers;
-using GVC.MODEL;
+﻿using GVC.MODEL;
+using GVC.UTIL;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Data;
@@ -11,7 +11,7 @@ namespace GVC.DALL
     {
         public DataTable ListaUsuario()
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 var comando = new SqlCommand("SELECT UsuarioID, NomeCompleto, Cpf, DataNascimento, Email, NomeUsuario, TipoUsuario, Senha, DataCriacao FROM Usuarios", conn);
@@ -31,7 +31,7 @@ namespace GVC.DALL
 
         public void GravaUsuario(UsuarioMODEL usuarios)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 var sqlcomm = new SqlCommand(
@@ -58,7 +58,7 @@ namespace GVC.DALL
 
         public void ExcluiUsuario(UsuarioMODEL usuarios)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 var sqlcomando = new SqlCommand("DELETE FROM Usuarios WHERE UsuarioID = @UsuarioID", conn);
@@ -75,7 +75,7 @@ namespace GVC.DALL
 
         public void Atualizar(UsuarioMODEL usuarios)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 var sqlcomm = new SqlCommand(
@@ -103,7 +103,7 @@ namespace GVC.DALL
 
         public void AtualizaUsuarioSenha(UsuarioMODEL usuarios)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 var sqlcomm = new SqlCommand("UPDATE Usuarios SET Senha = @Senha WHERE UsuarioID = @UsuarioID", conn);
@@ -122,7 +122,7 @@ namespace GVC.DALL
 
         public DataTable PesquisarPorNome(string nome)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 var sqlconn = "SELECT UsuarioID, NomeCompleto, Cpf, DataNascimento, Email, NomeUsuario, TipoUsuario, Senha, DataCriacao FROM Usuarios WHERE NomeUsuario LIKE @NomeUsuario";
@@ -150,7 +150,7 @@ namespace GVC.DALL
 
         public DataTable PesquisarPorCodigo(int nome)
         {
-            var conn = GVC.Helpers.Conexao.Conex();
+            var conn = Conexao.Conex();
             try
             {
                 DataTable dt = new DataTable();

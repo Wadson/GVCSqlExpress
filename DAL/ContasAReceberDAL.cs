@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GVC.MODEL;
+using GVC.UTIL;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -81,7 +82,7 @@ namespace GVC.DAL
                     break;
             }
 
-            using var conn = Helpers.Conexao.Conex();
+            using var conn = Conexao.Conex();
 
             // ✅ AQUI entra o código que você perguntou
             var lista = conn.Query<ContaAReceberDTO>(
