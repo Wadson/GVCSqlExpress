@@ -39,8 +39,7 @@ namespace GVC.View
         // Identificadores
         // ----------------------
         public long VendedorID { get; set; } = 0;
-        private long _clienteId;
-        private long _produtoId;
+        private long _clienteId;       
 
         public int ClienteID { get; set; }
         public int ProdutoID { get; set; }
@@ -72,7 +71,7 @@ namespace GVC.View
         // ----------------------
         private FrmLocalizarCliente frmPesquisaCliente;
         private bool formularioPesquisaAberto = false;
-        private bool _ignorandoBuscaProduto = false;
+        private bool _ignorandoBuscar = false;
 
         // ----------------------
         // Legado (compatibilidade)
@@ -461,7 +460,7 @@ namespace GVC.View
 
         private void btnAdicionarItem_Click(object sender, EventArgs e)
         {
-            if (_produtoId <= 0)
+            if (ProdutoID <= 0)
             {
                 Utilitario.Mensagens.Aviso("Ops! Esse produto não existe no cadastro. Deseja tentar outro?");
                 return;
@@ -474,7 +473,7 @@ namespace GVC.View
                 return;
 
             // Busca o item na lista
-            var item = _itensBinding.FirstOrDefault(i => i.ProdutoID == _produtoId);
+            var item = _itensBinding.FirstOrDefault(i => i.ProdutoID == ProdutoID);
 
             if (item != null)
             {
@@ -486,7 +485,7 @@ namespace GVC.View
                 _itensBinding.Add(new ItemVendaModel
                 {
                     VendaID = venda.VendaID,
-                    ProdutoID = _produtoId,
+                    ProdutoID = ProdutoID,
                     Quantidade = qtd,
                     PrecoUnitario = preco,
                     Subtotal = qtd * preco,
@@ -502,13 +501,13 @@ namespace GVC.View
             AtualizarTotais();
 
             // Limpeza controlada (SEM disparar busca)
-            _ignorandoBuscaProduto = true;
+            _ignorandoBuscar = true;
 
             LimparCamposProduto(); // ← aqui deve limpar txtProdutoBuscar, txtQuantidade, txtPrecoUnitario
            
-            _produtoId = 0;
+            ProdutoID = 0;
 
-            _ignorandoBuscaProduto = false;
+            _ignorandoBuscar = false;
 
             EstadoItemAdicionado();
 
@@ -714,7 +713,7 @@ namespace GVC.View
 
         private void LimparCamposProduto()
         {
-            _produtoId = 0;
+            ProdutoID = 0;
             txtProdutoBuscar.Clear();
             txtQuantidade.Clear();
             txtPrecoUnitario.Clear();
@@ -724,7 +723,7 @@ namespace GVC.View
         {
             // ===== ESTADO =====
             _clienteId = 0;
-            _produtoId = 0;
+            ProdutoID = 0;
             _clienteFoiSelecionado = false;
 
             // ===== CLIENTE =====
@@ -888,7 +887,7 @@ namespace GVC.View
             //    if (item.ProdutoID == 0)
             //        return; // cabeçalho
 
-            //    _produtoId = item.ProdutoID;
+            //    ProdutoID = item.ProdutoID;
             //    txtProdutoBuscar.Text = item.Texto.Substring(8, 30).Trim();
 
             //    // 👉 AQUI ESTÁ O FILÉ
@@ -940,7 +939,7 @@ namespace GVC.View
         {
             //if (lstProdutos.SelectedItem is ProdutosModel vendedor)
             //{
-            //    _produtoId = vendedor.ProdutoID;
+            //    ProdutoID = vendedor.ProdutoID;
             //    txtProdutoBuscar.Text = vendedor.NomeProduto;
             //}
 
@@ -1459,72 +1458,97 @@ namespace GVC.View
         }
         private void txtVendedorBuscar_TextChanged(object sender, EventArgs e)
         {
-            if (_ignorarEventosBusca)
-                return; // 🔹 Ignora quando estamos setando texto via código
+            // Se estamos ignorando eventos, sai imediatamente
+            if (_ignorarEventosBusca || _ignorandoBuscar)
+                return;
 
             var texto = txtVendedorBuscar.Text.Trim();
             if (string.IsNullOrEmpty(texto))
                 return;
 
-            using (FrmLocalizarVendedor pesquisaVendedor = new FrmLocalizarVendedor(this, texto))
+            using (var pesquisaVendedor = new FrmLocalizarVendedor(this, texto))
             {
-                pesquisaVendedor.Owner = this;
-
                 if (pesquisaVendedor.ShowDialog() == DialogResult.OK)
                 {
-                    // 🔹 Ativa a flag antes de atualizar o texto
-                    _ignorarEventosBusca = true;
-                    txtVendedorBuscar.Text = pesquisaVendedor.VendedorSelecionado;
-                    _ignorarEventosBusca = false; // 🔹 Desativa logo depois
-
-                    txtQuantidade.Focus();
+                    _ignorandoBuscar = true;
+                    try
+                    {
+                        ClienteID = pesquisaVendedor.VendedorID;
+                        txtVendedorBuscar.Text = pesquisaVendedor.VendedorSelecionado;
+                    }
+                    finally
+                    {
+                        _ignorandoBuscar = false;
+                    }
                 }
             }
+
+            txtProdutoBuscar.Select();
         }
         private void txtClienteBuscar_TextChanged(object sender, EventArgs e)
         {
-            if (_ignorarEventosBusca)
+            // Se estamos ignorando eventos, sai imediatamente
+            if (_ignorarEventosBusca || _ignorandoBuscar)
                 return;
 
             var texto = txtClienteBuscar.Text.Trim();
             if (string.IsNullOrEmpty(texto))
                 return;
 
-            using (FrmLocalizarCliente pesquisaCliente = new FrmLocalizarCliente(this, texto))
+            using (var pesquisaCliente = new FrmLocalizarCliente(this, txtClienteBuscar.Text))
             {
-                pesquisaCliente.Owner = this; // Define o formulário principal como "dono"
-
                 if (pesquisaCliente.ShowDialog() == DialogResult.OK)
                 {
-                    txtClienteBuscar.Text = pesquisaCliente.ClienteSelecionado;
-                    ClienteID = pesquisaCliente.ClienteID;
+                    // Ativa flag para bloquear reentrância
+                    _ignorandoBuscar = true;
+                    try
+                    {
+                        ClienteID = pesquisaCliente.ClienteID;
+                        txtClienteBuscar.Text = pesquisaCliente.ClienteSelecionado;
+                    }
+                    finally
+                    {
+                        // Libera flag após atualização
+                        _ignorandoBuscar = false;
+                    }
                 }
             }
+
+            txtProdutoBuscar.Select();
         }
 
         private void txtProdutoBuscar_TextChanged(object sender, EventArgs e)
         {
-            if (_ignorarEventosBusca || _ignorandoBuscaProduto)
+            // Se estamos ignorando eventos, sai imediatamente
+            if (_ignorarEventosBusca || _ignorandoBuscar)
                 return;
+
             var texto = txtProdutoBuscar.Text.Trim();
             if (string.IsNullOrEmpty(texto))
                 return;
 
-            using (FrmLocalizarProduto pesquisaProduto = new FrmLocalizarProduto(this, texto))
+            using (var pesquisaProduto = new FrmLocalizarProduto(this, texto))
             {
-                pesquisaProduto.Owner = this; // Define o formulário principal como "dono"
-
                 if (pesquisaProduto.ShowDialog() == DialogResult.OK)
                 {
-                    // Atualiza somente se o texto mudou
-                    if (txtProdutoBuscar.Text != pesquisaProduto.ProdutoSelecionado)
+                    // Ativa flag para bloquear reentrância
+                    _ignorandoBuscar = true;
+                    try
                     {
                         ProdutoID = pesquisaProduto.ProdutoID;
                         txtProdutoBuscar.Text = pesquisaProduto.ProdutoSelecionado;
-                        txtPrecoUnitario.Text = pesquisaProduto.PrecoUnitario.ToString("N2");                       
+                        txtPrecoUnitario.Text = pesquisaProduto.PrecoUnitario.ToString("N2");
+                        txtQuantidade.Text = "1";
+                        Utilitario.FormatarMoeda(txtPrecoUnitario);
+                    }
+                    finally
+                    {
+                        // Libera flag após atualização
+                        _ignorandoBuscar = false;
                     }
                 }
             }
+
             txtQuantidade.Select();
         }
 

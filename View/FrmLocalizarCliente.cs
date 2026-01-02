@@ -248,52 +248,16 @@ namespace GVC.View
                     Utilitario.Mensagens.Aviso("Dados do cliente inválidos.");
                     return;
                 }
+
+                // Preenche as propriedades públicas que o chamador vai ler
                 ClienteID = Convert.ToInt32(dataGridPesquisar["ClienteID", linhaAtual].Value);
                 ClienteSelecionado = dataGridPesquisar["Nome", linhaAtual].Value.ToString();
                 Logradouro = dataGridPesquisar["Logradouro", linhaAtual].Value.ToString();
                 Numero = dataGridPesquisar["Numero", linhaAtual].Value.ToString();
                 Bairro = dataGridPesquisar["Bairro", linhaAtual].Value.ToString();
 
-                if (this.Owner is FrmContasReceber frmContaReceberr)
-                {
-                    frmContaReceberr.ClienteID = ClienteID;
-                    frmContaReceberr.txtNomeCliente.Text = ClienteSelecionado;
-                }
-                else if (this.Owner is FrmRelatorios frmRelatorios)
-                {
-                    frmRelatorios.txtClienteID.Text = ClienteID.ToString();
-                    frmRelatorios.txtNomeCliente.Text = ClienteSelecionado;
-                }
-                else if (this.Owner is FrmVendas frmVendas)
-                {
-                    frmVendas.ClienteID = ClienteID;
-
-                    frmVendas.txtNomeCliente.Text = ClienteSelecionado;
-                    frmVendas.txtCpf.Text = Utilitario.FormatarCPF(Cpf);
-                }
-                else if (this.Owner is FrmPDV frmPDV)
-                {
-                    frmPDV.ClienteID = ClienteID;
-
-                    frmPDV.txtClienteBuscar.Text = ClienteSelecionado;                    
-                }
-                else if (this.Owner is FrmPDVendas frmPDVendas)
-                {
-                    frmPDVendas.ClienteID = ClienteID;
-                    frmPDVendas.txtClienteBuscar.Text = ClienteSelecionado;
-                }
-                else if (this.Owner is FrmGerenciarVendas frmGerVendas)
-                {
-                    frmGerVendas.ClienteID = ClienteID;
-
-                    frmGerVendas.txtCliente.Text = ClienteSelecionado;                    
-                }
-                else
-                {
-                    Utilitario.Mensagens.Aviso("O formulário chamador não é reconhecido.");
-                }
-
-                this.DialogResult = DialogResult.OK; // Confirma que um cliente foi selecionado
+                // Retorna sucesso para o ShowDialog()
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             finally
@@ -301,6 +265,7 @@ namespace GVC.View
                 isSelectingProduct = false;
             }
         }
+
         private void dataGridPesquisar_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridPesquisar.CurrentRow != null)

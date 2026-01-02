@@ -472,7 +472,6 @@
             btnImprimirCupomNaoFiscal.TabIndex = 1020;
             btnImprimirCupomNaoFiscal.TabStop = false;
             btnImprimirCupomNaoFiscal.Values.Text = "Imprimir Cupom";
-           
             // 
             // label10
             // 
@@ -902,14 +901,14 @@
             // 
             dgvParcelas.AllowUserToAddRows = false;
             dgvParcelas.Dock = DockStyle.Fill;
-            dgvParcelas.Location = new Point(631, 30);
+            dgvParcelas.Location = new Point(631, 20);
             dgvParcelas.Name = "dgvParcelas";
             dgvParcelas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010BlueDarkMode;
             dgvParcelas.RowHeadersWidth = 23;
             dataGridViewCellStyle1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             dgvParcelas.RowsDefaultCellStyle = dataGridViewCellStyle1;
             dgvParcelas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvParcelas.Size = new Size(200, 350);
+            dgvParcelas.Size = new Size(200, 360);
             dgvParcelas.TabIndex = 1036;
             // 
             // numParcelas
@@ -1257,7 +1256,6 @@
             btnNovaVenda.TabIndex = 1043;
             btnNovaVenda.TabStop = false;
             btnNovaVenda.Values.Text = "Nova Venda";
-           
             // 
             // pnlTitulo
             // 
@@ -1309,7 +1307,7 @@
             txtVendedorBuscar.StateNormal.Content.Color1 = Color.FromArgb(192, 255, 255);
             txtVendedorBuscar.StateNormal.Content.Font = new Font("Segoe UI", 9.75F);
             txtVendedorBuscar.TabIndex = 1;
-            txtVendedorBuscar.TextChanged += txtVendedorBuscar_TextChanged;           
+            txtVendedorBuscar.TextChanged += txtVendedorBuscar_TextChanged;
             // 
             // pnlFormaPgto
             // 
@@ -1349,11 +1347,11 @@
             // dgvItensVenda
             // 
             dgvItensVenda.Dock = DockStyle.Fill;
-            dgvItensVenda.Location = new Point(3, 30);
+            dgvItensVenda.Location = new Point(3, 20);
             dgvItensVenda.Name = "dgvItensVenda";
             dgvItensVenda.PaletteMode = Krypton.Toolkit.PaletteMode.Office365BlueDarkMode;
             dgvItensVenda.RowHeadersWidth = 23;
-            dgvItensVenda.Size = new Size(622, 350);
+            dgvItensVenda.Size = new Size(622, 360);
             dgvItensVenda.TabIndex = 1051;
             dgvItensVenda.TabStop = false;
             dgvItensVenda.CellContentClick += dgvItensVenda_CellContentClick;
@@ -1414,7 +1412,7 @@
             flowLayoutPanelTotais.Controls.Add(txtTroco);
             flowLayoutPanelTotais.FlowDirection = FlowDirection.TopDown;
             flowLayoutPanelTotais.ForeColor = Color.White;
-            flowLayoutPanelTotais.Location = new Point(837, 30);
+            flowLayoutPanelTotais.Location = new Point(837, 20);
             flowLayoutPanelTotais.Name = "flowLayoutPanelTotais";
             flowLayoutPanelTotais.Size = new Size(175, 342);
             flowLayoutPanelTotais.TabIndex = 1055;
@@ -1513,7 +1511,7 @@
             tableLayoutPanel1.Location = new Point(0, 117);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 17F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
             tableLayoutPanel1.Size = new Size(1015, 493);
@@ -1538,7 +1536,7 @@
             kryptonPanel1.Dock = DockStyle.Fill;
             kryptonPanel1.Location = new Point(631, 3);
             kryptonPanel1.Name = "kryptonPanel1";
-            kryptonPanel1.Size = new Size(200, 21);
+            kryptonPanel1.Size = new Size(200, 11);
             kryptonPanel1.StateCommon.Color1 = Color.White;
             kryptonPanel1.StateCommon.Color2 = Color.White;
             kryptonPanel1.TabIndex = 1057;
@@ -1548,10 +1546,10 @@
             kryptonLabel8.Dock = DockStyle.Fill;
             kryptonLabel8.Location = new Point(0, 0);
             kryptonLabel8.Name = "kryptonLabel8";
-            kryptonLabel8.Size = new Size(200, 21);
+            kryptonLabel8.Size = new Size(200, 11);
             kryptonLabel8.StateCommon.ShortText.Color1 = Color.FromArgb(44, 62, 80);
             kryptonLabel8.StateCommon.ShortText.Color2 = Color.FromArgb(44, 62, 80);
-            kryptonLabel8.StateCommon.ShortText.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            kryptonLabel8.StateCommon.ShortText.Font = new Font("Segoe UI", 8F);
             kryptonLabel8.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             kryptonLabel8.TabIndex = 1;
             kryptonLabel8.Values.Text = "PARCELAS";
@@ -1562,7 +1560,7 @@
             kryptonPanel2.Dock = DockStyle.Fill;
             kryptonPanel2.Location = new Point(3, 3);
             kryptonPanel2.Name = "kryptonPanel2";
-            kryptonPanel2.Size = new Size(622, 21);
+            kryptonPanel2.Size = new Size(622, 11);
             kryptonPanel2.StateCommon.Color1 = Color.White;
             kryptonPanel2.StateCommon.Color2 = Color.White;
             kryptonPanel2.TabIndex = 1058;
@@ -1572,10 +1570,10 @@
             kryptonLabel7.Dock = DockStyle.Fill;
             kryptonLabel7.Location = new Point(0, 0);
             kryptonLabel7.Name = "kryptonLabel7";
-            kryptonLabel7.Size = new Size(622, 21);
+            kryptonLabel7.Size = new Size(622, 11);
             kryptonLabel7.StateCommon.ShortText.Color1 = Color.FromArgb(44, 62, 80);
             kryptonLabel7.StateCommon.ShortText.Color2 = Color.FromArgb(44, 62, 80);
-            kryptonLabel7.StateCommon.ShortText.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            kryptonLabel7.StateCommon.ShortText.Font = new Font("Segoe UI", 8F);
             kryptonLabel7.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             kryptonLabel7.TabIndex = 1;
             kryptonLabel7.Values.Text = "ITENS DA VENDA";
@@ -1586,7 +1584,7 @@
             kryptonPanel3.Dock = DockStyle.Fill;
             kryptonPanel3.Location = new Point(837, 3);
             kryptonPanel3.Name = "kryptonPanel3";
-            kryptonPanel3.Size = new Size(175, 21);
+            kryptonPanel3.Size = new Size(175, 11);
             kryptonPanel3.StateCommon.Color1 = Color.White;
             kryptonPanel3.StateCommon.Color2 = Color.White;
             kryptonPanel3.TabIndex = 1059;
@@ -1596,10 +1594,10 @@
             kryptonLabel9.Dock = DockStyle.Fill;
             kryptonLabel9.Location = new Point(0, 0);
             kryptonLabel9.Name = "kryptonLabel9";
-            kryptonLabel9.Size = new Size(175, 21);
+            kryptonLabel9.Size = new Size(175, 11);
             kryptonLabel9.StateCommon.ShortText.Color1 = Color.FromArgb(44, 62, 80);
             kryptonLabel9.StateCommon.ShortText.Color2 = Color.FromArgb(44, 62, 80);
-            kryptonLabel9.StateCommon.ShortText.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            kryptonLabel9.StateCommon.ShortText.Font = new Font("Segoe UI", 8F);
             kryptonLabel9.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             kryptonLabel9.TabIndex = 2;
             kryptonLabel9.Values.Text = "TATAIS";

@@ -17,15 +17,13 @@ namespace GVC.View
     {
         private string _ClienteID;
         protected int LinhaAtual = -1;
-        public int ProdutoID { get; set; }       
-        public string NomeProduto { get; set; }
-        public decimal EstoqueAtual { get; set; }
+        public int ProdutoID { get; set; }
         public decimal PrecoUnitario { get; set; }
         public string Unidade { get; set; }
         public decimal Estoque { get; set; }
         public string Marca { get; set; }
-        private String referencia;       
-        public string ProdutoSelecionado { get; set; }       
+        private String referencia;
+        public string ProdutoSelecionado { get; set; }
         public Form FormChamador { get; set; }
 
         public FrmLocalizarProduto(Form formChamador, string textoDigitado)
@@ -54,23 +52,56 @@ namespace GVC.View
             // 1. Desliga o auto‑resize global
             dataGridPesquisar.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-            // 2. Cabeçalhos bonitos
-            if (dataGridPesquisar.Columns["ProdutoID"] != null) dataGridPesquisar.Columns["ProdutoID"].HeaderText = "Código";
-            if (dataGridPesquisar.Columns["NomeProduto"] != null) dataGridPesquisar.Columns["NomeProduto"].HeaderText = "Produto";
-            if (dataGridPesquisar.Columns["Referencia"] != null) dataGridPesquisar.Columns["Referencia"].HeaderText = "Referência";            
-            if (dataGridPesquisar.Columns["PrecoDeVenda"] != null) dataGridPesquisar.Columns["PrecoDeVenda"].HeaderText = "Preço Venda";
-            if (dataGridPesquisar.Columns["Estoque"] != null) dataGridPesquisar.Columns["Estoque"].HeaderText = "Estoque";
-            if (dataGridPesquisar.Columns["Unidade"] != null) dataGridPesquisar.Columns["Unidade"].HeaderText = "UN";
-            if (dataGridPesquisar.Columns["Marca"] != null) dataGridPesquisar.Columns["Marca"].HeaderText = "Marca";
+            // 2. Oculta todas as colunas inicialmente
+            foreach (DataGridViewColumn col in dataGridPesquisar.Columns)
+            {
+                col.Visible = false;
+            }
 
-            // 3. Colunas fixas (largura definida e não mudam)
+            // 3. Cabeçalhos bonitos
+            if (dataGridPesquisar.Columns["ProdutoID"] != null)
+            {
+                dataGridPesquisar.Columns["ProdutoID"].HeaderText = "Código";
+                dataGridPesquisar.Columns["ProdutoID"].Visible = true;
+            }
+            if (dataGridPesquisar.Columns["NomeProduto"] != null)
+            {
+                dataGridPesquisar.Columns["NomeProduto"].HeaderText = "Produto";
+                dataGridPesquisar.Columns["NomeProduto"].Visible = true;
+            }
+            if (dataGridPesquisar.Columns["Referencia"] != null)
+            {
+                dataGridPesquisar.Columns["Referencia"].HeaderText = "Referência";
+                dataGridPesquisar.Columns["Referencia"].Visible = true;
+            }
+            if (dataGridPesquisar.Columns["PrecoDeVenda"] != null)
+            {
+                dataGridPesquisar.Columns["PrecoDeVenda"].HeaderText = "Preço Venda";
+                dataGridPesquisar.Columns["PrecoDeVenda"].Visible = true;
+            }
+            if (dataGridPesquisar.Columns["Estoque"] != null)
+            {
+                dataGridPesquisar.Columns["Estoque"].HeaderText = "Estoque";
+                dataGridPesquisar.Columns["Estoque"].Visible = true;
+            }
+            if (dataGridPesquisar.Columns["Unidade"] != null)
+            {
+                dataGridPesquisar.Columns["Unidade"].HeaderText = "UN";
+                dataGridPesquisar.Columns["Unidade"].Visible = true;
+            }
+            if (dataGridPesquisar.Columns["Marca"] != null)
+            {
+                dataGridPesquisar.Columns["Marca"].HeaderText = "Marca";
+                dataGridPesquisar.Columns["Marca"].Visible = true;
+            }
+
+            // 4. Colunas fixas (largura definida e não mudam)
             var colunasFixas = new (string nome, int largura)[]
             {
-        ("ProdutoID", 80),
-        ("NomeProduto", 550), 
+        ("ProdutoID", 50),
         ("Referencia", 120),
         ("PrecoDeVenda", 80),
-        ("Estoque", 80),
+        ("Estoque", 60),
         ("Unidade", 60),
         ("Marca", 150)
             };
@@ -87,26 +118,23 @@ namespace GVC.View
                 }
             }
 
-            // 4. Colunas dinâmicas (ajustam conforme conteúdo)
-            var colunasAuto = new string[]  { "Referencia", "NomeFornecedor", "Marca" };
-
-            foreach (var nome in colunasAuto)
+            // 5. NomeProduto dinâmico (ocupa espaço restante)
+            if (dataGridPesquisar.Columns["NomeProduto"] != null)
             {
-                if (dataGridPesquisar.Columns[nome] != null)
-                {
-                    var col = dataGridPesquisar.Columns[nome];
-                    col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells; // 🔄 ajusta ao conteúdo
-                    col.ReadOnly = true;
-                }
+                var col = dataGridPesquisar.Columns["NomeProduto"];
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill; // 🔄 ajusta ao grid
+                col.ReadOnly = true;
             }
 
-            // 6. Estilo do cabeçalho
+            // 6. Cabeçalho mais estreito
             dataGridPesquisar.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridPesquisar.ColumnHeadersHeight = 35;
-            dataGridPesquisar.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, FontStyle.Bold);
+            dataGridPesquisar.ColumnHeadersHeight = 25; // 🔑 altura mais estreita (pode ajustar entre 20–25)
+
+            dataGridPesquisar.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9, FontStyle.Bold);
             dataGridPesquisar.ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridPesquisar.RowHeadersWidth = 30;
 
+            // 7. Estilo especial para Preço e Estoque
             if (dataGridPesquisar.Columns["PrecoDeVenda"] != null)
             {
                 dataGridPesquisar.Columns["PrecoDeVenda"].DefaultCellStyle.Font = new System.Drawing.Font("Arial", 10F, FontStyle.Bold);
@@ -117,9 +145,11 @@ namespace GVC.View
             {
                 dataGridPesquisar.Columns["Estoque"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
+
             // 8. Força o grid a respeitar tudo
             dataGridPesquisar.PerformLayout();
         }
+
 
         public new int ObterLinhaAtual()
         {
@@ -162,100 +192,54 @@ namespace GVC.View
         private void SelecionarProduto()
         {
             decimal preco;
-            // Verifica se o processo de seleção de produto já está em andamento
             if (isSelectingProduct) return;
             isSelectingProduct = true;
 
             try
             {
-                // Obtém a linha atual selecionada na grid
                 LinhaAtual = ObterLinhaAtual();
                 if (LinhaAtual < 0 || LinhaAtual >= dataGridPesquisar.Rows.Count)
                 {
-                    // Verifica se a linha obtida é válida
                     Utilitario.Mensagens.Aviso("Linha inválida.");
                     return;
                 }
-                // Verifica e obtém os valores das células NomeProduto e PrecoDeVenda
+
                 if (dataGridPesquisar["NomeProduto", LinhaAtual]?.Value == null ||
                     dataGridPesquisar["ProdutoID", LinhaAtual].Value == null ||
                     dataGridPesquisar["PrecoDeVenda", LinhaAtual]?.Value == null ||
                     !decimal.TryParse(dataGridPesquisar["PrecoDeVenda", LinhaAtual].Value.ToString(), out preco))
                 {
-                    // Caso os valores não sejam válidos, exibe uma mensagem de erro
                     Utilitario.Mensagens.Aviso("Dados do produto inválidos.");
                     return;
                 }
-                // Se chegou aqui, atribui à propriedade
-                PrecoUnitario = preco;
-                // Converte o valor da célula NomeProduto para string
+
+                // Preenche as propriedades públicas que o chamador vai ler
                 ProdutoID = int.Parse(dataGridPesquisar["ProdutoID", LinhaAtual].Value.ToString());
-                NomeProduto = dataGridPesquisar["NomeProduto", LinhaAtual].Value.ToString();
+                ProdutoSelecionado = dataGridPesquisar["NomeProduto", LinhaAtual].Value.ToString();
                 referencia = dataGridPesquisar["Referencia", LinhaAtual].Value.ToString();
                 Estoque = decimal.Parse(dataGridPesquisar["Estoque", LinhaAtual].Value.ToString());
                 PrecoUnitario = decimal.Parse(dataGridPesquisar["PrecoDeVenda", LinhaAtual].Value.ToString());
-                EstoqueAtual = decimal.Parse(dataGridPesquisar["Estoque", LinhaAtual].Value.ToString());
-               
-                // Acrescenta zeros à esquerda do ProdutoID
-                string numeroComZeros = Utilitario.ZerosEsquerda(ProdutoID, 4);
 
-               
-                if (this.Owner is FrmVendas frmVendas)
-                {
-                    // Preenche os campos no formulário FrmPedido com os dados do produto
-                    frmVendas.ProdutoID = ProdutoID;
-                    frmVendas.txtNomeProduto.Text = NomeProduto;
-                    frmVendas.txtPrecoUnitario.Text = PrecoUnitario.ToString();
-                    frmVendas.txtQuantidade.Text = "1";
-                    Utilitario.FormatarMoeda(frmVendas.txtPrecoUnitario);
-                }
+                // Se quiser manter preenchimento direto via Owner, tudo bem — mas o retorno via DialogResult é essencial
                 if (this.Owner is FrmPDV frmPDV)
                 {
-                    // Preenche os campos no formulário FrmPedido com os dados do produto
                     frmPDV.ProdutoID = ProdutoID;
-                    frmPDV.txtProdutoBuscar.Text = NomeProduto;
+                    frmPDV.txtProdutoBuscar.Text = ProdutoSelecionado;
                     frmPDV.txtPrecoUnitario.Text = PrecoUnitario.ToString();
                     frmPDV.txtQuantidade.Text = "1";
                     Utilitario.FormatarMoeda(frmPDV.txtPrecoUnitario);
                 }
-                if (this.Owner is FrmMovimentacaoEstoque frmMovimentacaoEstoque)
-                {
-                    // Preenche os campos no formulário FrmPedido com os dados do produto
-                    frmMovimentacaoEstoque.ProdutoID = ProdutoID;
-                    frmMovimentacaoEstoque.txtNomeProduto.Text = NomeProduto;
-                    frmMovimentacaoEstoque.txtProdutoID.Text = Utilitario.ZerosEsquerda(ProdutoID, 4);
-                    frmMovimentacaoEstoque.lblEstoqueAtual.Text = EstoqueAtual.ToString();
-                    //Utilitario.FormatarMoeda(frmMovimentacaoEstoque.txtPrecoUnitario);
-                }
-                if (this.Owner is FrmConsultaMovimentacaoEstoque frmConsultaMovimentacaoEstoque)
-                {
-                    // Preenche os campos no formulário FrmPedido com os dados do produto
-                   //frmConsultaMovimentacaoEstoque.ProdutoID = ProdutoID;
-                   frmConsultaMovimentacaoEstoque.txtNomeProduto.Text = NomeProduto;
-                   frmConsultaMovimentacaoEstoque.txtProdutoID.Text = Utilitario.ZerosEsquerda(ProdutoID, 4);
-                   //frmConsultaMovimentacaoEstoque.lblEstoqueAtual.Text = EstoqueAtual.ToString();
-                    //Utilitario.FormatarMoeda(frmMovimentacaoEstoque.txtPrecoUnitario);
-                }
-                else if (this.Owner is FrmEntradaEstoque frmEntradaEstoque)
-                {
-                    // Preenche os campos no formulário FrmPedido com os dados do produto
-                    frmEntradaEstoque.txtProdutoID.Text = ProdutoID.ToString();
-                    frmEntradaEstoque.txtNomeProduto.Text = NomeProduto;
-                }
-                // Fecha o formulário FrmLocalizarProduto
+
+                // Sinaliza sucesso para o ShowDialog()
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             finally
             {
-                // Certifica-se de que a variável isSelectingProduct seja false ao final do processo
                 isSelectingProduct = false;
             }
         }
-        // Alterado em 23/01/2025***************ACIMA
-        private void dataGridPesquisa_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SelecionarProduto();
-        }
+
 
         private void dataGridPesquisar_KeyDown(object sender, KeyEventArgs e)
         {
@@ -297,11 +281,6 @@ namespace GVC.View
             {
                 LinhaAtual = dataGridPesquisar.CurrentRow.Index;
             }
-        }
-
-        private void dataGridPesquisar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SelecionarProduto();
         }
 
         private void txtPesquisa_KeyDown(object sender, KeyEventArgs e)
@@ -356,6 +335,11 @@ namespace GVC.View
                 if (ctrl is KryptonTextBox kryptonTxt)
                     Utilitario.AplicarCorFoco(kryptonTxt);
             }
+        }
+
+        private void dataGridPesquisar_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SelecionarProduto();
         }
     }
 }

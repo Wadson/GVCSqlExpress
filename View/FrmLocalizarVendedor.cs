@@ -2,6 +2,7 @@
 using GVC.UTIL;
 using Krypton.Toolkit;
 using System;
+using System.Security.Cryptography.Xml;
 using System.Windows.Forms;
 
 namespace GVC.View
@@ -215,14 +216,14 @@ namespace GVC.View
 
         private bool isSelectingProduct = false;
         private Form formChamador;
-        private void SelecionarVendedor()
+       
+        private void SelecionarVendedores()
         {
             if (isSelectingProduct) return;
             isSelectingProduct = true;
 
             try
             {
-                // Obtém a linha atual selecionada na grid
                 linhaAtual = ObterLinhaAtual();
                 if (linhaAtual < 0 || linhaAtual >= dataGridPesquisar.Rows.Count)
                 {
@@ -230,26 +231,21 @@ namespace GVC.View
                     return;
                 }
 
-                if (dataGridPesquisar["ClienteID", linhaAtual]?.Value == null ||
-                    dataGridPesquisar["Nome", linhaAtual]?.Value == null)
+                var clienteIdValue = dataGridPesquisar["ClienteID", linhaAtual]?.Value;
+                var nomeValue = dataGridPesquisar["Nome", linhaAtual]?.Value;
+
+                if (clienteIdValue == null || nomeValue == null)
                 {
                     Utilitario.Mensagens.Aviso("Dados do vendedor inválidos.");
                     return;
                 }
-                VendedorID = Convert.ToInt32(dataGridPesquisar["ClienteID", linhaAtual].Value);
-                VendedorSelecionado = dataGridPesquisar["Nome", linhaAtual].Value.ToString();
-               
-                if (this.Owner is FrmPDVendas frmPDV)
-                {
-                    frmPDV.VendedorID = VendedorID;
-                    frmPDV.txtVendedorBuscar.Text = VendedorSelecionado;                    
-                }               
-                else
-                {
-                    Utilitario.Mensagens.Aviso("O formulário chamador não é reconhecido.");
-                }
 
-                this.DialogResult = DialogResult.OK; // Confirma que um vendedor foi selecionado
+                // Preenche as propriedades públicas que o chamador vai ler
+                VendedorID = int.TryParse(clienteIdValue.ToString(), out int id) ? id : 0;
+                VendedorSelecionado = nomeValue?.ToString() ?? string.Empty;
+
+                // Sinaliza sucesso para o ShowDialog()
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             finally
@@ -257,6 +253,9 @@ namespace GVC.View
                 isSelectingProduct = false;
             }
         }
+
+
+
         private void dataGridPesquisar_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridPesquisar.CurrentRow != null)
@@ -283,7 +282,7 @@ namespace GVC.View
             {
                 case Keys.Enter:
                     // Enter no DataGridView: seleciona vendedor
-                    SelecionarVendedor(); // Chama seu método existente
+                    SelecionarVendedores(); // Chama seu método existente
                     e.Handled = true;
                     break;
 
@@ -356,7 +355,7 @@ namespace GVC.View
                         dataGridPesquisar.Focus();
                         dataGridPesquisar.Rows[0].Selected = true;
                         dataGridPesquisar.CurrentCell = dataGridPesquisar.Rows[0].Cells[0];
-                        SelecionarVendedor(); // Chama seu método existente
+                        SelecionarVendedores(); // Chama seu método existente
                     }
                     e.Handled = true;
                     break;
@@ -395,7 +394,7 @@ namespace GVC.View
         {
             if (dataGridPesquisar.CurrentRow != null)
             {
-                SelecionarVendedor();
+                SelecionarVendedores();
             }
         }
 
@@ -408,7 +407,7 @@ namespace GVC.View
                     if (dataGridPesquisar.CurrentRow != null && dataGridPesquisar.CurrentRow.Index >= 0)
                     {
                         linhaAtual = dataGridPesquisar.CurrentRow.Index;
-                        SelecionarVendedor();
+                        SelecionarVendedores();
                     }
                     else
                     {

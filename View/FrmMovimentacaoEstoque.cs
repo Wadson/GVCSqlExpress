@@ -90,7 +90,7 @@ namespace GVC.View
                 if (pesquisaProduto.ShowDialog() == DialogResult.OK)
                 {
                     txtNomeProduto.Text = pesquisaProduto.ProdutoSelecionado;
-                    lblEstoqueAtual.Text = pesquisaProduto.EstoqueAtual.ToString("N2");
+                    lblEstoqueAtual.Text = pesquisaProduto.Estoque.ToString("N2");
                     ProdutoID = pesquisaProduto.ProdutoID;
                     txtNomeProduto.SelectionStart = txtNomeProduto.Text.Length;
                 }

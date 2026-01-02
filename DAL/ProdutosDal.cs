@@ -279,15 +279,16 @@ WHERE ProdutoID = @Id";
         {
             return new ProdutosModel
             {
-                ProdutoID = Convert.ToInt32(reader["ProdutoID"]),
-                NomeProduto = reader["NomeProduto"].ToString(),
-                Referencia = reader["Referencia"]?.ToString() ?? "",  
-                PrecoDeVenda = Convert.ToDecimal(reader["PrecoDeVenda"]),
-                Estoque = Convert.ToInt64(reader["Estoque"]),               
-                Unidade = reader["Unidade"]?.ToString() ?? "",
-                Marca = reader["Marca"]?.ToString() ?? "",
+                ProdutoID = reader.IsDBNull(reader.GetOrdinal("ProdutoID")) ? 0 : Convert.ToInt32(reader["ProdutoID"]),
+                NomeProduto = reader.IsDBNull(reader.GetOrdinal("NomeProduto")) ? string.Empty : reader["NomeProduto"]?.ToString() ?? string.Empty,
+                Referencia = reader.IsDBNull(reader.GetOrdinal("Referencia")) ? string.Empty : reader["Referencia"]?.ToString() ?? string.Empty,
+                PrecoDeVenda = reader.IsDBNull(reader.GetOrdinal("PrecoDeVenda")) ? 0m : Convert.ToDecimal(reader["PrecoDeVenda"]),
+                Estoque = (long)(reader.IsDBNull(reader.GetOrdinal("Estoque")) ? 0m : Convert.ToDecimal(reader["Estoque"])),
+                Unidade = reader.IsDBNull(reader.GetOrdinal("Unidade")) ? string.Empty : reader["Unidade"]?.ToString() ?? string.Empty,
+                Marca = reader.IsDBNull(reader.GetOrdinal("Marca")) ? string.Empty : reader["Marca"]?.ToString() ?? string.Empty,
             };
         }
+
         // ==================== PESQUISAR POR NOME ====================
         public List<ProdutosModel> PesquisarProdutoPorNome(string nome)
         {
