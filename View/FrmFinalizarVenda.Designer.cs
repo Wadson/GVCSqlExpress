@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(components);
             kryptonPalette2 = new Krypton.Toolkit.KryptonPalette(components);
             tlpFinalizacao = new TableLayoutPanel();
@@ -37,6 +37,8 @@
             pnCabecalho = new Krypton.Toolkit.KryptonPanel();
             lblTitulo = new Krypton.Toolkit.KryptonLabel();
             pnResumoVenda = new Krypton.Toolkit.KryptonPanel();
+            lblVendaNumero = new Label();
+            lblVendaResumo = new Label();
             lblCliente = new Label();
             lblClienteResumo = new Label();
             lblTotal = new Label();
@@ -63,9 +65,7 @@
             pnlAcoes = new Krypton.Toolkit.KryptonPanel();
             btnCancelar = new Krypton.Toolkit.KryptonButton();
             btnVoltar = new Krypton.Toolkit.KryptonButton();
-            btnConfirmarVenda = new Krypton.Toolkit.KryptonButton();
-            lblVendaNumero = new Label();
-            lblVendaResumo = new Label();
+            btnConfirmar = new Krypton.Toolkit.KryptonButton();
             tlpFinalizacao.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvParcelas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pnCabecalho).BeginInit();
@@ -155,8 +155,8 @@
             dgvParcelas.Name = "dgvParcelas";
             dgvParcelas.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010BlueDarkMode;
             dgvParcelas.RowHeadersWidth = 23;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dgvParcelas.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dgvParcelas.RowsDefaultCellStyle = dataGridViewCellStyle1;
             dgvParcelas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvParcelas.Size = new Size(347, 110);
             dgvParcelas.TabIndex = 1037;
@@ -181,7 +181,6 @@
             lblTitulo.StateCommon.ShortText.TextH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             lblTitulo.TabIndex = 0;
             lblTitulo.Values.Text = "FINALIZAR VENDA";
-            lblTitulo.Click += lblTitulo_Click;
             // 
             // pnResumoVenda
             // 
@@ -197,6 +196,32 @@
             pnResumoVenda.PaletteMode = Krypton.Toolkit.PaletteMode.Office2007White;
             pnResumoVenda.Size = new Size(347, 36);
             pnResumoVenda.TabIndex = 1;
+            // 
+            // lblVendaNumero
+            // 
+            lblVendaNumero.AutoSize = true;
+            lblVendaNumero.BackColor = Color.Transparent;
+            lblVendaNumero.Font = new Font("Segoe UI", 9F);
+            lblVendaNumero.ForeColor = Color.FromArgb(44, 62, 80);
+            lblVendaNumero.Location = new Point(61, 18);
+            lblVendaNumero.Name = "lblVendaNumero";
+            lblVendaNumero.Size = new Size(37, 15);
+            lblVendaNumero.TabIndex = 1055;
+            lblVendaNumero.Text = "00218";
+            lblVendaNumero.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblVendaResumo
+            // 
+            lblVendaResumo.AutoSize = true;
+            lblVendaResumo.BackColor = Color.Transparent;
+            lblVendaResumo.Font = new Font("Segoe UI", 9F);
+            lblVendaResumo.ForeColor = Color.FromArgb(44, 62, 80);
+            lblVendaResumo.Location = new Point(-1, 18);
+            lblVendaResumo.Name = "lblVendaResumo";
+            lblVendaResumo.Size = new Size(59, 15);
+            lblVendaResumo.TabIndex = 1054;
+            lblVendaResumo.Text = "Venda Nº:";
+            lblVendaResumo.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblCliente
             // 
@@ -294,6 +319,7 @@
             cmbFormaPagamento.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
             cmbFormaPagamento.TabIndex = 1035;
             cmbFormaPagamento.TabStop = false;
+            cmbFormaPagamento.SelectedIndexChanged += cmbFormaPagamento_SelectedIndexChanged;
             // 
             // pnlPagamentoVista
             // 
@@ -315,6 +341,7 @@
             txtTroco.Location = new Point(146, 28);
             txtTroco.Name = "txtTroco";
             txtTroco.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010BlueLightMode;
+            txtTroco.ReadOnly = true;
             txtTroco.Size = new Size(194, 24);
             txtTroco.StateCommon.Back.Color1 = Color.White;
             txtTroco.StateCommon.Border.Color1 = Color.FromArgb(8, 142, 254);
@@ -523,7 +550,6 @@
             numIntervalo.StateCommon.Content.Padding = new Padding(2, 3, 2, 3);
             numIntervalo.TabIndex = 1054;
             numIntervalo.Value = new decimal(new int[] { 30, 0, 0, 0 });
-            numIntervalo.ValueChanged += numIntervalo_ValueChanged;
             // 
             // lblIntervalo
             // 
@@ -574,7 +600,6 @@
             numParcelas.StateCommon.Content.Padding = new Padding(3);
             numParcelas.TabIndex = 1050;
             numParcelas.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            numParcelas.ValueChanged += numParcelas_ValueChanged;
             // 
             // lblNumParcelas
             // 
@@ -606,7 +631,7 @@
             // 
             pnlAcoes.Controls.Add(btnCancelar);
             pnlAcoes.Controls.Add(btnVoltar);
-            pnlAcoes.Controls.Add(btnConfirmarVenda);
+            pnlAcoes.Controls.Add(btnConfirmar);
             pnlAcoes.Dock = DockStyle.Fill;
             pnlAcoes.Location = new Point(3, 423);
             pnlAcoes.Name = "pnlAcoes";
@@ -728,87 +753,61 @@
             btnVoltar.Values.Text = "Voltar";
             btnVoltar.Click += btnVoltar_Click;
             // 
-            // btnConfirmarVenda
+            // btnConfirmar
             // 
-            btnConfirmarVenda.Anchor = AnchorStyles.Bottom;
-            btnConfirmarVenda.CornerRoundingRadius = 1F;
-            btnConfirmarVenda.Location = new Point(3, 5);
-            btnConfirmarVenda.Name = "btnConfirmarVenda";
-            btnConfirmarVenda.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
-            btnConfirmarVenda.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
-            btnConfirmarVenda.OverrideDefault.Back.ColorAngle = 45F;
-            btnConfirmarVenda.OverrideDefault.Border.Color1 = Color.FromArgb(6, 174, 244);
-            btnConfirmarVenda.OverrideDefault.Border.Color2 = Color.FromArgb(8, 142, 254);
-            btnConfirmarVenda.OverrideDefault.Border.ColorAngle = 45F;
-            btnConfirmarVenda.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmarVenda.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnConfirmarVenda.OverrideDefault.Border.Rounding = 20F;
-            btnConfirmarVenda.OverrideDefault.Border.Width = 1;
-            btnConfirmarVenda.Size = new Size(95, 27);
-            btnConfirmarVenda.StateCommon.Back.Color1 = Color.FromArgb(8, 142, 254);
-            btnConfirmarVenda.StateCommon.Back.Color2 = Color.FromArgb(8, 142, 254);
-            btnConfirmarVenda.StateCommon.Back.ColorAngle = 45F;
-            btnConfirmarVenda.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmarVenda.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnConfirmarVenda.StateCommon.Border.Rounding = 1F;
-            btnConfirmarVenda.StateCommon.Border.Width = 1;
-            btnConfirmarVenda.StateCommon.Content.Padding = new Padding(2, 3, 2, 3);
-            btnConfirmarVenda.StateCommon.Content.ShortText.Color1 = Color.White;
-            btnConfirmarVenda.StateCommon.Content.ShortText.Color2 = Color.White;
-            btnConfirmarVenda.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 8.25F);
-            btnConfirmarVenda.StatePressed.Back.Color1 = Color.FromArgb(119, 221, 119);
-            btnConfirmarVenda.StatePressed.Back.Color2 = Color.FromArgb(119, 221, 119);
-            btnConfirmarVenda.StatePressed.Back.ColorAngle = 135F;
-            btnConfirmarVenda.StatePressed.Border.Color1 = Color.FromArgb(20, 145, 198);
-            btnConfirmarVenda.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
-            btnConfirmarVenda.StatePressed.Border.ColorAngle = 135F;
-            btnConfirmarVenda.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmarVenda.StatePressed.Border.Rounding = 20F;
-            btnConfirmarVenda.StatePressed.Border.Width = 1;
-            btnConfirmarVenda.StatePressed.Content.ShortText.Color1 = Color.Black;
-            btnConfirmarVenda.StatePressed.Content.ShortText.Color2 = Color.Black;
-            btnConfirmarVenda.StateTracking.Back.Color1 = Color.FromArgb(119, 221, 119);
-            btnConfirmarVenda.StateTracking.Back.Color2 = Color.FromArgb(119, 221, 119);
-            btnConfirmarVenda.StateTracking.Back.ColorAngle = 45F;
-            btnConfirmarVenda.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
-            btnConfirmarVenda.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
-            btnConfirmarVenda.StateTracking.Border.ColorAngle = 45F;
-            btnConfirmarVenda.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
-            btnConfirmarVenda.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            btnConfirmarVenda.StateTracking.Border.Rounding = 20F;
-            btnConfirmarVenda.StateTracking.Border.Width = 1;
-            btnConfirmarVenda.StateTracking.Content.ShortText.Color1 = Color.Black;
-            btnConfirmarVenda.StateTracking.Content.ShortText.Color2 = Color.Black;
-            btnConfirmarVenda.TabIndex = 1017;
-            btnConfirmarVenda.TabStop = false;
-            btnConfirmarVenda.Values.Text = "Confirmar Venda";
-            btnConfirmarVenda.Click += btnConfirmarVenda_Click;
-            // 
-            // lblVendaNumero
-            // 
-            lblVendaNumero.AutoSize = true;
-            lblVendaNumero.BackColor = Color.Transparent;
-            lblVendaNumero.Font = new Font("Segoe UI", 9F);
-            lblVendaNumero.ForeColor = Color.FromArgb(44, 62, 80);
-            lblVendaNumero.Location = new Point(61, 18);
-            lblVendaNumero.Name = "lblVendaNumero";
-            lblVendaNumero.Size = new Size(37, 15);
-            lblVendaNumero.TabIndex = 1055;
-            lblVendaNumero.Text = "00218";
-            lblVendaNumero.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblVendaResumo
-            // 
-            lblVendaResumo.AutoSize = true;
-            lblVendaResumo.BackColor = Color.Transparent;
-            lblVendaResumo.Font = new Font("Segoe UI", 9F);
-            lblVendaResumo.ForeColor = Color.FromArgb(44, 62, 80);
-            lblVendaResumo.Location = new Point(-1, 18);
-            lblVendaResumo.Name = "lblVendaResumo";
-            lblVendaResumo.Size = new Size(59, 15);
-            lblVendaResumo.TabIndex = 1054;
-            lblVendaResumo.Text = "Venda Nº:";
-            lblVendaResumo.TextAlign = ContentAlignment.MiddleCenter;
+            btnConfirmar.Anchor = AnchorStyles.Bottom;
+            btnConfirmar.CornerRoundingRadius = 1F;
+            btnConfirmar.Location = new Point(3, 5);
+            btnConfirmar.Name = "btnConfirmar";
+            btnConfirmar.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
+            btnConfirmar.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
+            btnConfirmar.OverrideDefault.Back.ColorAngle = 45F;
+            btnConfirmar.OverrideDefault.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnConfirmar.OverrideDefault.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnConfirmar.OverrideDefault.Border.ColorAngle = 45F;
+            btnConfirmar.OverrideDefault.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmar.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnConfirmar.OverrideDefault.Border.Rounding = 20F;
+            btnConfirmar.OverrideDefault.Border.Width = 1;
+            btnConfirmar.Size = new Size(95, 27);
+            btnConfirmar.StateCommon.Back.Color1 = Color.FromArgb(8, 142, 254);
+            btnConfirmar.StateCommon.Back.Color2 = Color.FromArgb(8, 142, 254);
+            btnConfirmar.StateCommon.Back.ColorAngle = 45F;
+            btnConfirmar.StateCommon.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmar.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnConfirmar.StateCommon.Border.Rounding = 1F;
+            btnConfirmar.StateCommon.Border.Width = 1;
+            btnConfirmar.StateCommon.Content.Padding = new Padding(2, 3, 2, 3);
+            btnConfirmar.StateCommon.Content.ShortText.Color1 = Color.White;
+            btnConfirmar.StateCommon.Content.ShortText.Color2 = Color.White;
+            btnConfirmar.StateCommon.Content.ShortText.Font = new Font("Segoe UI", 8.25F);
+            btnConfirmar.StatePressed.Back.Color1 = Color.FromArgb(119, 221, 119);
+            btnConfirmar.StatePressed.Back.Color2 = Color.FromArgb(119, 221, 119);
+            btnConfirmar.StatePressed.Back.ColorAngle = 135F;
+            btnConfirmar.StatePressed.Border.Color1 = Color.FromArgb(20, 145, 198);
+            btnConfirmar.StatePressed.Border.Color2 = Color.FromArgb(22, 121, 206);
+            btnConfirmar.StatePressed.Border.ColorAngle = 135F;
+            btnConfirmar.StatePressed.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmar.StatePressed.Border.Rounding = 20F;
+            btnConfirmar.StatePressed.Border.Width = 1;
+            btnConfirmar.StatePressed.Content.ShortText.Color1 = Color.Black;
+            btnConfirmar.StatePressed.Content.ShortText.Color2 = Color.Black;
+            btnConfirmar.StateTracking.Back.Color1 = Color.FromArgb(119, 221, 119);
+            btnConfirmar.StateTracking.Back.Color2 = Color.FromArgb(119, 221, 119);
+            btnConfirmar.StateTracking.Back.ColorAngle = 45F;
+            btnConfirmar.StateTracking.Border.Color1 = Color.FromArgb(6, 174, 244);
+            btnConfirmar.StateTracking.Border.Color2 = Color.FromArgb(8, 142, 254);
+            btnConfirmar.StateTracking.Border.ColorAngle = 45F;
+            btnConfirmar.StateTracking.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom | Krypton.Toolkit.PaletteDrawBorders.Left | Krypton.Toolkit.PaletteDrawBorders.Right;
+            btnConfirmar.StateTracking.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            btnConfirmar.StateTracking.Border.Rounding = 20F;
+            btnConfirmar.StateTracking.Border.Width = 1;
+            btnConfirmar.StateTracking.Content.ShortText.Color1 = Color.Black;
+            btnConfirmar.StateTracking.Content.ShortText.Color2 = Color.Black;
+            btnConfirmar.TabIndex = 1017;
+            btnConfirmar.TabStop = false;
+            btnConfirmar.Values.Text = "Confirmar Venda";
+            btnConfirmar.Click += btnConfirmar_Click;
             // 
             // FrmFinalizarVenda
             // 
@@ -889,7 +888,7 @@
         private Label label7;
         public Krypton.Toolkit.KryptonTextBox txtObservacao;
         private Krypton.Toolkit.KryptonPanel pnlAcoes;
-        public Krypton.Toolkit.KryptonButton btnConfirmarVenda;
+        public Krypton.Toolkit.KryptonButton btnConfirmar;
         public Krypton.Toolkit.KryptonButton btnVoltar;
         public Krypton.Toolkit.KryptonButton btnCancelar;
         private Label lblVendaNumero;

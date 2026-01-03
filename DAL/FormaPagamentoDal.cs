@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace GVC.DAL
 {
-    internal class FormaPgtoDal
+    internal class FormaPagamentoDal
     {
         private const string SqlBase = @"
-            SELECT FormaPgtoID, FormaPgto FROM FormaPgto";
+            SELECT FormaPgtoID, NomeFormaPagamento FROM FormaPagamento";
         public DataTable ListaFormaPgto()
         {
             var conn = Conexao.Conex();
             try
             {
-                var comando = new SqlCommand("SELECT FormaPgtoID, FormaPgto FROM FormaPgto", conn);
+                var comando = new SqlCommand("SELECT FormaPgtoID, NomeFormaPagamento FROM FormaPagamento", conn);
 
                 conn.Open();
                 var reader = comando.ExecuteReader();
@@ -35,14 +35,14 @@ namespace GVC.DAL
             }
         }
 
-        public void GravaFormaPgto(FormaPgtoModel formaPgtos)
+        public void GravaFormaPgto(FormaPagamentoModel formaPgtos)
         {
             var conn = Conexao.Conex();
             try
             {
-                var sqlcomm = new SqlCommand("INSERT INTO FormaPgto (FormaPgto) VALUES (@FormaPgto)", conn);
+                var sqlcomm = new SqlCommand("INSERT INTO FormaPagamento (NomeFormaPagamento) VALUES (@NomeFormaPagamento)", conn);
 
-                sqlcomm.Parameters.AddWithValue("@FormaPgto", formaPgtos.NomeFormaPgto);
+                sqlcomm.Parameters.AddWithValue("@NomeFormaPagamento", formaPgtos.NomeFormaPagamento);
                 conn.Open();
                 sqlcomm.ExecuteNonQuery();
             }
@@ -52,12 +52,12 @@ namespace GVC.DAL
             }
         }
 
-        public void ExcluiFormaPgto(FormaPgtoModel formaPgto)
+        public void ExcluiFormaPgto(FormaPagamentoModel formaPgto)
         {
             var conn = Conexao.Conex();
             try
             {
-                var sqlcomando = new SqlCommand("DELETE FROM FormaPgto WHERE FormaPgtoID = @FormaPgtoID", conn);
+                var sqlcomando = new SqlCommand("DELETE FROM FormaPagamento WHERE FormaPgtoID = @FormaPgtoID", conn);
                 sqlcomando.Parameters.AddWithValue("@FormaPgtoID", formaPgto.FormaPgtoID);
 
                 conn.Open();
@@ -69,14 +69,14 @@ namespace GVC.DAL
             }
         }
 
-        public void Atualizar(FormaPgtoModel formaPgto)
+        public void Atualizar(FormaPagamentoModel formaPgto)
         {
             var conn = Conexao.Conex();
             try
             {
-                var sqlcomm = new SqlCommand("UPDATE FormaPgto SET FormaPgto = @NomeFormaPgto WHERE FormaPgtoID = @FormaPgtoID", conn);
+                var sqlcomm = new SqlCommand("UPDATE FormaPagamento SET NomeFormaPagamento = @NomeFormaPgto WHERE FormaPgtoID = @FormaPgtoID", conn);
 
-                sqlcomm.Parameters.AddWithValue("@NomeFormaPgto", formaPgto.NomeFormaPgto);               
+                sqlcomm.Parameters.AddWithValue("@NomeFormaPgto", formaPgto.NomeFormaPagamento);               
                 sqlcomm.Parameters.AddWithValue("@FormaPgtoID", formaPgto.FormaPgtoID);
 
                 conn.Open();
@@ -93,7 +93,7 @@ namespace GVC.DAL
             var conn = Conexao.Conex();
             try
             {
-                var sqlconn = "SELECT FormaPgtoID, FormaPgto FROM FormaPgto WHERE FormaPgto LIKE @NomeFormaPgto";
+                var sqlconn = "SELECT FormaPgtoID, NomeFormaPagamento FROM FormaPagamento WHERE NomeFormaPagamento LIKE @NomeFormaPgto";
                 var cmd = new SqlCommand(sqlconn, conn);
                 cmd.Parameters.AddWithValue("@NomeFormaPgto", "%" + nome + "%");
 
@@ -115,7 +115,7 @@ namespace GVC.DAL
                 conn.Close();
             }
         }
-        public FormaPgtoModel? BuscarPorId(int formaPgtoID)
+        public FormaPagamentoModel? BuscarPorId(int formaPgtoID)
         {
             string sql = SqlBase + " WHERE FormaPgtoID = @Id";
             using (var conn = Conexao.Conex())
@@ -140,7 +140,7 @@ namespace GVC.DAL
             {
                 DataTable dt = new DataTable();
 
-                string sqlconn = "SELECT FormaPgtoID, FormaPgto FROM FormaPgto WHERE FormaPgtoID = @FormaPgtoID";
+                string sqlconn = "SELECT FormaPgtoID, NomeFormaPagamento FROM FormaPagamento WHERE FormaPgtoID = @FormaPgtoID";
 
                 using (SqlCommand cmd = new SqlCommand(sqlconn, conn))
                 {
@@ -173,7 +173,7 @@ namespace GVC.DAL
             var conn = Conexao.Conex();
             try
             {
-                var sql = "SELECT FormaPgtoID, FormaPgto FROM FormaPgto";
+                var sql = "SELECT FormaPgtoID, NomeFormaPagamento FROM FormaPagamento";
                 var cmd = new SqlCommand(sql, conn);
 
                 conn.Open();
@@ -195,15 +195,13 @@ namespace GVC.DAL
             }
         }
 
-
-
         // Método auxiliar para mapear EmpresaModel a partir de SqlDataReader
-        private FormaPgtoModel MapFormaPgto(SqlDataReader reader)
+        private FormaPagamentoModel MapFormaPgto(SqlDataReader reader)
         {
-            return new FormaPgtoModel
+            return new FormaPagamentoModel
             {
                 FormaPgtoID = reader.GetInt32(reader.GetOrdinal("FormaPgtoID")),
-                NomeFormaPgto = reader["FormaPgto"]?.ToString() ?? "",              
+                NomeFormaPagamento = reader["NomeFormaPagamento"]?.ToString() ?? "",              
             };
         }
     }

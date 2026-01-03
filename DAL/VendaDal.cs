@@ -46,7 +46,6 @@ namespace GVC.DALL
                     cmdVenda.Parameters.AddWithValue("@ClienteID", venda.ClienteID);
                     cmdVenda.Parameters.AddWithValue("@ValorTotal", venda.ValorTotal);
                     cmdVenda.Parameters.AddWithValue("@FormaPgtoID",venda.FormaPgtoID ?? (object)DBNull.Value);
-
                     cmdVenda.Parameters.AddWithValue("@Desconto", venda.Desconto);                    
                     cmdVenda.Parameters.AddWithValue("@Observacoes", (object)venda.Observacoes ?? DBNull.Value);
                     cmdVenda.Parameters.AddWithValue("@StatusVenda", venda.StatusVenda.ToDb());
@@ -61,19 +60,16 @@ namespace GVC.DALL
                         foreach (var item in itens)
                         {
                             item.VendaID = vendaId;
-
-                            // Calcular subtotal se necessário
-                            if (!item.Subtotal.HasValue)
-                            {
-                                item.Subtotal = (decimal)item.Quantidade * item.PrecoUnitario;
-                            }
+                                                       
+                            // Atualiza o subtotal internamente
+                            item.AtualizarSubtotal();
 
                             using var cmdItem = new SqlCommand(sqlItem, conn, transaction);
                             cmdItem.Parameters.AddWithValue("@VendaID", item.VendaID);
                             cmdItem.Parameters.AddWithValue("@ProdutoID", item.ProdutoID);
                             cmdItem.Parameters.AddWithValue("@Quantidade", item.Quantidade);
                             cmdItem.Parameters.AddWithValue("@PrecoUnitario", item.PrecoUnitario);
-
+                            cmdItem.Parameters.AddWithValue("@Subtotal", item.Subtotal); // já calculado
                             // ⭐⭐ SOLUÇÃO DEFINITIVA PARA DescontoItem nullable ⭐⭐
                             decimal descontoItemValor = (decimal)item.DescontoItem;
                             cmdItem.Parameters.AddWithValue("@DescontoItem", descontoItemValor);
@@ -103,21 +99,34 @@ namespace GVC.DALL
                         {
                             p.VendaID = vendaId;
                             using var cmdParcela = new SqlCommand(sqlParcela, conn, transaction);
+                           
                             cmdParcela.Parameters.AddWithValue("@VendaID", p.VendaID);
                             cmdParcela.Parameters.AddWithValue("@NumeroParcela", p.NumeroParcela);
                             cmdParcela.Parameters.AddWithValue("@DataVencimento", p.DataVencimento);
-                            cmdParcela.Parameters.AddWithValue("@ValorParcela", p.ValorParcela);
-                            cmdParcela.Parameters.AddWithValue("@ValorRecebido", p.ValorRecebido);
-                            //cmdParcela.Parameters.AddWithValue("@ValorRecebido", p.ValorRecebido == 0 ? (object)DBNull.Value : p.ValorRecebido);                            
-                            cmdParcela.Parameters.AddWithValue("@Status",p.Status.ToDb());
+
+                            cmdParcela.Parameters.Add("@ValorParcela", SqlDbType.Decimal).Value = Math.Round(p.ValorParcela, 2, MidpointRounding.AwayFromZero);
+                            cmdParcela.Parameters["@ValorParcela"].Precision = 18;
+                            cmdParcela.Parameters["@ValorParcela"].Scale = 2;
+
+                            cmdParcela.Parameters.Add("@ValorRecebido", SqlDbType.Decimal).Value =
+                                p.ValorRecebido.HasValue ? Math.Round(Math.Min(p.ValorRecebido.Value, p.ValorParcela), 2, MidpointRounding.AwayFromZero) : (object)DBNull.Value;
+                            cmdParcela.Parameters["@ValorRecebido"].Precision = 18;
+                            cmdParcela.Parameters["@ValorRecebido"].Scale = 2;
 
 
-                            cmdParcela.Parameters.AddWithValue("@DataPagamento", (object)p.DataPagamento ?? DBNull.Value);
-                            cmdParcela.Parameters.AddWithValue("@Juros", p.Juros);
-                            cmdParcela.Parameters.AddWithValue("@Multa", p.Multa);
-                            //cmdParcela.Parameters.AddWithValue("@Juros", p.Juros == 0 ? (object)DBNull.Value : p.Juros);
-                            //cmdParcela.Parameters.AddWithValue("@Multa", p.Multa == 0 ? (object)DBNull.Value : p.Multa);
-                            cmdParcela.Parameters.AddWithValue("@Observacao", (object)p.Observacao ?? DBNull.Value);
+                            // Status
+                            cmdParcela.Parameters.AddWithValue("@Status", p.Status.ToDb());
+
+                            // DataPagamento
+                            cmdParcela.Parameters.AddWithValue("@DataPagamento", (object?)p.DataPagamento ?? DBNull.Value);
+
+                            // Juros e Multa (somente uma vez, usando null quando zero)
+                            cmdParcela.Parameters.AddWithValue("@Juros", p.Juros == 0 ? (object)DBNull.Value : p.Juros);
+                            cmdParcela.Parameters.AddWithValue("@Multa", p.Multa == 0 ? (object)DBNull.Value : p.Multa);
+
+                            // Observacao
+                            cmdParcela.Parameters.AddWithValue("@Observacao", (object?)p.Observacao ?? DBNull.Value);
+                                                        
                             cmdParcela.ExecuteNonQuery();
                         }
                     }
@@ -231,10 +240,10 @@ namespace GVC.DALL
         v.Observacoes,
         v.StatusVenda,
         v.VendedorID,
-        f.FormaPgto AS FormaPagamento
+        f.NomeFormaPagamento AS NomeFormaPagamento
     FROM Venda v
     INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
-    LEFT JOIN FormaPgto f ON v.FormaPgtoID = f.FormaPgtoID
+    LEFT JOIN FormaPagamento f ON v.FormaPgtoID = f.FormaPgtoID
     ORDER BY v.DataVenda DESC";
 
             using var conn = Conexao.Conex();
@@ -257,9 +266,9 @@ namespace GVC.DALL
                 v.Observacoes,
                 v.StatusVenda,
                 v.VendedorID
-                f.FormaPgto AS FormaPagamento
+                f.NomeFormaPagamento AS NomeFormaPagamento
             FROM Venda v
-            LEFT JOIN FormaPgto f ON v.FormaPgtoID = f.FormaPgtoID
+            LEFT JOIN FormaPagamento f ON v.FormaPgtoID = f.FormaPgtoID
             WHERE v.ClienteID = @ClienteID
             ORDER BY v.DataVenda DESC";
 
@@ -284,10 +293,10 @@ namespace GVC.DALL
                 v.Observacoes,
                 v.StatusVenda,
                 v.VendedorID
-                f.FormaPgto AS FormaPagamento
+                f.NomeFormaPagamento AS NomeFormaPagamento
             FROM Venda v
             INNER JOIN Cliente c ON v.ClienteID = c.ClienteID
-            LEFT JOIN FormaPgto f ON v.FormaPgtoID = f.FormaPgtoID
+            LEFT JOIN FormaPagamento f ON v.FormaPgtoID = f.FormaPgtoID
             WHERE v.DataVenda BETWEEN @Inicio AND @Fim
             ORDER BY v.DataVenda DESC";
 

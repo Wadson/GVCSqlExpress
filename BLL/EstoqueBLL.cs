@@ -1,6 +1,7 @@
 ﻿using GVC.DAL;
 using GVC.MODEL;
 using GVC.UTIL;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,7 @@ namespace GVC.BLL
                 tran.Rollback();
                 throw;
             }
-        }
+        }       
+
     }
 }

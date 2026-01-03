@@ -8,25 +8,21 @@ namespace GVC.MODEL.Enums
 {
     public enum EnumStatusParcela
     {
-        Aberta,
-        Atrasada,
-        AguardandoPagamento,
+        Pendente,
+        ParcialmentePago,
         Pago,
-        Cancelada,
-        Devolvida,
-        ParcialmentePago
+        Atrasada,        
+        Cancelada    
+        
     }
 
     public enum EnumStatusVenda
     {
         Aberta,
-        EmAnalise,
         AguardandoPagamento,
-        Concluida,
-        Cancelada,
-        Devolvida,
-        Expirada,
         ParcialmentePago,
+        Concluida,
+        Cancelada, 
         Suspensa
     }
 

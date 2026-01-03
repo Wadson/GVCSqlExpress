@@ -3,8 +3,11 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using GVC.UTIL;
 
 namespace GVC.DAL
 {
@@ -18,6 +21,19 @@ namespace GVC.DAL
             cmd.Parameters.AddWithValue("@ProdutoID", produtoId);
 
             return Convert.ToInt32(cmd.ExecuteScalar());
+        }
+        public int ObterEstoqueAtualizado(long produtoId)
+        {
+            using (var conn = Conexao.Conex())
+            {
+                string sql = "SELECT Estoque FROM Produtos WHERE ProdutoID = @id";
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", produtoId);
+                    conn.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
         }
 
         public void AtualizarEstoque(int produtoId, int novoEstoque, SqlConnection conn, SqlTransaction tran)

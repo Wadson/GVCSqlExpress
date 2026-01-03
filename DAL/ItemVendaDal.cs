@@ -75,16 +75,16 @@ namespace GVC.DALL
         public List<ItemVendaModel> ConsultarItensVenda(int vendaId)
         {
             string sql = @"
-                SELECT ItemVendaID,
-                       VendaID,
-                       ProdutoID,
-                       Quantidade,
-                       PrecoUnitario,
-                       Subtotal,
-                       DescontoItem
-                FROM ItemVenda
-                WHERE VendaID = @VendaID
-                ORDER BY ItemVendaID";
+        SELECT ItemVendaID,
+               VendaID,
+               ProdutoID,
+               Quantidade,
+               PrecoUnitario,
+               Subtotal,
+               DescontoItem
+        FROM ItemVenda
+        WHERE VendaID = @VendaID
+        ORDER BY ItemVendaID";
 
             var lista = new List<ItemVendaModel>();
 
@@ -96,16 +96,22 @@ namespace GVC.DALL
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                lista.Add(new ItemVendaModel
+                var quantidade = reader.GetInt32("Quantidade");
+                var precoUnitario = reader.GetDecimal("PrecoUnitario");
+                var descontoItem = reader.IsDBNull("DescontoItem") ? 0m : reader.GetDecimal("DescontoItem");
+
+                var item = new ItemVendaModel
                 {
                     ItemVendaID = reader.GetInt64("ItemVendaID"),
                     VendaID = reader.GetInt64("VendaID"),
                     ProdutoID = reader.GetInt64("ProdutoID"),
-                    Quantidade = reader.GetInt32("Quantidade"),
-                    PrecoUnitario = reader.GetDecimal("PrecoUnitario"),
-                    Subtotal = reader.GetDecimal("Subtotal"),
-                    DescontoItem = reader.GetDecimal("DescontoItem")
-                });
+                    Quantidade = quantidade,
+                    PrecoUnitario = precoUnitario,
+                    DescontoItem = descontoItem
+                };
+
+                // ✅ Calcula Subtotal automaticamente
+                lista.Add(item);
             }
             return lista;
         }
@@ -149,19 +155,29 @@ namespace GVC.DALL
             using var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                return new ItemVendaModel
+                var quantidade = reader.GetInt32("Quantidade");
+                var precoUnitario = reader.GetDecimal("PrecoUnitario");
+                var descontoItem = reader.IsDBNull("DescontoItem") ? 0m : reader.GetDecimal("DescontoItem");
+
+                // ✅ Criar item primeiro
+                var item = new ItemVendaModel
                 {
                     ItemVendaID = reader.GetInt64("ItemVendaID"),
                     VendaID = reader.GetInt64("VendaID"),
                     ProdutoID = reader.GetInt64("ProdutoID"),
-                    Quantidade = reader.GetInt32("Quantidade"),
-                    PrecoUnitario = reader.GetDecimal("PrecoUnitario"),
-                    Subtotal = reader.GetDecimal("Subtotal"),
-                    DescontoItem = reader.GetDecimal("DescontoItem")
+                    Quantidade = quantidade,
+                    PrecoUnitario = precoUnitario,
+                    DescontoItem = descontoItem
                 };
+
+                // ✅ Calcular subtotal usando método interno
+                item.AtualizarSubtotal();
+
+                return item;
             }
             return null;
         }
+
 
         // 8. CALCULAR TOTAL DA VENDA
         public decimal CalcularTotalVenda(int vendaId)
@@ -212,20 +228,18 @@ namespace GVC.DALL
         public List<ItemVendaModel> ListarItensPorVenda(long vendaId)
         {
             string sql = @"
-                SELECT
-                    iv.ItemVendaID,
-                    iv.VendaID,
-                    iv.ProdutoID,
-                    p.NomeProduto AS ProdutoDescricao,                   
-                    iv.Quantidade,
-                    iv.PrecoUnitario,
-                    iv.Subtotal,
-                    iv.DescontoItem,
-                    (iv.Quantidade * iv.PrecoUnitario - ISNULL(iv.DescontoItem, 0)) AS TotalItem
-                FROM ItemVenda iv
-                INNER JOIN Produtos p ON iv.ProdutoID = p.ProdutoID
-                WHERE iv.VendaID = @VendaID
-                ORDER BY iv.ItemVendaID";           
+        SELECT
+            iv.ItemVendaID,
+            iv.VendaID,
+            iv.ProdutoID,
+            p.NomeProduto AS ProdutoDescricao,
+            iv.Quantidade,
+            iv.PrecoUnitario,
+            iv.DescontoItem
+        FROM ItemVenda iv
+        INNER JOIN Produtos p ON iv.ProdutoID = p.ProdutoID
+        WHERE iv.VendaID = @VendaID
+        ORDER BY iv.ItemVendaID";
 
             var itens = new List<ItemVendaModel>();
 
@@ -237,24 +251,26 @@ namespace GVC.DALL
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
+                var quantidade = reader.GetInt32("Quantidade");
+                var precoUnitario = reader.GetDecimal("PrecoUnitario");
+                var descontoItem = reader.IsDBNull("DescontoItem") ? 0m : reader.GetDecimal("DescontoItem");
+
                 var item = new ItemVendaModel
                 {
-                    // ⭐⭐ MUDAR DE GetInt64 PARA GetInt32 ⭐⭐
-                    ItemVendaID = reader.GetInt32("ItemVendaID"),    // GetInt32
-                    VendaID = reader.GetInt32("VendaID"),            // GetInt32
-                    ProdutoID = reader.GetInt32("ProdutoID"),        // GetInt32
-                    Quantidade = reader.GetInt32("Quantidade"),      // Já está GetInt32
-
-                    PrecoUnitario = reader.GetDecimal("PrecoUnitario"),
-                    Subtotal = reader.IsDBNull("Subtotal") ? null : reader.GetDecimal("Subtotal"),
-                    DescontoItem = reader.IsDBNull("DescontoItem") ? null : reader.GetDecimal("DescontoItem"),
-                    ProdutoDescricao = reader.IsDBNull("ProdutoDescricao") ? null : reader.GetString("ProdutoDescricao")
+                    ItemVendaID = reader.GetInt64("ItemVendaID"),
+                    VendaID = reader.GetInt64("VendaID"),
+                    ProdutoID = reader.GetInt64("ProdutoID"),
+                    Quantidade = quantidade,
+                    PrecoUnitario = precoUnitario,
+                    DescontoItem = descontoItem,
+                    ProdutoDescricao = reader.IsDBNull("ProdutoDescricao") ? string.Empty : reader.GetString("ProdutoDescricao")
                 };
+
+                // ✅ Subtotal será calculado automaticamente pelo model
                 itens.Add(item);
             }
-            return itens;      
+            return itens;
         }
-
         public void ExcluirPorVenda(long vendaId)
         {
             string sql = "DELETE FROM ItemVenda WHERE VendaID = @VendaID";

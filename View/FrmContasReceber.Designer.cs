@@ -130,7 +130,7 @@
             // txtNomeCliente
             // 
             txtNomeCliente.InputControlStyle = Krypton.Toolkit.InputControlStyle.Custom1;
-            txtNomeCliente.Location = new Point(175, 19);
+            txtNomeCliente.Location = new Point(175, 20);
             txtNomeCliente.Name = "txtNomeCliente";
             txtNomeCliente.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010BlueLightMode;
             txtNomeCliente.Size = new Size(319, 24);
@@ -167,7 +167,7 @@
             // txtNumeroVenda
             // 
             txtNumeroVenda.InputControlStyle = Krypton.Toolkit.InputControlStyle.Custom1;
-            txtNumeroVenda.Location = new Point(175, 19);
+            txtNumeroVenda.Location = new Point(175, 20);
             txtNumeroVenda.Name = "txtNumeroVenda";
             txtNumeroVenda.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010BlueLightMode;
             txtNumeroVenda.Size = new Size(68, 24);
@@ -256,7 +256,7 @@
             cmbStatusParcela.CornerRoundingRadius = 6F;
             cmbStatusParcela.DropDownWidth = 171;
             cmbStatusParcela.IntegralHeight = false;
-            cmbStatusParcela.Items.AddRange(new object[] { "Atrasada", "Cancelada", "Em Cobrança, Isenta", "Pendente", "Paga", "Parcialmente Paga", "Renegociada", "Todas", "Vencidas" });
+            cmbStatusParcela.Items.AddRange(new object[] { " Aberta              ", " Atrasada            ", " Aguardando Pagamento", " Pago                ", " Cancelada           ", " Devolvida           ", " Parcialmente Pago   " });
             cmbStatusParcela.Location = new Point(175, 19);
             cmbStatusParcela.Name = "cmbStatusParcela";
             cmbStatusParcela.Size = new Size(116, 25);

@@ -37,7 +37,7 @@ namespace GVC.DTO
                     ValorParcela = valor,
                     ValorRecebido = request.PagamentoAVista ? valor : 0m,
                     Saldo = request.PagamentoAVista ? 0m : valor,
-                    Status = request.PagamentoAVista ? EnumStatusParcela.Pago : EnumStatusParcela.Aberta
+                    Status = request.PagamentoAVista ? EnumStatusParcela.Pago : EnumStatusParcela.Pendente
                 });
             }
 

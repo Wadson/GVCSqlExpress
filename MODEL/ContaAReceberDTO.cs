@@ -19,7 +19,7 @@ namespace GVC.MODEL
         public decimal ValorRecebido { get; set; }
         public decimal Saldo { get; set; }
         public string StatusParcela { get; set; }
-        public string FormaPgto { get; set; }
+        public string NomeFormaPagamento { get; set; }
         public string Observacoes { get; set; } // ⬅️ aqui
     }
 }

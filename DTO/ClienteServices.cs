@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using GVC.UTIL;
 
-namespace GVC.Services
+namespace GVC.DTO
 {
     public class ClienteService
     {

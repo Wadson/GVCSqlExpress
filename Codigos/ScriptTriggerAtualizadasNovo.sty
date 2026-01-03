@@ -1,0 +1,286 @@
+-- =============================================
+-- 0️⃣ LIMPAR TRIGGERS ANTIGAS (se existirem)
+-- =============================================
+
+IF OBJECT_ID('tr_calcular_subtotal_itemvenda', 'TR') IS NOT NULL DROP TRIGGER tr_calcular_subtotal_itemvenda;
+GO
+IF OBJECT_ID('tr_atualiza_apos_pagamento_parcial', 'TR') IS NOT NULL DROP TRIGGER tr_atualiza_apos_pagamento_parcial;
+GO
+IF OBJECT_ID('tr_valida_valor_recebido', 'TR') IS NOT NULL DROP TRIGGER tr_valida_valor_recebido;
+GO
+IF OBJECT_ID('tr_atualiza_status_parcela', 'TR') IS NOT NULL DROP TRIGGER tr_atualiza_status_parcela;
+GO
+IF OBJECT_ID('tr_atualiza_status_venda', 'TR') IS NOT NULL DROP TRIGGER tr_atualiza_status_venda;
+GO
+IF OBJECT_ID('tr_atualiza_ultima_compra_cliente', 'TR') IS NOT NULL DROP TRIGGER tr_atualiza_ultima_compra_cliente;
+GO
+IF OBJECT_ID('tr_atualiza_status_por_estoque', 'TR') IS NOT NULL DROP TRIGGER tr_atualiza_status_por_estoque;
+GO
+IF OBJECT_ID('tr_valida_validade_produto', 'TR') IS NOT NULL DROP TRIGGER tr_valida_validade_produto;
+GO
+IF OBJECT_ID('tr_gerar_parcelas_e_status_inicial', 'TR') IS NOT NULL DROP TRIGGER tr_gerar_parcelas_e_status_inicial;
+GO
+
+-- =============================================
+-- 1️⃣ Subtotal automático em ItemVenda
+-- =============================================
+CREATE TRIGGER tr_calcular_subtotal_itemvenda
+ON ItemVenda
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF COLUMNS_UPDATED() & 
+       (POWER(2, (COLUMNPROPERTY(OBJECT_ID('ItemVenda'),'Quantidade','ColumnId')-1)) 
+       | POWER(2, (COLUMNPROPERTY(OBJECT_ID('ItemVenda'),'PrecoUnitario','ColumnId')-1)) 
+       | POWER(2, (COLUMNPROPERTY(OBJECT_ID('ItemVenda'),'DescontoItem','ColumnId')-1))) > 0
+    BEGIN
+        UPDATE iv
+        SET Subtotal = (i.Quantidade * i.PrecoUnitario) - ISNULL(i.DescontoItem,0)
+        FROM ItemVenda iv
+        INNER JOIN inserted i ON iv.ItemVendaID = i.ItemVendaID;
+    END
+END;
+GO
+
+-- =============================================
+-- 2️⃣ Atualiza ValorRecebido ao inserir pagamento parcial
+-- =============================================
+CREATE TRIGGER tr_atualiza_apos_pagamento_parcial
+ON PagamentosParciais
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE p
+    SET p.ValorRecebido = ISNULL(p.ValorRecebido,0) + ISNULL(i.ValorPago,0)
+    FROM Parcela p
+    INNER JOIN inserted i ON p.ParcelaID = i.ParcelaID;
+END;
+GO
+
+-- =============================================
+-- 3️⃣ Valida ValorRecebido não exceder parcela
+-- =============================================
+CREATE TRIGGER tr_valida_valor_recebido
+ON Parcela
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        WHERE ISNULL(i.ValorRecebido,0) > (i.ValorParcela + ISNULL(i.Juros,0) + ISNULL(i.Multa,0)) + 0.01
+    )
+    BEGIN
+        RAISERROR('ERRO: Valor Recebido excede o total.', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END;
+GO
+
+-- =============================================
+-- 4️⃣ Atualiza Status e DataPagamento da Parcela
+-- =============================================
+CREATE TRIGGER tr_atualiza_status_parcela
+ON Parcela
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Não altera parcelas canceladas
+    IF EXISTS (SELECT 1 FROM inserted WHERE Status = 'CANCELADA')
+        RETURN;
+
+    -- Atualiza status e data pagamento apenas se ValorRecebido foi alterado
+    IF COLUMNS_UPDATED() & POWER(2, (COLUMNPROPERTY(OBJECT_ID('Parcela'),'ValorRecebido','ColumnId')-1)) > 0
+    BEGIN
+        UPDATE p
+        SET 
+            p.Status = CASE
+                           WHEN ISNULL(i.ValorRecebido,0) >= (i.ValorParcela + ISNULL(i.Juros,0) + ISNULL(i.Multa,0)) - 0.01 THEN 'Paga'
+                           WHEN ISNULL(i.ValorRecebido,0) > 0 THEN 'Parcialmente Paga'
+                           ELSE 'Pendente'
+                       END,
+            p.DataPagamento = CASE
+                                 WHEN ISNULL(i.ValorRecebido,0) >= (i.ValorParcela + ISNULL(i.Juros,0) + ISNULL(i.Multa,0)) - 0.01
+                                      AND p.DataPagamento IS NULL THEN CAST(GETDATE() AS DATE)
+                                 WHEN ISNULL(i.ValorRecebido,0) = 0 THEN NULL
+                                 ELSE p.DataPagamento
+                              END
+        FROM Parcela p
+        INNER JOIN inserted i ON p.ParcelaID = i.ParcelaID
+        WHERE p.Status <> 'CANCELADA';
+    END
+END;
+GO
+
+-- =============================================
+-- 5️⃣ Atualiza status agregado de Venda
+-- =============================================
+CREATE TRIGGER tr_atualiza_status_venda
+ON Parcela
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF COLUMNS_UPDATED() & 
+       (POWER(2, (COLUMNPROPERTY(OBJECT_ID('Parcela'),'Status','ColumnId')-1)) 
+       | POWER(2, (COLUMNPROPERTY(OBJECT_ID('Parcela'),'ValorRecebido','ColumnId')-1))) > 0
+    BEGIN
+        ;WITH StatusPorVenda AS (
+            SELECT
+                p.VendaID,
+                CASE
+                    WHEN COUNT(CASE WHEN p.Status = 'Cancelada' THEN 1 END) = COUNT(*) THEN 'Cancelada'
+                    WHEN COUNT(CASE WHEN p.Status IN ('Pendente','Atrasada') THEN 1 END) > 0 THEN 'Aguardando Pagamento'
+                    WHEN COUNT(CASE WHEN p.Status = 'Parcialmente Paga' THEN 1 END) > 0 THEN 'Parcialmente Pago'
+                    WHEN COUNT(CASE WHEN p.Status = 'Paga' THEN 1 END) = COUNT(*) THEN 'Concluída'
+                    ELSE 'Aguardando Pagamento'
+                END AS NovoStatus
+            FROM Parcela p
+            WHERE p.VendaID IN (SELECT DISTINCT VendaID FROM inserted)
+            GROUP BY p.VendaID
+        )
+        UPDATE v
+        SET v.StatusVenda = spv.NovoStatus
+        FROM Venda v
+        INNER JOIN StatusPorVenda spv ON v.VendaID = spv.VendaID;
+    END
+END;
+GO
+
+-- =============================================
+-- 6️⃣ Atualiza data de última compra do cliente
+-- =============================================
+CREATE TRIGGER tr_atualiza_ultima_compra_cliente
+ON Venda
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE c
+    SET DataUltimaCompra = i.DataVenda
+    FROM Clientes c
+    INNER JOIN inserted i ON c.ClienteID = i.ClienteID;
+END;
+GO
+
+-- =============================================
+-- 7️⃣ Atualiza status de produtos baseado no estoque
+-- =============================================
+CREATE TRIGGER tr_atualiza_status_por_estoque
+ON Produtos
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF COLUMNS_UPDATED() & POWER(2, (COLUMNPROPERTY(OBJECT_ID('Produtos'),'Estoque','ColumnId')-1)) > 0
+    BEGIN
+        UPDATE p
+        SET p.Status = CASE
+                           WHEN i.Estoque <= 0 THEN 'Indisponível'
+                           ELSE 'Disponível'
+                       END
+        FROM Produtos p
+        INNER JOIN inserted i ON p.ProdutoID = i.ProdutoID
+        WHERE p.Situacao = 'Ativo';
+    END
+END;
+GO
+
+-- =============================================
+-- 8️⃣ Valida data de validade do produto
+-- =============================================
+CREATE TRIGGER tr_valida_validade_produto
+ON Produtos
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF COLUMNS_UPDATED() & POWER(2, (COLUMNPROPERTY(OBJECT_ID('Produtos'),'DataValidade','ColumnId')-1)) > 0
+    BEGIN
+        IF EXISTS (SELECT 1 FROM inserted WHERE DataValidade IS NOT NULL AND DataValidade < CAST(GETDATE() AS DATE))
+        BEGIN
+            RAISERROR('AVISO: Produto com data de validade vencida.', 10, 1);
+        END
+    END
+END;
+GO
+
+
+-- =============================================
+-- 9️⃣ Otimizado: Gera parcelas e define StatusVenda inicial após inserir Venda
+-- =============================================
+IF OBJECT_ID('tr_gerar_parcelas_e_status_inicial', 'TR') IS NOT NULL DROP TRIGGER tr_gerar_parcelas_e_status_inicial;
+GO
+
+CREATE TRIGGER tr_gerar_parcelas_e_status_inicial
+ON Venda
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- 1️⃣ Atualiza o StatusVenda inicial
+    UPDATE v
+    SET StatusVenda = CASE
+                          WHEN fp.NomeFormaPagamento IN ('Dinheiro','Débito','PIX','Transferência') THEN 'Concluída'
+                          WHEN fp.NomeFormaPagamento = 'Cheque' THEN 'Em Análise'
+                          ELSE 'Aguardando Pagamento'
+                      END
+    FROM Venda v
+    INNER JOIN inserted i ON v.VendaID = i.VendaID
+    LEFT JOIN FormaPagamento fp ON i.FormaPgtoID = fp.FormaPgtoID;
+
+    -- 2️⃣ Insere a parcela inicial
+    INSERT INTO Parcela (
+        VendaID, NumeroParcela, ValorParcela, DataVencimento, Status,
+        ValorRecebido, DataPagamento, Juros, Multa, Observacao
+    )
+    SELECT
+        i.VendaID,
+        1,
+        ROUND(i.ValorTotal,2),
+        CASE
+            WHEN fp.NomeFormaPagamento = 'Boleto' THEN DATEADD(DAY,3,CAST(i.DataVenda AS DATE))
+            ELSE CAST(i.DataVenda AS DATE)
+        END,
+        CASE
+            WHEN fp.NomeFormaPagamento IN ('Dinheiro','Débito','PIX','Transferência') THEN 'Paga'
+            ELSE 'Pendente'
+        END,
+        CASE
+            WHEN fp.NomeFormaPagamento IN ('Dinheiro','Débito','PIX','Transferência') THEN ROUND(i.ValorTotal,2)
+            ELSE 0
+        END,
+        CASE
+            WHEN fp.NomeFormaPagamento IN ('Dinheiro','Débito','PIX','Transferência') THEN CAST(i.DataVenda AS DATE)
+            ELSE NULL
+        END,
+        0, 0, NULL
+    FROM inserted i
+    LEFT JOIN FormaPagamento fp ON i.FormaPgtoID = fp.FormaPgtoID;
+
+    -- 3️⃣ Insere PagamentosParciais para vendas à vista
+    INSERT INTO PagamentosParciais (ParcelaID, DataPagamento, ValorPago, FormaPgtoID)
+    SELECT
+        p.ParcelaID,
+        CAST(i.DataVenda AS DATE),
+        p.ValorParcela,
+        i.FormaPgtoID
+    FROM Parcela p
+    INNER JOIN inserted i ON p.VendaID = i.VendaID
+    LEFT JOIN FormaPagamento fp ON i.FormaPgtoID = fp.FormaPgtoID
+    WHERE fp.NomeFormaPagamento IN ('Dinheiro','Débito','PIX','Transferência');
+END;
+GO

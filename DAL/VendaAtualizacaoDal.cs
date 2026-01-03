@@ -87,17 +87,13 @@ namespace GVC.DALL
             cmd.ExecuteNonQuery();
         }
 
-        private void InserirItens(
-            long vendaId,
-            List<ItemVendaModel> itens,
-            SqlConnection conn,
-            SqlTransaction tran)
+        private void InserirItens(long vendaId, List<ItemVendaModel> itens, SqlConnection conn, SqlTransaction tran)
         {
             string sql = @"
-                INSERT INTO ItemVenda
-                (VendaID, ProdutoID, Quantidade, PrecoUnitario, Subtotal, DescontoItem)
-                VALUES
-                (@VendaID, @ProdutoID, @Quantidade, @PrecoUnitario, @Subtotal, @DescontoItem)";
+        INSERT INTO ItemVenda
+        (VendaID, ProdutoID, Quantidade, PrecoUnitario, Subtotal, DescontoItem)
+        VALUES
+        (@VendaID, @ProdutoID, @Quantidade, @PrecoUnitario, @Subtotal, @DescontoItem)";
 
             foreach (var item in itens)
             {
@@ -106,12 +102,13 @@ namespace GVC.DALL
                 cmd.Parameters.AddWithValue("@ProdutoID", item.ProdutoID);
                 cmd.Parameters.AddWithValue("@Quantidade", item.Quantidade);
                 cmd.Parameters.AddWithValue("@PrecoUnitario", item.PrecoUnitario);
-                cmd.Parameters.AddWithValue("@Subtotal", item.Subtotal);
-                cmd.Parameters.AddWithValue("@DescontoItem", item.DescontoItem ?? 0);
+                cmd.Parameters.AddWithValue("@Subtotal", item.Subtotal); // leitura ok
+                cmd.Parameters.AddWithValue("@DescontoItem", item.DescontoItem); // já não é nullable
 
                 cmd.ExecuteNonQuery();
             }
         }
+
 
         private void ExcluirParcelas(
             long vendaId,

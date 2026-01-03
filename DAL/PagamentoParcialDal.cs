@@ -51,10 +51,10 @@ namespace GVC.DALL
         SELECT
             pp.DataPagamento,
             pp.ValorPago,
-            fp.FormaPgto AS FormaPagamento,
+            fp.NomeFormaPagamento AS NOmeFormaPagamento,
             pp.Observacao
         FROM PagamentosParciais pp
-        LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = pp.FormaPgtoID
+        LEFT JOIN FormaPagamento fp ON fp.FormaPgtoID = pp.FormaPgtoID
         WHERE pp.PagamentoID = @PagamentoID";
 
             using var conn = Conexao.Conex();
@@ -129,10 +129,10 @@ namespace GVC.DALL
                     pp.ParcelaID,
                     pp.DataPagamento,
                     pp.ValorPago,
-                    fp.FormaPgto AS FormaPagamento,
+                    fp.NomeFormaPagamento AS NomeFormaPagamento,
                     pp.Observacao
                 FROM PagamentosParciais pp
-                LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = pp.FormaPgtoID
+                LEFT JOIN FormaPagamento fp ON fp.FormaPgtoID = pp.FormaPgtoID
                 WHERE pp.ParcelaID = @ParcelaID
                 ORDER BY pp.DataPagamento";
 
@@ -145,10 +145,10 @@ namespace GVC.DALL
         SELECT 
             pp.DataPagamento,
             pp.ValorPago,
-            fp.FormaPgto AS FormaPagamento,
+            fp.NomeFormaPagamento AS NomeFormaPagamento,
             ISNULL(pp.Observacao, 'Baixa parcial') AS Observacao
         FROM PagamentosParciais pp
-        LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = pp.FormaPgtoID
+        LEFT JOIN FormaPagamento fp ON fp.FormaPgtoID = pp.FormaPgtoID
         WHERE pp.ParcelaID = @ParcelaID
         ORDER BY pp.DataPagamento";
 
@@ -189,10 +189,10 @@ namespace GVC.DALL
 SELECT
     pp.DataPagamento,
     pp.ValorPago,
-    fp.FormaPgto AS FormaPagamento,
+    fp.NomeFormaPagamento AS FormaPagamento,
     pp.Observacao
 FROM PagamentosParciais pp
-LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = pp.FormaPgtoID
+LEFT JOIN FormaPagamento fp ON fp.FormaPgtoID = pp.FormaPgtoID
 WHERE pp.ParcelaID = @ParcelaID
 ORDER BY pp.DataPagamento";
 

@@ -85,17 +85,21 @@ WHERE v.VendaID = @VendaID";
                 using var dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
+                    var quantidade = (int)dr["Quantidade"];
+                    var precoUnitario = (decimal)dr["PrecoUnitario"];
+                    var descontoItem = dr["DescontoItem"] == DBNull.Value ? 0m : (decimal)dr["DescontoItem"];
+
                     venda.Itens.Add(new ItemVendaModel
                     {
                         ProdutoID = (long)dr["ProdutoID"],
                         ProdutoDescricao = dr["ProdutoDescricao"].ToString(),
-                        Quantidade = (int)dr["Quantidade"],
-                        PrecoUnitario = (decimal)dr["PrecoUnitario"],
-                        Subtotal = (decimal)dr["Subtotal"],
-                        DescontoItem = dr["DescontoItem"] as decimal?
+                        Quantidade = quantidade,
+                        PrecoUnitario = precoUnitario,
+                        DescontoItem = descontoItem
                     });
                 }
             }
+
 
             // =========================
             // PARCELAS

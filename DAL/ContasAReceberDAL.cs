@@ -30,12 +30,12 @@ namespace GVC.DAL
             p.ValorRecebido   AS ValorRecebido,
             (p.ValorParcela + p.Juros + p.Multa - p.ValorRecebido) AS Saldo,
             p.Status          AS StatusParcela,
-            fp.FormaPgto      AS FormaPgto,
+            fp.NomeFormaPagamento      AS NomeFormaPagamento,
             v.Observacoes     AS Observacoes
         FROM Parcela p
         JOIN Venda v       ON v.VendaID = p.VendaID
         JOIN Clientes c    ON c.ClienteID = v.ClienteID
-        LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = v.FormaPgtoID
+        LEFT JOIN FormaPagamento fp ON fp.FormaPgtoID = v.FormaPgtoID
         WHERE 1 = 1
     ");
 
@@ -83,12 +83,8 @@ namespace GVC.DAL
             }
 
             using var conn = Conexao.Conex();
-
             // ✅ AQUI entra o código que você perguntou
-            var lista = conn.Query<ContaAReceberDTO>(
-                sql.ToString(),
-                param
-            ).ToList();
+            var lista = conn.Query<ContaAReceberDTO>(sql.ToString(), param).ToList();
 
             return lista;
         }

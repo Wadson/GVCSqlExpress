@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace GVC.BLL
 {
-    internal class FormaPgtoBLL
+    internal class FormaPagamentoBLL
     {
-        FormaPgtoDal formaPgtodal = null;
+        FormaPagamentoDal formaPgtodal = null;
         
 
         public DataTable Listar()
@@ -22,7 +22,7 @@ namespace GVC.BLL
             DataTable dtable = new DataTable();
             try
             {
-                formaPgtodal = new FormaPgtoDal();
+                formaPgtodal = new FormaPagamentoDal();
                 dtable = formaPgtodal.ListaFormaPgto();
             }
             catch (Exception erro)
@@ -32,11 +32,11 @@ namespace GVC.BLL
             return dtable;
         }
 
-        public void Salvar(FormaPgtoModel formaPgto)
+        public void Salvar(FormaPagamentoModel formaPgto)
         {
             try
             {
-                formaPgtodal = new FormaPgtoDal();
+                formaPgtodal = new FormaPagamentoDal();
                 formaPgtodal.GravaFormaPgto(formaPgto);
             }
             catch (Exception erro)
@@ -45,11 +45,11 @@ namespace GVC.BLL
             }
         }
 
-        public void Excluir(FormaPgtoModel formaPgto)
+        public void Excluir(FormaPagamentoModel formaPgto)
         {
             try
             {
-                formaPgtodal = new FormaPgtoDal();
+                formaPgtodal = new FormaPagamentoDal();
                 formaPgtodal.ExcluiFormaPgto(formaPgto);
             }
             catch (Exception erro)
@@ -57,11 +57,11 @@ namespace GVC.BLL
                 throw erro;
             }
         }
-        public void Alterar(FormaPgtoModel formaPgto)
+        public void Alterar(FormaPagamentoModel formaPgto)
         {
             try
             {
-                formaPgtodal = new FormaPgtoDal();
+                formaPgtodal = new FormaPagamentoDal();
                 formaPgtodal.Atualizar(formaPgto);
             }
             catch (Exception erro)
@@ -69,26 +69,26 @@ namespace GVC.BLL
                 throw erro;
             }
         }
-        public FormaPgtoModel? BuscarPorId(int formaPgtoId)
+        public FormaPagamentoModel? BuscarPorId(int formaPgtoId)
         {
-            formaPgtodal = new FormaPgtoDal();
+            formaPgtodal = new FormaPagamentoDal();
             return formaPgtodal.BuscarPorId(formaPgtoId);
         }
-        public FormaPgtoModel PesquisarNo(DataGridView DataGridPesquisa, string pesquisa)
+        public FormaPagamentoModel PesquisarNo(DataGridView DataGridPesquisa, string pesquisa)
         {
             var conn = Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT * FROM FormaPgto WHERE FormaPgto like '" + pesquisa + "%'", conn);
+                SqlCommand sql = new SqlCommand("SELECT * FROM FormaPagamento WHERE NomeFormaPagamento like '" + pesquisa + "%'", conn);
                 conn.Open();
                 SqlDataReader datareader;
-                FormaPgtoModel obj_formaPgto = new FormaPgtoModel();
+                FormaPagamentoModel obj_formaPgto = new FormaPagamentoModel();
                 datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (datareader.Read())
                 {
                     obj_formaPgto.FormaPgtoID = Convert.ToInt32(datareader["FormaPgtoID"]);
-                    obj_formaPgto.NomeFormaPgto = datareader["FormaPgto"].ToString();
+                    obj_formaPgto.NomeFormaPagamento = datareader["NomeFormaPagamento"].ToString();
                 }
                 return obj_formaPgto;
             }
@@ -101,21 +101,21 @@ namespace GVC.BLL
                 conn.Close();
             }
         }
-        public FormaPgtoModel PesquisarCodigo(string pesquisa)
+        public FormaPagamentoModel PesquisarCodigo(string pesquisa)
         {
             var conn = Conexao.Conex();
             try
             {
-                SqlCommand sql = new SqlCommand("SELECT * FROM FormaPgto WHERE FormaPgtoID like '" + pesquisa + "%'", conn);
+                SqlCommand sql = new SqlCommand("SELECT * FROM FormaPagamento WHERE FormaPgtoID like '" + pesquisa + "%'", conn);
                 conn.Open();
                 SqlDataReader datareader;
-                FormaPgtoModel obj_formaPgto = new FormaPgtoModel();
+                FormaPagamentoModel obj_formaPgto = new FormaPagamentoModel();
                 datareader = sql.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (datareader.Read())
                 {
                     obj_formaPgto.FormaPgtoID = Convert.ToInt32(datareader["FormaPgtoID"]);
-                    obj_formaPgto.NomeFormaPgto = datareader["FormaPgto"].ToString();
+                    obj_formaPgto.NomeFormaPagamento = datareader["NomeFormaPagamento"].ToString();
                 }
                 return obj_formaPgto;
             }

@@ -149,7 +149,7 @@ namespace GVC.View
 
             dgvContasAReceber.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "FormaPgto",
+                DataPropertyName = "NomeFormaPagamento",
                 HeaderText = "Forma Pgto",
                 Width = 120,
                 ValueType = typeof(string)
@@ -971,10 +971,10 @@ namespace GVC.View
             pp.ParcelaID,
             pp.DataPagamento,
             pp.ValorPago,
-            fp.FormaPgto AS FormaPagamento,
+            fp.NomeFormaPagamento AS NomeFormaPagamento,
             pp.Observacao
         FROM PagamentosParciais pp
-        LEFT JOIN FormaPgto fp ON fp.FormaPgtoID = pp.FormaPgtoID
+        LEFT JOIN FormaPagamento fp ON fp.FormaPgtoID = pp.FormaPgtoID
         WHERE pp.ParcelaID IN @ids";
 
             return conn.Query<PagamentoExtratoModel>(sql, new { ids }).ToList();

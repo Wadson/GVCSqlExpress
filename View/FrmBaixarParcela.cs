@@ -351,11 +351,11 @@ namespace GVC.View
         }
         private void CarregarFormasPagamento()
         {
-            var dal = new FormaPgtoDal();
+            var dal = new FormaPagamentoDal();
             var formas = dal.Listar(); // deve retornar ID + Nome
 
             
-            cmbFormaPagamento.DisplayMember = "FormaPgto";
+            cmbFormaPagamento.DisplayMember = "NomeFormaPagamento";
             cmbFormaPagamento.ValueMember = "FormaPgtoID";
             cmbFormaPagamento.DataSource = formas;
 

@@ -1355,17 +1355,18 @@ namespace GVC.UTIL{
                 cmb.SelectedIndex = 0;
 
                 string query = @"
-            SELECT FormaPgtoID, FormaPgto 
-            FROM FormaPgto 
+            SELECT FormaPgtoID, NomeFormaPagamento 
+            FROM FormaPagamento 
+            WHERE Ativo = 1 
             ORDER BY 
                 CASE 
-                    WHEN FormaPgto LIKE 'Dinheiro%' THEN 1
-                    WHEN FormaPgto LIKE 'PIX%' THEN 2
-                    WHEN FormaPgto LIKE 'Cartão Débito%' THEN 3
-                    WHEN FormaPgto LIKE 'Cartão Crédito%' THEN 4
+                    WHEN NomeFormaPagamento LIKE 'Dinheiro%' THEN 1
+                    WHEN NomeFormaPagamento LIKE 'PIX%' THEN 2
+                    WHEN NomeFormaPagamento LIKE 'Cartão Débito%' THEN 3
+                    WHEN NomeFormaPagamento LIKE 'Cartão Crédito%' THEN 4
                     ELSE 5
                 END,
-                FormaPgto";
+                NomeFormaPagamento";
 
                 using (var connection = Conexao.Conex())
                 using (var command = new SqlCommand(query, connection))
@@ -1378,14 +1379,14 @@ namespace GVC.UTIL{
                         {
                             cmb.Items.Add(new FormaPagamentoItem(
                                 Convert.ToInt32(reader["FormaPgtoID"]),
-                                reader["FormaPgto"].ToString()
+                                reader["NomeFormaPagamento"].ToString()
                             ));
                         }
                     }
                 }
 
                 // Exibe Descricao corretamente
-                cmb.DisplayMember = nameof(FormaPagamentoItem.Descricao);
+                cmb.DisplayMember = nameof(FormaPagamentoItem.NomeFormaPagamento);
             }
             catch (Exception ex)
             {
@@ -1405,15 +1406,25 @@ namespace GVC.UTIL{
     /// </summary>
     public class FormaPagamentoItem
     {
-        public int Id { get; }
-        public string Descricao { get; }
+        // Campos iguais aos da tabela FormaPagamento
+        public int FormaPgtoID { get; set; }
+        public string NomeFormaPagamento { get; set; }
+        public bool Ativo { get; set; } = true;
 
-        public FormaPagamentoItem(int id, string descricao)
+        // Construtor opcional
+        public FormaPagamentoItem() { }
+
+        public FormaPagamentoItem(int formaPgtoID, string nomeFormaPagamento, bool ativo = true)
         {
-            Id = id;
-            Descricao = descricao;
+            FormaPgtoID = formaPgtoID;
+            NomeFormaPagamento = nomeFormaPagamento;
+            Ativo = ativo;
         }
-        public override string ToString() => Descricao;
+
+        // Mostra no ComboBox o nome da forma de pagamento
+        public override string ToString() => NomeFormaPagamento;
+
+        // Método para salvar nomes dos controles de um form
         public static void SalvarNomesControles(Form form, string caminhoArquivo)
         {
             var nomes = new List<string>();
@@ -1422,6 +1433,7 @@ namespace GVC.UTIL{
             // Salva todos os nomes no arquivo .txt
             File.WriteAllLines(caminhoArquivo, nomes);
         }
+
         private static void PercorrerControles(Control.ControlCollection controls, List<string> nomes)
         {
             foreach (Control ctrl in controls)
@@ -1435,5 +1447,6 @@ namespace GVC.UTIL{
             }
         }
     }
+
 
 }

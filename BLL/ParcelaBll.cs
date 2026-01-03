@@ -82,22 +82,21 @@ namespace GVC.BLL
         // ==========================================================
         public void BaixarParcelaTotal(long parcelaId)
         {
-            var parcela = _parcelaDal.BuscarPorId(parcelaId)
-                ?? throw new Exception("Parcela não encontrada.");
+            var parcela = _parcelaDal.BuscarPorId(parcelaId) ?? throw new Exception("Parcela não encontrada.");
 
             // Calcular o saldo restante em decimal
-            decimal totalDevido = (parcela.ValorParcela + parcela.Juros + parcela.Multa);
-            decimal valorRecebido = parcela.ValorRecebido;
-            decimal saldoRestante = totalDevido - valorRecebido;
+            decimal? totalDevido = parcela.ValorParcela + parcela.Juros + parcela.Multa;
+            decimal? valorRecebido = parcela.ValorRecebido;
+            decimal? saldoRestante = totalDevido - valorRecebido;
 
             if (saldoRestante <= 0)
                 return; // Já está quitada
 
             // Arredondar para evitar problemas de precisão
-            saldoRestante = Math.Round(saldoRestante, 2, MidpointRounding.AwayFromZero);
+            saldoRestante = Math.Round(saldoRestante ?? 0m, 2, MidpointRounding.AwayFromZero);
 
             // Inserir pagamento do saldo restante
-            _parcelaDal.BaixarParcela(parcelaId, saldoRestante, DateTime.Now);
+            _parcelaDal.BaixarParcela(parcelaId, (decimal)saldoRestante, DateTime.Now);
 
             // 🧾 RECIBO AUTOMÁTICO
             GerarReciboAutomatico(parcelaId);
@@ -120,8 +119,8 @@ namespace GVC.BLL
             var parcela = _parcelaDal.BuscarPorId(parcelaId)
                 ?? throw new Exception("Parcela não encontrada.");
 
-            decimal totalDevido = parcela.ValorParcela + parcela.Juros + parcela.Multa;
-            decimal saldoAtual = totalDevido - parcela.ValorRecebido;
+            decimal? totalDevido = parcela.ValorParcela + parcela.Juros + parcela.Multa;
+            decimal? saldoAtual = totalDevido - parcela.ValorRecebido;
 
             valorPago = Math.Round(valorPago, 2, MidpointRounding.AwayFromZero);
 
@@ -298,20 +297,19 @@ WHERE ParcelaID = @ParcelaID";
                 var parcela = _parcelaDal.BuscarPorId(parcelaId)
                     ?? throw new Exception("Parcela não encontrada.");
 
-                decimal estornoNestaParcela =
-                    Math.Min(parcela.ValorRecebido, valorRestante);
+                decimal? estornoNestaParcela = Math.Min((decimal)parcela.ValorRecebido, valorRestante);
 
                 if (estornoNestaParcela <= 0)
                     continue;
 
                 _parcelaDal.EstornarPagamento(
                     (long)parcelaId,
-                    estornoNestaParcela,
+                    (decimal)estornoNestaParcela,
                     DateTime.Now,
                     motivo
                 );
 
-                valorRestante -= estornoNestaParcela;
+                valorRestante -= (decimal)estornoNestaParcela;
             }
 
             // 🔁 Recalcula status da venda UMA VEZ

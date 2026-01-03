@@ -28,8 +28,8 @@ namespace GVC.BLL
             if (parcelas == null || parcelas.Count == 0)
                 return EnumStatusVenda.Aberta.ToString();
 
-            decimal total = parcelas.Sum(p => p.ValorParcela + p.Juros + p.Multa);
-            decimal recebido = parcelas.Sum(p => p.ValorRecebido);
+            decimal? total = parcelas.Sum(p => p.ValorParcela + p.Juros + p.Multa);
+            decimal? recebido = parcelas.Sum(p => p.ValorRecebido);
 
             if (recebido <= 0)
                 return EnumStatusVenda.Aberta.ToString();
@@ -39,7 +39,7 @@ namespace GVC.BLL
 
             return EnumStatusVenda.ParcialmentePago.ToString();
         }
-        public int SalvarVendaCompleta( VendaModel venda, List<ItemVendaModel> itens, List<ParcelaModel>? parcelas = null )
+        public int SalvarVendaCompleta(VendaModel venda, List<ItemVendaModel> itens, List<ParcelaModel>? parcelas = null)
         {
             if (venda == null)
                 throw new ArgumentNullException(nameof(venda));
@@ -55,20 +55,19 @@ namespace GVC.BLL
 
             foreach (var item in itens)
             {
-                decimal preco = item.PrecoUnitario;
-                decimal descontoItem = item.DescontoItem ?? 0m;
+                if (item.DescontoItem < 0m)
+                    item.DescontoItem = 0m;
 
-                if (descontoItem < 0m) 
-                    descontoItem = 0m; item.Subtotal = Math.Max( 0m, (item.Quantidade * preco) - descontoItem);
-
-                if (item.Quantidade <= 0) 
+                if (item.Quantidade <= 0)
                     throw new Exception("Item com quantidade inválida.");
 
                 if (item.PrecoUnitario < 0)
                     throw new Exception("Item com preço negativo não permitido.");
+
+                // ✅ Subtotal calculado automaticamente pelo model
             }
 
-            decimal totalItens = itens.Sum(i => i.Subtotal ?? 0m);
+            decimal totalItens = itens.Sum(i => i.Subtotal);
             venda.ValorTotal = Math.Max(0m, totalItens - descontoVenda);
             venda.Desconto = descontoVenda;
 
@@ -86,6 +85,7 @@ namespace GVC.BLL
             // ====================
             return vendaDAL.AddVendaCompleta(venda, itens, parcelas);
         }
+
 
         public void ExcluirVenda(int vendaID)
         {
@@ -114,22 +114,20 @@ namespace GVC.BLL
             return vendaDAL.ObterVendaPorId(vendaId);
         }
 
-        public string CalcularStatusVenda(List<ParcelaModel> parcelas)
+        public EnumStatusVenda CalcularStatusVenda(List<ParcelaModel> parcelas)
         {
             if (parcelas == null || parcelas.Count == 0)
-                return EnumStatusVenda.Aberta.ToString();
+                return EnumStatusVenda.Concluida;
 
-            decimal total = parcelas.Sum(p => p.ValorParcela + p.Juros + p.Multa);
-            decimal recebido = parcelas.Sum(p => p.ValorRecebido);
+            if (parcelas.All(p => p.Status == EnumStatusParcela.Pago))
+                return EnumStatusVenda.Concluida;
 
-            if (recebido <= 0)
-                return EnumStatusVenda.Aberta.ToString();
+            if (parcelas.Any(p => p.Status == EnumStatusParcela.Pago))
+                return EnumStatusVenda.ParcialmentePago;
 
-            if (recebido >= total)
-                return EnumStatusVenda.Concluida.ToString();
-
-            return EnumStatusVenda.ParcialmentePago.ToString();
+            return EnumStatusVenda.AguardandoPagamento;
         }
+
         public void CancelarVenda(long vendaId, string motivo)
         {
             if (string.IsNullOrWhiteSpace(motivo))
@@ -154,15 +152,16 @@ namespace GVC.BLL
 
                 foreach (var p in parcelas)
                 {
-                    if (p.ValorRecebido > 0)
+                    if ((p.ValorRecebido ?? 0m) > 0m)
                     {
                         parcelaBll.EstornarPagamento(
                             p.ParcelaID,
-                            p.ValorRecebido,
+                            p.ValorRecebido ?? 0m,
                             motivo
                         );
                     }
                 }
+
 
                 // ============================
                 // 2️⃣ CANCELAR PARCELAS

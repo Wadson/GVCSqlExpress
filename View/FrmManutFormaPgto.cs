@@ -18,7 +18,7 @@ namespace GVC.View
     public partial class FrmManutFormaPgto : KryptonForm
     {
         private bool _gridConfigurado = false; //Faz parte da configuração do grid
-        private readonly FormaPgtoBLL _formaPgtoBll = new FormaPgtoBLL();
+        private readonly FormaPagamentoBLL _formaPgtoBll = new FormaPagamentoBLL();
         public FrmManutFormaPgto(string statusOperacao)
         {           
             InitializeComponent();
@@ -32,7 +32,7 @@ namespace GVC.View
         }
         public void ListarFormaPgto()
         {
-            FormaPgtoBLL bll = new FormaPgtoBLL();
+            FormaPagamentoBLL bll = new FormaPagamentoBLL();
 
             dgvFormaPgto.SuspendLayout();
             dgvFormaPgto.DataSource = bll.Listar();
@@ -59,17 +59,17 @@ namespace GVC.View
         private void PersonalizarDataGridView()
         {
             // Campos que EXPANDEM
-            ConfigurarColunaFill("FormaPgto", 250, 1);
+            ConfigurarColunaFill("NomeFormaPagamento", 250, 1);
           
             // Cabeçalhos
             dgvFormaPgto.Columns["FormaPgtoID"].HeaderText = "Código";
-            dgvFormaPgto.Columns["FormaPgto"].HeaderText = "Forma de Pagamento";
+            dgvFormaPgto.Columns["NomeFormaPagamento"].HeaderText = "Forma de Pagamento";
 
             // Larguras FIXAS
             dgvFormaPgto.Columns["FormaPgtoID"].Width = 60;
 
             // Campos que EXPANDEM
-            dgvFormaPgto.Columns["FormaPgto"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvFormaPgto.Columns["NomeFormaPagamento"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
 
             dgvFormaPgto.Columns["FormaPgtoID"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -157,7 +157,7 @@ namespace GVC.View
         {
             string texto = txtPesquisa.Text.Trim();
 
-            FormaPgtoDal dao = new FormaPgtoDal();
+            FormaPagamentoDal dao = new FormaPagamentoDal();
             DataTable dt;
 
             if (string.IsNullOrEmpty(texto))

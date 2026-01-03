@@ -86,17 +86,14 @@ namespace GVC.DTO
 
             foreach (var p in parcelas)
             {
-                p.Saldo = CalcularSaldoParcela(p.ValorParcela, p.ValorRecebido);
+                p.Saldo = CalcularSaldoParcela(p.ValorParcela, (decimal)p.ValorRecebido);
             }
         }
 
         // ================================
         // 1️⃣ APLICA REGRAS FINANCEIRAS
         // ================================
-        public void ProcessarFinanceiroVenda(
-     VendaModel venda,
-     List<ParcelaModel> parcelas
- )
+        public void ProcessarFinanceiroVenda( VendaModel venda,List<ParcelaModel> parcelas)
         {
             if (parcelas == null || !parcelas.Any())
                 throw new Exception("Venda sem parcelas.");
@@ -116,24 +113,26 @@ namespace GVC.DTO
             foreach (var p in parcelas)
             {
                 p.ValorParcela = Math.Max(0m, p.ValorParcela);
-                p.ValorRecebido = Math.Max(0m, p.ValorRecebido);
-                p.Juros = Math.Max(0m, p.Juros);
-                p.Multa = Math.Max(0m, p.Multa);
+
+                p.ValorRecebido = Math.Max(0m, p.ValorRecebido ?? 0m);
+                p.Juros = Math.Max(0m, p.Juros ?? 0m);
+                p.Multa = Math.Max(0m, p.Multa ?? 0m);
 
                 if (p.Status == EnumStatusParcela.Pago)
                 {
                     if (p.DataPagamento == null)
                         p.DataPagamento = DateTime.Now;
 
-                    p.ValorRecebido = p.ValorParcela + p.Juros + p.Multa;
+                    p.ValorRecebido = p.ValorParcela + (p.Juros ?? 0m) + (p.Multa ?? 0m);
                 }
 
                 p.Saldo = Math.Max(
                     0m,
-                    (p.ValorParcela + p.Juros + p.Multa) - p.ValorRecebido
+                    (p.ValorParcela + (p.Juros ?? 0m) + (p.Multa ?? 0m)) - (p.ValorRecebido ?? 0m)
                 );
             }
         }
+
 
 
         // ================================
@@ -149,12 +148,12 @@ namespace GVC.DTO
         // 4️⃣ TOTAL DAS PARCELAS
         // ================================
         private void ValidarTotalParcelas(
-            decimal valorVenda,
-            List<ParcelaModel> parcelas
-        )
+    decimal valorVenda,
+    List<ParcelaModel> parcelas
+)
         {
             decimal totalParcelas = parcelas.Sum(p =>
-                p.ValorParcela + p.Juros + p.Multa
+                p.ValorParcela + (p.Juros ?? 0m) + (p.Multa ?? 0m)
             );
 
             if (Math.Abs(totalParcelas - valorVenda) > 0.01m)
@@ -165,6 +164,7 @@ namespace GVC.DTO
                 );
             }
         }
+
 
         // ================================
         // 5️⃣ STATUS DA VENDA
@@ -179,7 +179,16 @@ namespace GVC.DTO
 
             return EnumStatusVenda.AguardandoPagamento;
         }
-
+        public List<ParcelaModel> GerarParcelaQuitada(decimal valor)
+        {
+            return new List<ParcelaModel> { new ParcelaModel{
+            NumeroParcela = 1,
+            DataVencimento = DateTime.Today,
+            ValorParcela = valor,
+            ValorRecebido = valor,
+            DataPagamento = DateTime.Now,
+            Status = EnumStatusParcela.Pago } };
+        }
     }
 
 }

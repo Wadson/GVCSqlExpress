@@ -1,0 +1,212 @@
+// 1️⃣ ATUALIZA VALOR RECEBIDO (Pagamento Parcial)
+
+ALTER TRIGGER tr_atualiza_apos_pagamento_parcial
+ON PagamentosParciais
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE p
+    SET p.ValorRecebido = ISNULL(p.ValorRecebido, 0) + i.ValorPago
+    FROM Parcela p
+    INNER JOIN inserted i ON p.ParcelaID = i.ParcelaID
+    WHERE p.Status <> 'Cancelada';
+END;
+GO
+// 2️⃣ VALIDA VALOR RECEBIDO (Não exceder total)
+
+ALTER TRIGGER tr_valida_valor_recebido
+ON Parcela
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (
+        SELECT 1
+        FROM inserted i
+        WHERE i.ValorRecebido >
+              (i.ValorParcela + ISNULL(i.Juros,0) + ISNULL(i.Multa,0)) + 0.01
+          AND i.Status <> 'Cancelada'
+    )
+    BEGIN
+        RAISERROR('ERRO: Valor recebido excede o total da parcela.', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END;
+GO
+
+// 3️⃣ ATUALIZA STATUS DA PARCELA (Pendente / Parcial / Pago / Atrasada)
+
+ALTER TRIGGER tr_atualiza_status_parcela
+ON Parcela
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE p
+    SET
+        p.Status =
+            CASE
+                WHEN p.Status = 'Cancelada' THEN 'Cancelada'
+
+                WHEN i.ValorRecebido >=
+                     (i.ValorParcela + ISNULL(i.Juros,0) + ISNULL(i.Multa,0)) - 0.01
+                    THEN 'Pago'
+
+                WHEN i.ValorRecebido > 0
+                    THEN 'Parcialmente Pago'
+
+                WHEN i.DataVencimento < CAST(GETDATE() AS DATE)
+                    THEN 'Atrasada'
+
+                ELSE 'Pendente'
+            END,
+
+        p.DataPagamento =
+            CASE
+                WHEN i.ValorRecebido >=
+                     (i.ValorParcela + ISNULL(i.Juros,0) + ISNULL(i.Multa,0)) - 0.01
+                     AND p.DataPagamento IS NULL
+                    THEN CAST(GETDATE() AS DATE)
+
+                WHEN i.ValorRecebido = 0
+                    THEN NULL
+
+                ELSE p.DataPagamento
+            END
+    FROM Parcela p
+    INNER JOIN inserted i ON p.ParcelaID = i.ParcelaID
+    WHERE
+        (i.ValorRecebido <> ISNULL((SELECT d.ValorRecebido FROM deleted d WHERE d.ParcelaID = i.ParcelaID),0))
+        OR (i.DataVencimento <> (SELECT d.DataVencimento FROM deleted d WHERE d.ParcelaID = i.ParcelaID));
+END;
+GO
+
+// 4️⃣ ATUALIZA STATUS DA VENDA (AGREGADO CORRETO)
+
+ALTER TRIGGER tr_atualiza_status_venda
+ON Parcela
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    ;WITH StatusVendaCalc AS (
+        SELECT
+            p.VendaID,
+            CASE
+                WHEN COUNT(*) = COUNT(CASE WHEN p.Status = 'Cancelada' THEN 1 END)
+                    THEN 'Cancelada'
+
+                WHEN COUNT(*) = COUNT(CASE WHEN p.Status = 'Pago' THEN 1 END)
+                    THEN 'Concluída'
+
+                WHEN COUNT(CASE WHEN p.Status = 'Parcialmente Pago' THEN 1 END) > 0
+                  OR (
+                      COUNT(CASE WHEN p.Status = 'Pago' THEN 1 END) > 0
+                  AND COUNT(CASE WHEN p.Status IN ('Pendente','Atrasada') THEN 1 END) > 0
+                  )
+                    THEN 'Parcialmente Pago'
+
+                WHEN COUNT(CASE WHEN p.Status = 'Atrasada' THEN 1 END) > 0
+                    THEN 'Aguardando Pagamento'
+
+                ELSE 'Aguardando Pagamento'
+            END AS NovoStatus
+        FROM Parcela p
+        WHERE p.VendaID IN (SELECT DISTINCT VendaID FROM inserted)
+        GROUP BY p.VendaID
+    )
+    UPDATE v
+    SET v.StatusVenda = s.NovoStatus
+    FROM Venda v
+    INNER JOIN StatusVendaCalc s ON v.VendaID = s.VendaID
+    WHERE v.StatusVenda <> s.NovoStatus;
+END;
+GO
+
+5️⃣ ATUALIZA DATA DA ÚLTIMA COMPRA DO CLIENTE
+
+ALTER TRIGGER tr_atualiza_ultima_compra_cliente
+ON Venda
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE c
+    SET c.DataUltimaCompra = i.DataVenda
+    FROM Clientes c
+    INNER JOIN inserted i ON c.ClienteID = i.ClienteID;
+END;
+GO
+
+6️⃣ CALCULA SUBTOTAL DO ITEM DA VENDA
+
+ALTER TRIGGER tr_calcular_subtotal_itemvenda
+ON ItemVenda
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE iv
+    SET iv.Subtotal =
+        CASE
+            WHEN (i.Quantidade * i.PrecoUnitario) - ISNULL(i.DescontoItem,0) < 0
+                THEN 0
+            ELSE (i.Quantidade * i.PrecoUnitario) - ISNULL(i.DescontoItem,0)
+        END
+    FROM ItemVenda iv
+    INNER JOIN inserted i ON iv.ItemVendaID = i.ItemVendaID;
+END;
+GO
+
+7️⃣ ATUALIZA STATUS DO PRODUTO POR ESTOQUE
+
+ALTER TRIGGER tr_atualiza_status_por_estoque
+ON Produtos
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE p
+    SET p.Status =
+        CASE
+            WHEN i.Estoque <= 0 THEN 'Indisponível'
+            ELSE 'Disponível'
+        END
+    FROM Produtos p
+    INNER JOIN inserted i ON p.ProdutoID = i.ProdutoID
+    WHERE p.Situacao = 'Ativo';
+END;
+GO
+
+8️⃣ VALIDA DATA DE VALIDADE DO PRODUTO
+
+ALTER TRIGGER tr_valida_validade_produto
+ON Produtos
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (
+        SELECT 1
+        FROM inserted
+        WHERE DataValidade IS NOT NULL
+          AND DataValidade < CAST(GETDATE() AS DATE)
+    )
+    BEGIN
+        RAISERROR('AVISO: Produto com data de validade vencida.', 10, 1);
+    END
+END;
+GO
+
+
+
+

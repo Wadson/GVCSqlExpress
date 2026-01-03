@@ -43,7 +43,7 @@
             label3 = new Label();
             lblProduto = new Label();
             txtQuantidade = new Krypton.Toolkit.KryptonTextBox();
-            lblSubTotal = new Label();
+            lblRotuloSubTotal = new Label();
             btnFinalizarVenda = new Krypton.Toolkit.KryptonButton();
             kryptonLabel5 = new Krypton.Toolkit.KryptonLabel();
             kryptonLabel6 = new Krypton.Toolkit.KryptonLabel();
@@ -62,12 +62,13 @@
             pnlResumo = new Krypton.Toolkit.KryptonPanel();
             txtTotalGeral = new Label();
             lblTotal = new Label();
-            txtSubTotal = new Label();
+            lblSubTotal = new Label();
             txtTotalItens = new Label();
             lblTotalItens = new Label();
             kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(components);
             flowLayoutPanel1 = new FlowLayoutPanel();
             btnSair = new Krypton.Toolkit.KryptonButton();
+            flowLayoutPanel2 = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)pnlHeader).BeginInit();
             pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvItensVenda).BeginInit();
@@ -77,6 +78,7 @@
             ((System.ComponentModel.ISupportInitialize)pnlResumo).BeginInit();
             pnlResumo.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
+            flowLayoutPanel2.SuspendLayout();
             SuspendLayout();
             // 
             // txtClienteBuscar
@@ -345,25 +347,25 @@
             txtQuantidade.TextAlign = HorizontalAlignment.Center;
             txtQuantidade.KeyDown += txtQuantidade_KeyDown;
             // 
-            // lblSubTotal
+            // lblRotuloSubTotal
             // 
-            lblSubTotal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblSubTotal.AutoSize = true;
-            lblSubTotal.BackColor = Color.Transparent;
-            lblSubTotal.Font = new Font("Segoe UI", 12F);
-            lblSubTotal.ForeColor = Color.FromArgb(44, 62, 80);
-            lblSubTotal.Location = new Point(305, 4);
-            lblSubTotal.Name = "lblSubTotal";
-            lblSubTotal.Size = new Size(72, 21);
-            lblSubTotal.TabIndex = 1030;
-            lblSubTotal.Text = "SubTotal:";
-            lblSubTotal.TextAlign = ContentAlignment.MiddleCenter;
+            lblRotuloSubTotal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblRotuloSubTotal.AutoSize = true;
+            lblRotuloSubTotal.BackColor = Color.Transparent;
+            lblRotuloSubTotal.Font = new Font("Segoe UI", 12F);
+            lblRotuloSubTotal.ForeColor = Color.FromArgb(44, 62, 80);
+            lblRotuloSubTotal.Location = new Point(305, 4);
+            lblRotuloSubTotal.Name = "lblRotuloSubTotal";
+            lblRotuloSubTotal.Size = new Size(72, 21);
+            lblRotuloSubTotal.TabIndex = 1030;
+            lblRotuloSubTotal.Text = "SubTotal:";
+            lblRotuloSubTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // btnFinalizarVenda
             // 
             btnFinalizarVenda.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnFinalizarVenda.CornerRoundingRadius = 1F;
-            btnFinalizarVenda.Location = new Point(584, 3);
+            btnFinalizarVenda.Location = new Point(99, 3);
             btnFinalizarVenda.Name = "btnFinalizarVenda";
             btnFinalizarVenda.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnFinalizarVenda.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -375,7 +377,7 @@
             btnFinalizarVenda.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             btnFinalizarVenda.OverrideDefault.Border.Rounding = 20F;
             btnFinalizarVenda.OverrideDefault.Border.Width = 1;
-            btnFinalizarVenda.Size = new Size(110, 27);
+            btnFinalizarVenda.Size = new Size(90, 27);
             btnFinalizarVenda.StateCommon.Back.Color1 = Color.FromArgb(8, 142, 254);
             btnFinalizarVenda.StateCommon.Back.Color2 = Color.FromArgb(8, 142, 254);
             btnFinalizarVenda.StateCommon.Back.ColorAngle = 45F;
@@ -455,7 +457,7 @@
             // 
             btnNovaVenda.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnNovaVenda.CornerRoundingRadius = 1F;
-            btnNovaVenda.Location = new Point(478, 3);
+            btnNovaVenda.Location = new Point(3, 3);
             btnNovaVenda.Name = "btnNovaVenda";
             btnNovaVenda.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnNovaVenda.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -467,7 +469,7 @@
             btnNovaVenda.OverrideDefault.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
             btnNovaVenda.OverrideDefault.Border.Rounding = 20F;
             btnNovaVenda.OverrideDefault.Border.Width = 1;
-            btnNovaVenda.Size = new Size(100, 27);
+            btnNovaVenda.Size = new Size(90, 27);
             btnNovaVenda.StateCommon.Back.Color1 = Color.FromArgb(252, 252, 250);
             btnNovaVenda.StateCommon.Back.Color2 = Color.FromArgb(252, 252, 250);
             btnNovaVenda.StateCommon.Back.ColorAngle = 45F;
@@ -507,6 +509,7 @@
             btnNovaVenda.TabIndex = 1043;
             btnNovaVenda.TabStop = false;
             btnNovaVenda.Values.Text = "Nova Venda";
+            btnNovaVenda.Click += btnNovaVenda_Click;
             // 
             // kryptonLabel2
             // 
@@ -595,6 +598,7 @@
             dgvItensVenda.TabIndex = 1051;
             dgvItensVenda.TabStop = false;
             dgvItensVenda.CellContentClick += dgvItensVenda_CellContentClick;
+            dgvItensVenda.CellEndEdit += dgvItensVenda_CellEndEdit;
             // 
             // tlpMain
             // 
@@ -696,9 +700,9 @@
             // 
             pnlResumo.Controls.Add(txtTotalGeral);
             pnlResumo.Controls.Add(lblTotal);
-            pnlResumo.Controls.Add(txtSubTotal);
-            pnlResumo.Controls.Add(txtTotalItens);
             pnlResumo.Controls.Add(lblSubTotal);
+            pnlResumo.Controls.Add(txtTotalItens);
+            pnlResumo.Controls.Add(lblRotuloSubTotal);
             pnlResumo.Controls.Add(lblTotalItens);
             pnlResumo.Dock = DockStyle.Fill;
             pnlResumo.Location = new Point(3, 463);
@@ -735,19 +739,19 @@
             lblTotal.Text = "Total:";
             lblTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // txtSubTotal
+            // lblSubTotal
             // 
-            txtSubTotal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            txtSubTotal.AutoSize = true;
-            txtSubTotal.BackColor = Color.Transparent;
-            txtSubTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            txtSubTotal.ForeColor = Color.FromArgb(44, 62, 80);
-            txtSubTotal.Location = new Point(377, 5);
-            txtSubTotal.Name = "txtSubTotal";
-            txtSubTotal.Size = new Size(22, 21);
-            txtSubTotal.TabIndex = 1049;
-            txtSubTotal.Text = "--";
-            txtSubTotal.TextAlign = ContentAlignment.MiddleCenter;
+            lblSubTotal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblSubTotal.AutoSize = true;
+            lblSubTotal.BackColor = Color.Transparent;
+            lblSubTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblSubTotal.ForeColor = Color.FromArgb(44, 62, 80);
+            lblSubTotal.Location = new Point(377, 5);
+            lblSubTotal.Name = "lblSubTotal";
+            lblSubTotal.Size = new Size(22, 21);
+            lblSubTotal.TabIndex = 1049;
+            lblSubTotal.Text = "--";
+            lblSubTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // txtTotalItens
             // 
@@ -813,25 +817,22 @@
             // 
             // flowLayoutPanel1
             // 
+            flowLayoutPanel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             flowLayoutPanel1.Controls.Add(kryptonLabel1);
             flowLayoutPanel1.Controls.Add(kryptonLabel2);
             flowLayoutPanel1.Controls.Add(kryptonLabel3);
             flowLayoutPanel1.Controls.Add(kryptonLabel6);
             flowLayoutPanel1.Controls.Add(kryptonLabel5);
-            flowLayoutPanel1.Controls.Add(btnNovaVenda);
-            flowLayoutPanel1.Controls.Add(btnFinalizarVenda);
-            flowLayoutPanel1.Controls.Add(btnSair);
-            flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.Location = new Point(0, 594);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(812, 32);
+            flowLayoutPanel1.Size = new Size(484, 32);
             flowLayoutPanel1.TabIndex = 1050;
             // 
             // btnSair
             // 
             btnSair.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSair.CornerRoundingRadius = 1F;
-            btnSair.Location = new Point(700, 3);
+            btnSair.Location = new Point(195, 3);
             btnSair.Name = "btnSair";
             btnSair.OverrideDefault.Back.Color1 = Color.FromArgb(6, 174, 244);
             btnSair.OverrideDefault.Back.Color2 = Color.FromArgb(8, 142, 254);
@@ -885,12 +886,24 @@
             btnSair.Values.Text = "Sair";
             btnSair.Click += btnSair_Click;
             // 
+            // flowLayoutPanel2
+            // 
+            flowLayoutPanel2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            flowLayoutPanel2.Controls.Add(btnNovaVenda);
+            flowLayoutPanel2.Controls.Add(btnFinalizarVenda);
+            flowLayoutPanel2.Controls.Add(btnSair);
+            flowLayoutPanel2.Location = new Point(506, 594);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(303, 32);
+            flowLayoutPanel2.TabIndex = 1051;
+            // 
             // FrmPDVendas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(252, 252, 250);
             ClientSize = new Size(812, 626);
+            Controls.Add(flowLayoutPanel2);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(lblDesconto);
             Controls.Add(lblTotalLiquido);
@@ -923,6 +936,7 @@
             pnlResumo.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            flowLayoutPanel2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -940,7 +954,7 @@
         private Label label1;
         private Label label3;
         public Krypton.Toolkit.KryptonTextBox txtQuantidade;
-        private Label lblSubTotal;
+        private Label lblRotuloSubTotal;
         private Label lblProduto;
         public Krypton.Toolkit.KryptonButton btnFinalizarVenda;
         private Label lblVendedor;
@@ -961,11 +975,12 @@
         public Krypton.Toolkit.KryptonTextBox txtDataVenda;
         private Krypton.Toolkit.KryptonPanel pnlDadosVenda_pnlProdutosEntrada;
         private Krypton.Toolkit.KryptonPanel pnlResumo;
-        private Label txtSubTotal;
+        private Label lblSubTotal;
         private Label txtTotalItens;
         private Label txtTotalGeral;
         private Label lblTotal;
         private FlowLayoutPanel flowLayoutPanel1;
         public Krypton.Toolkit.KryptonButton btnSair;
+        private FlowLayoutPanel flowLayoutPanel2;
     }
 }

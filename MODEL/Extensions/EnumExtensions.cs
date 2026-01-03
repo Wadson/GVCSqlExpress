@@ -16,13 +16,10 @@ namespace GVC.MODEL.Extensions
         {
             return status switch
             {
-                EnumStatusVenda.Aberta => "Aberta",
-                EnumStatusVenda.EmAnalise => "Em Análise",
+                EnumStatusVenda.Aberta => "Aberta",              
                 EnumStatusVenda.AguardandoPagamento => "Aguardando Pagamento",
                 EnumStatusVenda.Concluida => "Concluída",
-                EnumStatusVenda.Cancelada => "Cancelada",
-                EnumStatusVenda.Devolvida => "Devolvida",
-                EnumStatusVenda.Expirada => "Expirada",
+                EnumStatusVenda.Cancelada => "Cancelada", 
                 EnumStatusVenda.ParcialmentePago => "Parcialmente Pago",
                 EnumStatusVenda.Suspensa => "Suspensa",
                 _ => throw new ArgumentOutOfRangeException()
@@ -36,13 +33,10 @@ namespace GVC.MODEL.Extensions
         {
             return status switch
             {
-                "Aberta" => EnumStatusVenda.Aberta,
-                "Em Análise" => EnumStatusVenda.EmAnalise,
+                "Aberta" => EnumStatusVenda.Aberta,               
                 "Aguardando Pagamento" => EnumStatusVenda.AguardandoPagamento,
                 "Concluída" => EnumStatusVenda.Concluida,
-                "Cancelada" => EnumStatusVenda.Cancelada,
-                "Devolvida" => EnumStatusVenda.Devolvida,
-                "Expirada" => EnumStatusVenda.Expirada,
+                "Cancelada" => EnumStatusVenda.Cancelada,              
                 "Parcialmente Pago" => EnumStatusVenda.ParcialmentePago,
                 "Suspensa" => EnumStatusVenda.Suspensa,
                 _ => throw new Exception($"Status de venda inválido: {status}")
@@ -56,12 +50,10 @@ namespace GVC.MODEL.Extensions
         {
             return status switch
             {
-                EnumStatusParcela.Aberta => "Aberta",
-                EnumStatusParcela.Atrasada => "Atrasada",
-                EnumStatusParcela.AguardandoPagamento => "Aguardando Pagamento",
+                EnumStatusParcela.Pendente => "Pendente",
+                EnumStatusParcela.Atrasada => "Atrasada",                
                 EnumStatusParcela.Pago => "Pago",
-                EnumStatusParcela.Cancelada => "Cancelada",
-                EnumStatusParcela.Devolvida => "Devolvida",
+                EnumStatusParcela.Cancelada => "Cancelada",              
                 EnumStatusParcela.ParcialmentePago => "Parcialmente Pago",
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -74,12 +66,10 @@ namespace GVC.MODEL.Extensions
         {
             return status switch
             {
-                "Aberta" => EnumStatusParcela.Aberta,
-                "Atrasada" => EnumStatusParcela.Atrasada,
-                "Aguardando Pagamento" => EnumStatusParcela.AguardandoPagamento,
+                "Aberta" => EnumStatusParcela.Pendente,
+                "Atrasada" => EnumStatusParcela.Atrasada,               
                 "Pago" => EnumStatusParcela.Pago,
-                "Cancelada" => EnumStatusParcela.Cancelada,
-                "Devolvida" => EnumStatusParcela.Devolvida,
+                "Cancelada" => EnumStatusParcela.Cancelada,              
                 "Parcialmente Pago" => EnumStatusParcela.ParcialmentePago,
                 _ => throw new Exception($"Status de parcela inválido: {status}")
             };

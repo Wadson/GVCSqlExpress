@@ -23,10 +23,10 @@ namespace GVC.View
     {
         public string StatusOperacao { get; set; } // "NOVO", "ALTERAR", "EXCLUSAO"
         public bool CarregandoDados { get; set; }
-        private readonly FormaPgtoBLL _formaPgtoBll = new FormaPgtoBLL();
-        private FormaPgtoDal _formaPgtoDal = new FormaPgtoDal();
+        private readonly FormaPagamentoBLL _formaPgtoBll = new FormaPagamentoBLL();
+        private FormaPagamentoDal _formaPgtoDal = new FormaPagamentoDal();
         public int FormaPgtoID { get; set; }
-        private readonly string QueryMaxId = "SELECT MAX(FormaPgtoID) FROM FormaPgto";
+        private readonly string QueryMaxId = "SELECT MAX(FormaPgtoID) FROM FormaPagamento";
         public bool HouveAlteracao { get; private set; } // indica se houve alteração nos dados atualiza o datagrid do FrmManutFormaPgto
 
 
@@ -52,12 +52,12 @@ namespace GVC.View
                 txtFormaPgtoID.Text = "0000";
             }
         }
-        private FormaPgtoModel MontarObjetoFormaPgto()
+        private FormaPagamentoModel MontarObjetoFormaPgto()
         {
-            var formapgto = new FormaPgtoModel
+            var formapgto = new FormaPagamentoModel
             {
-                FormaPgtoID = long.Parse(txtFormaPgtoID.Text),
-                NomeFormaPgto = txtFormaPgto.Text?.Trim(),
+                FormaPgtoID = int.Parse(txtFormaPgtoID.Text),
+                NomeFormaPagamento = txtFormaPgto.Text?.Trim(),
             };
 
             if (StatusOperacao == "NOVO")
@@ -282,7 +282,7 @@ namespace GVC.View
                 return;
 
             txtFormaPgtoID.Text = Utilitario.ZerosEsquerda((int)formapgto.FormaPgtoID, 4);
-            txtFormaPgto.Text = formapgto.NomeFormaPgto;
+            txtFormaPgto.Text = formapgto.NomeFormaPagamento;
             
         }
         private void FrmCadFormaPgto_Load(object sender, EventArgs e)

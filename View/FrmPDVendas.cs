@@ -8,6 +8,7 @@ using GVC.UTIL;
 using Krypton.Toolkit;
 using Microsoft.Data;
 using Microsoft.Data.SqlClient;
+using SistemaVendas.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,13 +29,9 @@ namespace GVC.View
         private readonly ModoVenda _modo;
         private readonly long _vendaId;
         public long VendaID { get; private set; }
-
         private bool _clienteFoiSelecionado = false;
         private bool _ignorarEventosBusca = false;
-
         public long VendedorID { get; set; }
-
-
         public long ClienteID { get; set; }
         public long ProdutoID { get; set; }
         public string NomeCliente { get; set; }
@@ -45,7 +42,6 @@ namespace GVC.View
         private decimal _subtotal = 0m;
         private decimal _desconto = 0m;
         private decimal _valorTotal = 0m;
-
         // ----------------------
         // Itens e Parcelas
         // ----------------------
@@ -64,8 +60,20 @@ namespace GVC.View
         private FrmLocalizarCliente frmPesquisaCliente;
         private bool formularioPesquisaAberto = false;
         private bool _ignorandoBuscar = false;
-
         private readonly string QueryVenda = "SELECT MAX(VendaID) FROM Venda";
+
+
+        private enum EstadoVenda
+        {
+            Inicial,              // Tela recém aberta
+            ClienteSelecionado,   // Cliente escolhido
+            VendedorSelecionado,  // Vendedor escolhido
+            ComItens,             // Tem pelo menos 1 item no grid
+            ProntaParaFinalizar,  // Já passou pela tela de finalização
+            Finalizada            // Venda gravada com sucesso
+        }
+        private EstadoVenda _estadoVenda = EstadoVenda.Inicial;
+
 
         public FrmPDVendas()// NOVA VENDA
         {
@@ -76,7 +84,7 @@ namespace GVC.View
 
             InicializarFormulario(); // <<< OBRIGATÓRIO
 
-            dgvItensVenda.CellEndEdit += dgvitens_CellEndEdit;
+            dgvItensVenda.CellEndEdit += dgvItensVenda_CellEndEdit;
             this.Text = "Frente de Caixa";
             this.StateCommon.Header.Content.ShortText.Color1 = Color.Red;
             this.StateCommon.Header.Content.ShortText.Color2 = Color.White;
@@ -110,38 +118,148 @@ namespace GVC.View
             txtPrecoUnitario.Text = "0,00";
             AtualizarTotais();
         }
-
-        private void AtualizarContadorItens()
+        private void AtualizarEstadoTela()
         {
-            int totalItens = _itensBinding.Count;
-            txtTotalItens.Text = totalItens.ToString();
+            // Regra de ouro: desabilita tudo primeiro
+            txtClienteBuscar.Enabled = false;
+            txtVendedorBuscar.Enabled = false;
+            txtProdutoBuscar.Enabled = false;
+            dgvItensVenda.Enabled = false;
+
+            btnNovaVenda.Enabled = false;
+            btnFinalizarVenda.Enabled = false;
+            btnSair.Enabled = true;
+
+            switch (_estadoVenda)
+            {
+                case EstadoVenda.Inicial:
+                    txtClienteBuscar.Enabled = true;
+                    if (txtClienteBuscar.CanFocus)
+                    {
+                        txtClienteBuscar.Focus();
+                        txtClienteBuscar.SelectAll();
+                    }
+                    break;
+
+                case EstadoVenda.ClienteSelecionado:
+                    txtClienteBuscar.Enabled = true;     // permite trocar cliente
+                    txtVendedorBuscar.Enabled = true;
+                    if (txtVendedorBuscar.CanFocus)
+                    {
+                        txtVendedorBuscar.Focus();
+                        txtVendedorBuscar.SelectAll();
+                    }
+                    break;
+
+                case EstadoVenda.VendedorSelecionado:
+                    txtClienteBuscar.Enabled = true;
+                    txtVendedorBuscar.Enabled = true;
+                    txtProdutoBuscar.Enabled = true;
+                    if (txtProdutoBuscar.CanFocus)
+                    {
+                        txtProdutoBuscar.Focus();
+                        txtProdutoBuscar.SelectAll();
+                    }
+                    break;
+
+                case EstadoVenda.ComItens:
+                    txtClienteBuscar.Enabled = true;
+                    txtVendedorBuscar.Enabled = true;
+                    txtProdutoBuscar.Enabled = true;
+                    dgvItensVenda.Enabled = true;
+                    btnFinalizarVenda.Enabled = true;   // Libera F12 ou botão de finalizar
+                    break;
+
+                case EstadoVenda.ProntaParaFinalizar:
+                    txtClienteBuscar.Enabled = true;
+                    txtVendedorBuscar.Enabled = true;
+                    txtProdutoBuscar.Enabled = true;
+                    dgvItensVenda.Enabled = true;
+                    btnFinalizarVenda.Enabled = true;
+                    btnNovaVenda.Enabled = true;        // Permite iniciar nova venda
+                    break;
+
+                case EstadoVenda.Finalizada:
+                    // Tudo bloqueado, exceto nova venda e sair
+                    btnNovaVenda.Enabled = true;
+                    btnSair.Enabled = true;
+                    break;
+            }
         }
+               
+
+        // Chame este método sempre que adicionar ou remover um item do grid
+       
+
+        // Captura F12 para abrir tela de finalização
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.F12 && _estadoVenda >= EstadoVenda.ComItens)
+            {
+                // Apenas executa o mesmo método que o botão usa — NÃO abre o form aqui manualmente
+                FinalizarVenda();
+                return true; // Impede que a tecla F12 faça outro comportamento padrão
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void FrmPDVendas_Load(object sender, EventArgs e)
         {
-            txtProdutoBuscar.Enabled = true;
+            // Permite capturar teclas como F12 no form
             this.KeyPreview = true;
 
+            // 1. Define o estado inicial ANTES de tudo
+            _estadoVenda = EstadoVenda.Inicial;
+
+            // 2. Configura o BindingList e o grid
             _itensBinding = new BindingList<ItemVendaModel>();
-            _itensBinding.ListChanged += (sender, args) => AtualizarContadorItens();
-            dgvItensVenda.DataSource = _itensBinding;
 
-
-            if (_modo == ModoVenda.Edicao)
+            // Evento que monitora adição/remoção de itens
+            _itensBinding.ListChanged += (s, a) =>
             {
-                AjustarCamposEdicao();
+                if (_itensBinding.Count > 0)
+                {
+                    if (_estadoVenda < EstadoVenda.ComItens)
+                        _estadoVenda = EstadoVenda.ComItens;
+                }
+                else
+                {
+                    // Se esvaziou o grid, volta para o estado anterior correto
+                    if (_estadoVenda >= EstadoVenda.ComItens)
+                        _estadoVenda = EstadoVenda.VendedorSelecionado;
+                }
 
-                this.Text = $"Alterando Venda Nº {_vendaId}";
-                //btnSalvarVenda.Text = "Salvar Alterações";
-            }
-            else
-            {
-                int vendaID = Utilitario.ProximoId(QueryVenda);
-                txtVendaID.Text = Utilitario.ZerosEsquerda(vendaID, 4);
-                txtDataVenda.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            }
+                // IMPORTANTE: Atualiza a tela sempre que a lista mudar
+                AtualizarEstadoTela();
+            };
+
+            _itensBindingSource.DataSource = _itensBinding;
+            dgvItensVenda.DataSource = _itensBindingSource;
+
+            // 3. Configurações iniciais para nova venda
             if (_modo == ModoVenda.Nova)
             {
-                //EstadoInicial();
+                int proximaVendaID = Utilitario.ProximoId(QueryVenda);
+                txtVendaID.Text = Utilitario.ZerosEsquerda(proximaVendaID, 4);
+                txtDataVenda.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            }
+            else if (_modo == ModoVenda.Edicao)
+            {
+                // CarregarVenda(); // descomente quando implementar
+                AjustarCamposEdicao();
+                this.Text = $"Alterando Venda Nº {_vendaId}";
+                // btnFinalizarVenda.Text = "Salvar Alterações";
+            }
+
+            // 4. Finalmente: atualiza a tela e coloca foco no primeiro campo
+            AtualizarEstadoTela();
+
+            // Garante o foco no campo de busca de cliente
+            if (txtClienteBuscar.CanFocus)
+            {
+                txtClienteBuscar.Focus();
+                txtClienteBuscar.SelectAll();
             }
         }
         #endregion
@@ -296,23 +414,45 @@ namespace GVC.View
         {
             if (ProdutoID <= 0)
             {
-                Utilitario.Mensagens.Aviso("Ops! Esse produto não existe no cadastro. Deseja tentar outro?");
+                Utilitario.Mensagens.Aviso("Produto inválido.");
                 return;
             }
-
-            if (!decimal.TryParse(txtPrecoUnitario.Text, out decimal preco))
-                return;
 
             if (!int.TryParse(txtQuantidade.Text, out int qtd) || qtd <= 0)
                 return;
 
-            // Busca o item na lista
+            if (!decimal.TryParse(txtPrecoUnitario.Text, out decimal preco))
+                return;
+
+            int estoqueAtual = new EstoqueDAL().ObterEstoqueAtualizado(ProdutoID);
+
+            if (estoqueAtual <= 0)
+            {
+                Utilitario.Mensagens.Aviso("Produto sem estoque.");
+                return;
+            }
+
+            if (qtd > estoqueAtual)
+            {
+                Utilitario.Mensagens.Aviso(
+                    $"Estoque insuficiente. Disponível: {estoqueAtual}"
+                );
+                return;
+            }
+
             var item = _itensBinding.FirstOrDefault(i => i.ProdutoID == ProdutoID);
 
             if (item != null)
             {
-                item.Quantidade += qtd;
-                item.Subtotal = item.Quantidade * item.PrecoUnitario;
+                if (item.Quantidade + qtd > estoqueAtual)
+                {
+                    Utilitario.Mensagens.Aviso(
+                        $"Quantidade total excede o estoque ({estoqueAtual})."
+                    );
+                    return;
+                }
+
+                item.Quantidade += qtd; // Subtotal será recalculado automaticamente
             }
             else
             {
@@ -322,28 +462,22 @@ namespace GVC.View
                     ProdutoID = ProdutoID,
                     Quantidade = qtd,
                     PrecoUnitario = preco,
-                    Subtotal = qtd * preco,
-                    DescontoItem = 0m,
+                    EstoqueAtual = estoqueAtual,
                     ProdutoDescricao = txtProdutoBuscar.Text
                 });
             }
 
-            // Atualizações visuais
-            _itensBindingSource.ResetBindings(false);
-            dgvItensVenda.Refresh();
 
             AtualizarTotais();
+            // 🔥 AQUI: Volta o foco para buscar o próximo produto
+            LimparCamposProduto(); // já zera ProdutoID e limpa os textos
 
-            // Limpeza controlada (SEM disparar busca)
-            _ignorandoBuscar = true;
-
-            LimparCamposProduto(); // ← aqui deve limpar txtProdutoBuscar, txtQuantidade, txtPrecoUnitario
-
-            ProdutoID = 0;
-
-            _ignorandoBuscar = false;
-
-            txtProdutoBuscar.Focus();
+            // Garante que o campo esteja habilitado (deve estar, pois já tem itens ou vendedor)
+            if (txtProdutoBuscar.CanFocus)
+            {
+                txtProdutoBuscar.Focus();
+                txtProdutoBuscar.SelectAll(); // seleciona tudo para digitar por cima rapidamente
+            }
         }
 
 
@@ -373,102 +507,9 @@ namespace GVC.View
             _valorTotal = _subtotal - _desconto;
 
             // Atualiza os campos na tela
-            txtSubTotal.Text = _subtotal.ToString("N2");
+            lblSubTotal.Text = _subtotal.ToString("N2");
         }
 
-        private void btnSalvarVenda_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // ===============================
-                // 🔒 VALIDAÇÕES OBRIGATÓRIAS
-                // ===============================
-
-                if (ClienteID <= 0)
-                {
-                    Utilitario.Mensagens.Aviso("Selecione um cliente.");
-                    return;
-                }
-
-                if (_itensBinding.Count == 0)
-                {
-                    Utilitario.Mensagens.Aviso("Adicione itens à venda.");
-                    return;
-                }
-                // ===============================
-                // MONTAR VENDA
-                // ===============================
-                var vendaModel = new VendaModel
-                {
-                    ClienteID = ClienteID,
-                    //FormaPgtoID = forma.Id,
-                    DataVenda = DateTime.Now,
-                    //Observacoes = txtObservacao.Text,
-                    //StatusVenda = CalcularStatusVendaPorFormaPgto(forma.Descricao),
-                    VendedorID = VendedorID > 0 ? VendedorID : 0,
-                };
-
-
-                // ===============================
-                // SALVAR (NOVA x EDIÇÃO)
-                // ===============================
-                var bll = new VendaBLL();
-
-                if (_modo == ModoVenda.Nova)
-                {
-                    //bll.SalvarVendaCompleta(vendaModel, _itensBinding.ToList(), parcelas);
-
-                    var resposta = MessageBox.Show(
-                        "✅ VENDA CONCLUÍDA COM SUCESSO ✅\n\n" +
-                        "Os dados foram registrados corretamente.\n\n" +
-                        "Deseja imprimir o cupom não fiscal?",
-                        "CONFIRMAÇÃO DE VENDA",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question,
-                        MessageBoxDefaultButton.Button1
-                    );
-
-                    if (resposta == DialogResult.Yes)
-                    {
-                        CupomNaoFiscalPdf.Gerar(
-                            vendaModel,
-                            _itensBinding.ToList(),
-                            "Yago Brandão dos Passos",
-                            "60.252.955/0001-68",
-                            "Rua Cinco, Nº 379 - Bela Vista - Xinguara",
-                            "(94) 9 3300-4134"
-                        );
-                    }
-
-                    LimparFormulario();
-                }
-
-                else // EDIÇÃO
-                {
-                    vendaModel.VendaID = _vendaId;
-                    //bll.AtualizarVendaCompleta(vendaModel, _itensBinding.ToList(), parcelas);
-
-                    MessageBox.Show(
-                                    "🔄 VENDA ATUALIZADA COM SUCESSO 🔄\n\n" +
-                                    "Os dados foram modificados corretamente.",
-                                    "CONFIRMAÇÃO DE ATUALIZAÇÃO",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information,
-                                    MessageBoxDefaultButton.Button1
-                                    );
-                    this.Close();
-                }
-            }
-            catch (SqlException sqlEx)
-            {
-                Utilitario.Mensagens.Erro($"Erro SQL (Número: {sqlEx.Number}): {sqlEx.Message}");
-
-            }
-            catch (Exception ex)
-            {
-                Utilitario.Mensagens.Aviso(ex.Message);
-            }
-        }
 
         #endregion
 
@@ -497,7 +538,7 @@ namespace GVC.View
             _itensBinding.Clear();
             dgvItensVenda.Refresh();
 
-            txtSubTotal.Text = "0,00";
+            lblSubTotal.Text = "0,00";
 
             // ===== PRODUTO =====
             LimparCamposProduto();
@@ -520,10 +561,37 @@ namespace GVC.View
         }
 
         #region Helpers
+        private bool ValidarEstoqueAntesFinalizar()
+        {
+            foreach (var item in _itensBinding)
+            {
+                if (item.Quantidade <= 0)
+                {
+                    Utilitario.Mensagens.Aviso(
+                        $"Informe uma quantidade válida para o produto {item.ProdutoDescricao}");
+                    return false;
+                }
 
+                if (item.Quantidade > item.EstoqueAtual)
+                {
+                    Utilitario.Mensagens.Aviso(
+                        $"Estoque insuficiente para {item.ProdutoDescricao}\n" +
+                        $"Disponível: {item.EstoqueAtual}");
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         private void FinalizarVenda()
         {
+            dgvItensVenda.EndEdit();
+            _itensBindingSource.EndEdit();
+
+            if (!ValidarEstoqueAntesFinalizar())
+                return;
+
             if (ClienteID <= 0)
             {
                 Utilitario.Mensagens.Aviso("Selecione um cliente.");
@@ -555,28 +623,24 @@ namespace GVC.View
                 Total = _valorTotal
             };
 
-
             // FrmPDVendas
             using (var frm = new FrmFinalizarVenda(dto))
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
+                    // 🔥 AQUI É O ÚNICO LUGAR QUE FINALIZA
                     new VendaBLL().SalvarVendaCompleta(
                         frm.VendaFinal,
                         frm.Itens,
-                        frm.Parcelas   // 🔥 veio do FrmFinalizarVenda
+                        frm.Parcelas
                     );
 
-                    if (MessageBox.Show("Deseja imprimir o cupom?", "Cupom",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        CupomNaoFiscalPdf.Gerar(frm.VendaFinal, frm.Itens);
-                    }
+                    // 🔥 CUPOM SÓ AQUI
+                    CupomNaoFiscalPdf.Gerar(frm.VendaFinal, frm.Itens);
 
                     LimparFormulario();
                 }
             }
-
         }
 
         private ProdutoListaItem CriarCabecalhoProduto()
@@ -615,37 +679,6 @@ namespace GVC.View
                     Utilitario.AplicarCorFoco(kryptonTxt);
             }
         }
-
-        private void dgvitens_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-
-            dgvItensVenda.CommitEdit(DataGridViewDataErrorContexts.Commit);
-
-            var item = dgvItensVenda.Rows[e.RowIndex].DataBoundItem as ItemVendaModel;
-            if (item == null) return;
-
-            // Blindagem + recálculo imediato
-            if (item.Quantidade < 0)
-                item.Quantidade = 0;
-
-            if (item.PrecoUnitario < 0)
-                item.PrecoUnitario = 0;
-
-            if (item.DescontoItem < 0)
-                item.DescontoItem = 0;
-
-            decimal subtotalBruto = item.Quantidade * item.PrecoUnitario;
-
-            if (item.DescontoItem > subtotalBruto)
-                item.DescontoItem = subtotalBruto;
-
-            item.Subtotal = subtotalBruto - item.DescontoItem;
-
-            _itensBindingSource.ResetBindings(false);
-            AtualizarTotais();
-        }
-
         #region ==========INICIO DOS MÉTODOS DE VENDA==========
 
 
@@ -671,7 +704,7 @@ namespace GVC.View
             this.DialogResult = DialogResult.Cancel;
             txtQuantidade.Text = "1";
             txtPrecoUnitario.Text = "0,00";
-            txtSubTotal.Text = "0,00";
+            lblSubTotal.Text = "0,00";
             AtualizarTotais();
             LimparFormulario();
         }
@@ -758,6 +791,13 @@ namespace GVC.View
                     {
                         VendedorID = pesquisaVendedor.VendedorID;
                         txtVendedorBuscar.Text = pesquisaVendedor.VendedorSelecionado;
+
+                        // 🔥 Avança o estado
+                        if (_estadoVenda < EstadoVenda.VendedorSelecionado)
+                        {
+                            _estadoVenda = EstadoVenda.VendedorSelecionado;
+                            AtualizarEstadoTela();
+                        }
                     }
                     finally
                     {
@@ -800,6 +840,13 @@ namespace GVC.View
                         ClienteID = pesquisaCliente.ClienteID;
                         txtClienteBuscar.Text = pesquisaCliente.ClienteSelecionado;
                         NomeCliente = pesquisaCliente.ClienteSelecionado;
+
+                        // 🔥 AQUI: avança o estado e atualiza a tela
+                        if (_estadoVenda < EstadoVenda.ClienteSelecionado)
+                        {
+                            _estadoVenda = EstadoVenda.ClienteSelecionado;
+                            AtualizarEstadoTela();
+                        }
 
                     }
                     finally
@@ -852,6 +899,8 @@ namespace GVC.View
                     {
                         // Libera flag após atualização
                         _ignorandoBuscar = false;
+                        txtQuantidade.Focus();
+                        txtQuantidade.SelectAll();
                     }
                 }
             }
@@ -892,6 +941,10 @@ namespace GVC.View
 
         private void FrmPDVendas_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.F12)
+            {
+                e.SuppressKeyPress = true;
+            }
             switch (e.KeyCode)
             {
                 //case Keys.F2:
@@ -909,50 +962,94 @@ namespace GVC.View
                 //    e.SuppressKeyPress = true;
                 //    break;
 
-                case Keys.F6:
-                    btnAdicionarItem.PerformClick();
-                    e.SuppressKeyPress = true;
-                    break;
+                //case Keys.F6:
+                //    btnAdicionarItem.PerformClick();
+                //    e.SuppressKeyPress = true;
+                //    break;
 
-                case Keys.F12:
-                    FinalizarVenda();
-                    e.SuppressKeyPress = true;
-                    break;
+                //case Keys.F12:
+                //    FinalizarVenda();
+                //    e.SuppressKeyPress = true;
+                //    break;
 
-                case Keys.Escape:
-                    e.SuppressKeyPress = true;
-                    break;
+                //case Keys.Escape:
+                //    e.SuppressKeyPress = true;
+                //    break;
             }
+        }
+
+        private void dgvItensVenda_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            dgvItensVenda.CommitEdit(DataGridViewDataErrorContexts.Commit);
+
+            var item = dgvItensVenda.Rows[e.RowIndex].DataBoundItem as ItemVendaModel;
+            if (item == null) return;
+
+            // Blindagem + recálculo automático
+            if (item.Quantidade <= 0)
+                item.Quantidade = 1;
+
+            if (item.Quantidade > item.EstoqueAtual)
+                item.Quantidade = (int)item.EstoqueAtual;
+
+            if (item.PrecoUnitario < 0)
+                item.PrecoUnitario = 0;
+
+            if (item.DescontoItem < 0)
+                item.DescontoItem = 0;
+
+            decimal subtotalBruto = item.Quantidade * item.PrecoUnitario;
+
+            if (item.DescontoItem > subtotalBruto)
+                item.DescontoItem = subtotalBruto;
+
+            // ❌ Remover esta linha:
+            // item.Subtotal = subtotalBruto - item.DescontoItem;
+
+            // Atualiza bindings
+            _itensBindingSource.ResetBindings(false);
+            AtualizarTotais();
+        }
+
+        private void btnNovaVenda_Click(object sender, EventArgs e)
+        {
+            // Limpa todos os dados
+            ClienteID = 0;
+            VendedorID = 0;
+            dgvItensVenda.Rows.Clear();
+            txtClienteBuscar.Clear();
+            txtVendedorBuscar.Clear();
+            txtProdutoBuscar.Clear();
+            // Limpe outros campos (totais, descontos, etc.)
+
+            _estadoVenda = EstadoVenda.Inicial;
+            AtualizarEstadoTela();
         }
     }
 }
 
 /*
                    
-//========================STATUS PARA VENDA ABAIXO=============================
+            📊 Status para a Tabela Venda coluna "StatusVenda"
+            
+            Aberta               → em edição.
+            Em Análise           → aguardando aprovação (crédito/cheque).
+            Aguardando Pagamento → emitida, aguardando liquidação.
+            Parcialmente Pago    → parte quitada.
+            Concluída            → 100% liquidada.
+            Cancelada            → anulada.
+            Suspensa             → bloqueada temporariamente.
+           
+           📊 Status para a Tabela Parcela coluna "Status"
 
-            Aberta               → Venda registrada, mas ainda não concluída (em andamento).
-            Em Análise           → Aguardando aprovação de crédito ou validação interna.
-            Aguardando Pagamento → Venda confirmada, mas o cliente ainda não pagou.
-            Concluída            → Venda finalizada com sucesso, pagamento confirmado.
-            Cancelada            → Venda anulada por desistência, erro ou acordo.
-            Devolvida            → Venda concluída, mas houve devolução do produto/serviço.
-            Expirada             → Quando o prazo de pagamento ou validade da proposta passou sem conclusão.
-            Parcialmente Pago    → Cliente pagou parte do valor, mas ainda há saldo pendente.
-            Suspensa             → Venda temporariamente interrompida (ex.: problemas logísticos ou decisão 
-
-
-// ========================STATUS PARA PARCELA ABAIXO=============================
-
-            Aberta               → não faz sentido para parcela (é mais para venda)
-            Atrasada             → Parcela cujo vencimento já passou e não foi paga.
-            Aguardando Pagamento → melhor usar "Pendente"
-            Pago                 → melhor usar "Paga"
-            Cancelada            → Parcela anulada, não precisa mais ser paga (ex.: erro de lançamento, acordo).
-            Devolvida            → raro em parcela, mas pode ter
-            Parcialmente Pago    → melhor "Parcialmente Paga"
-
-          //===========TABELA PARCELA STATUS==============================================
+            Pendente          → aguardando pagamento.
+            Parcialmente Paga → recebeu parte.
+            Paga              → liquidada.
+            Atrasada          → vencida sem quitação.
+            Cancelada         → anulada.
+        
 
                     */
 #endregion
